@@ -6,7 +6,7 @@ function bonus_mvmt()
         bn.t=bn.t or 0
         bn.lethalt=bn.lethalt or 0
 
-        local args={_sc={},c=0,spd=speed(bn),bn=bn}
+        local args={_sc={},c=0,spd=speed(bn),i=i}
         if bn.t>=8 then
             collide(bn,args)
             if args.removed then goto removed end
@@ -21,7 +21,7 @@ function bonus_mvmt()
         pixelperfect(bn,bn.imgdata,ball,ball.imgdata,function(args)
             plrbonus=plrbonus+1
             playsnd(audio.get)
-            rem(bonuses,find(bonuses,args.bn))
+            rem(bonuses,args.i)
             return true
         end,args)
 

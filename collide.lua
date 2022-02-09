@@ -51,7 +51,7 @@ function collide(_ball,args)
         if _ball==ball then
             sc_t=t+1; love.update=gameover 
         else
-            rem(bonuses,find(bonuses,args.bn))
+            rem(bonuses,args.i)
             args.removed=true
         end
     end
@@ -64,7 +64,7 @@ function ballcollide(_ball,args)
     pixelperfect(args._ball,args._ball.imgdata,srndtop,surroundtopdata,ceilcoll,args)
     for i=#shifters,1,-1 do
         local s=shifters[i]
-        args.i=i; args.s=s
+        args.si=i; args.s=s
         pixelperfect(args._ball,args._ball.imgdata,s,shifterdata,solidcoll,args)
     end
 end
@@ -89,7 +89,7 @@ end
 function solidcoll(args)
     if args._ball==ball and ball.bonus then
         particlespam(args.s)
-        rem(shifters,args.i)
+        rem(shifters,args.si)
         score=score+250
         playsnd(audio.crush)
         shout(250,ball.x+13,ball.y+13)
