@@ -21,8 +21,7 @@ function input()
     if (plrbonus>0 and ((tapped('lshift') or tapped('rshift')) and love.update~=replay) and not ball.bonus) or (love.update==replay and find(rp[rp.i],'shift')) then
         ball.bonus=65
         plrbonus=plrbonus-1
-        audio.powerup:stop()
-        audio.powerup:play()
+        playsnd(audio.powerup)
         --print('bonus')
         if love.update~=replay then ins(rp[#rp],'shift') end
     end
