@@ -82,7 +82,7 @@ function spawn()
     end
 end
 
--- check if 2 of #_sc colliding blocks
+-- check if all colliding shifters
 -- travel to the same direction.
 -- returns 1 if true, else 0 or 2
 function check_same(_sc)
