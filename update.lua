@@ -2,7 +2,6 @@ debug=false
 
 score=0
 
-shifters={}
 grid=flr(43/2+1)
 
 ball={x=309/2-12, y=96, dx=0, dy=0, img=lg.newCanvas(26,26)}
@@ -13,26 +12,27 @@ fg(0xf0/255.0,0xf0/255.0,0xf0/255.0)
 circ('fill',13,13,12.8)
 lg.setCanvas()
 ball.imgdata=ball.img:newImageData()
+ball.lethalt=0
+
+bonuses={}
 plrbonus=0
 if debug then plrbonus=10 end
 
+shifters={}
 for i=1,5 do
     local sx,sy=grid*i+1,309/2-grid+grid*i+1
     ins(shifters,{x=sx,y=sy})
     ins(shifters,{x=309-sx-43,y=sy})
 end
 spawn_t=2000
-ball.lethalt=0
-
-bonuses={}
-
-rp={i=1}
 
 srndtop={x=0,y=0}
 srndbottom={x=0,y=flr(309/2)+1}
 
 xspeed=0.065
 grav=0.06
+
+rp={i=1}
 
 function init()
     if not audio.mewsic:isPlaying() then
