@@ -86,7 +86,6 @@ function gameover(dt)
         love.event.push('quit')
     end
     if tapped('r') then
-        love.update=update
         reset()
         return
     end
