@@ -120,3 +120,7 @@ shouts={}
 function shout(msg,mx,my)
     ins(shouts,{msg=msg,x=mx,y=my,t=0})
 end
+
+function playsnd(snd)
+    snd:stop(); snd:play()
+end

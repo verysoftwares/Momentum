@@ -40,10 +40,6 @@ function init()
     end
 end
 
-function playsnd(snd)
-    snd:stop(); snd:play()
-end
-
 function update(dt)
     local st=love.timer.getTime()
     
