@@ -29,13 +29,16 @@ function collide(_ball,args)
     ballcollide(_ball,args)
     c=args.c
 
+    -- collisions forgiven for 5 frames
     if c>29 then
         _ball.lethalt=_ball.lethalt+1
-        if _ball.lethalt<5 then c=0 end
+        if _ball.lethalt<=5 then c=0 end
     else
         _ball.lethalt=0
     end
     local scsame=check_same(args._sc)
+
+    -- _ball is destroyed
     if (c>29 and (_ball.lethalt>=5 or headon(args._sc)) and (#args._sc>=2 and scsame~=1)) or _ball.y>=309 then 
         if not (_ball.y>=309) then
             particlespam(_ball)

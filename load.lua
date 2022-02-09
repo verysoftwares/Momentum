@@ -3,6 +3,7 @@ function love.load()
     smolfont = lg.newFont('wares/nokiafc22.ttf', 8)
     explainfont = lg.newFont('wares/RobotoCondensed-Regular.ttf', 18)
     lg.setFont(lcdfont)
+    
     audio={}
     audio.mewsic= love.audio.newSource('wares/foothold-full.ogg','stream')
     audio.mewsic:setVolume(0.7)
@@ -13,21 +14,25 @@ function love.load()
     audio.fall= love.audio.newSource('wares/202753__sheepfilms__slide-whistle.wav','static')
     audio.get= love.audio.newSource('wares/611111__5ro4__bell-ding-3.wav','static')
     audio.get:setVolume(0.7)
+    
     images={}
     images.bg1=lg.newImage('wares/surroundbg.png')
     images.bg2a=lg.newImage('wares/surroundtop.png')
     images.bg2b=lg.newImage('wares/surroundbottom.png')
+    
     local sd=lg.newCanvas(309,flr(309/2))
     lg.setCanvas(sd)
     bg(0,0,0,0)
     lg.draw(images.bg2a,0,0)
     lg.setCanvas()
     surroundtopdata=sd:newImageData()
+    
     lg.setCanvas(sd)
     bg(0,0,0,0)
     lg.draw(images.bg2b,0,0)
     lg.setCanvas()
     surroundbottomdata=sd:newImageData()
+    
     images.shift=lg.newImage('wares/shift.png')
     local scanvas=lg.newCanvas(43,43)
     lg.setCanvas(scanvas)
@@ -36,6 +41,7 @@ function love.load()
     lg.draw(images.shift,0,0)
     lg.setCanvas()
     shifterdata=scanvas:newImageData()
+    
     images.arrow=lg.newImage('wares/shift2.png')
     images.alert=lg.newImage('wares/shift3.png')
 end

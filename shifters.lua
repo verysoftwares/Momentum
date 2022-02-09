@@ -32,6 +32,8 @@ function shift(s)
     if ball.y+13>s.y+grid then s.dy=1 
     else s.dy=-1 end
     s.t=0
+
+    -- first time moving -> add spawner
     if s.myspawn==nil then
     ins(spawners,{t=spawn_t,x=s.x,y=s.y})
     s.myspawn=spawners[#spawners]
@@ -55,6 +57,7 @@ function spawn()
         end)
         if spawnblocked then goto skip end
         end
+
         ins(bonuses,{x=sp.x+12,y=sp.y-12,dx=0,dy=-1.5,img=lg.newCanvas(26,26)})
         if bonuses[#bonuses].x<309/2 then bonuses[#bonuses].dx=1.5
         else bonuses[#bonuses].dx=-1.5 end
@@ -63,7 +66,7 @@ function spawn()
         circ('fill',13,13,13)
         fg(0xf0/255.0,0xa0/255.0,0xb0/255.0)
         circ('fill',13,13,12.8)
-        lg.setCanvas()
+        lg.setCanvas()        
         bonuses[#bonuses].imgdata=bonuses[#bonuses].img:newImageData()
         --if not bonusimg then bonusdata=bonuses[#bonuses].img end
 
