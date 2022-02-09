@@ -1,3 +1,5 @@
+-- the given update function for moving shifters
+-- (when not moving, their update is nil)
 function shiftupdate(s)
     if s.t<20 then
         if s.t%3==0 then s.x=s.x+s.dx; s.y=s.y+s.dy end
@@ -23,6 +25,7 @@ function shiftupdate(s)
 end
 
 spawners={}
+-- shifter starts to move
 function shift(s)
     if ball.x+13>s.x+grid then s.dx=1 
     else s.dx=-1 end
