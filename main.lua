@@ -5,6 +5,7 @@
     require 'input'
     require 'collide'
     require 'shifters'
+    require 'bonuses'
     require 'particles'
     require 'update'
     require 'draw'
