@@ -38,6 +38,8 @@ function shift(s)
     s.update=shiftupdate
 end
 
+-- spawn new shifter and powerup.
+-- called every frame
 function spawn()
     for i=#spawners,1,-1 do
     local sp=spawners[i]
@@ -74,6 +76,9 @@ function spawn()
     end
 end
 
+-- check if 2 of #_sc colliding blocks
+-- travel to the same direction.
+-- returns 1 if true, else 0 or 2
 function check_same(_sc)
     local sdx,sdy=0,0
     local scsame=0

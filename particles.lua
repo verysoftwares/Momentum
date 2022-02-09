@@ -1,4 +1,6 @@
 particles={}
+
+-- splits target sprite to chunks.
 function particlespam(ent)
     local chunksize=6
     if find(shifters,ent) then

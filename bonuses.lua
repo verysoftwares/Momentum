@@ -1,3 +1,5 @@
+-- powerup movement, colliding 
+-- similarly to the player ball.
 function bonus_mvmt()
     for i=#bonuses,1,-1 do
         local bn=bonuses[i]

@@ -1,3 +1,5 @@
+-- input, working both for live input
+-- and recorded input (replays).
 function input()
     local press=false
     if ((love.keyboard.isDown('a') or love.keyboard.isDown('left')) and love.update~=replay) or (love.update==replay and find(rp[rp.i],'a')) then

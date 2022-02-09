@@ -1,3 +1,5 @@
+-- pixel-perfect collisions.
+-- takes 'oncoll' callback function as argument. 
 function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
     for y=imgdata1:getHeight()-1,0,-1 do
     for x=imgdata1:getWidth()-1,0,-1 do
@@ -19,6 +21,7 @@ function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
     end
 end
 
+-- ball collision setup
 function collide(_ball,args)
     aligned=false
     touch=false
@@ -51,6 +54,8 @@ function collide(_ball,args)
     end
 end
 
+-- collide with top of the map
+-- and with all shifters
 function ballcollide(_ball,args)
     args._ball=_ball
     pixelperfect(args._ball,args._ball.imgdata,srndtop,surroundtopdata,ceilcoll,args)
@@ -61,6 +66,7 @@ function ballcollide(_ball,args)
     end
 end
 
+-- top of the map
 function ceilcoll(args)
     if not find(args._sc,srndtop) then
         ins(args._sc,srndtop)
@@ -76,6 +82,7 @@ function ceilcoll(args)
     end
 end
 
+-- shifters
 function solidcoll(args)
     if args._ball==ball and ball.bonus then
         particlespam(args.s)
@@ -101,6 +108,7 @@ function solidcoll(args)
     NESWalign(args)
 end
 
+-- align ball/powerup based on collision data
 function NESWalign(args)
     local yforce=1+args.spd*0.4
     local xforce=yforce*0.5
