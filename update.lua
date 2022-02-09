@@ -83,65 +83,6 @@ function update(dt)
     t = t+1
 end
 
-function input()
-    local press=false
-    if ((love.keyboard.isDown('a') or love.keyboard.isDown('left')) and love.update~=replay) or (love.update==replay and find(rp[rp.i],'a')) then
-        press=true
-        if ball.dx > -1 then
-            ball.dx = ball.dx-math.abs((ball.dx-(-1))/2.0)
-        end
-        ball.dx=ball.dx-xspeed
-        if love.update~=replay then ins(rp[#rp],'a') end
-    end
-    if ((love.keyboard.isDown('d') or love.keyboard.isDown('right')) and love.update~=replay) or (love.update==replay and find(rp[rp.i],'d')) then
-        press=true
-        if ball.dx < 1 then
-            ball.dx = ball.dx+math.abs((ball.dx-1)/2.0)
-        end
-        ball.dx=ball.dx+xspeed
-        if love.update~=replay then ins(rp[#rp],'d') end
-    end
-    if (plrbonus>0 and ((tapped('lshift') or tapped('rshift')) and love.update~=replay) and not ball.bonus) or (love.update==replay and find(rp[rp.i],'shift')) then
-        ball.bonus=65
-        plrbonus=plrbonus-1
-        audio.powerup:stop()
-        audio.powerup:play()
-        --print('bonus')
-        if love.update~=replay then ins(rp[#rp],'shift') end
-    end
-    if not press then
-        ball.dx=ball.dx*0.98
-    end
-end
-
-function bonus_mvmt()
-    for i=#bonuses,1,-1 do
-        local bn=bonuses[i]
-        bn.t=bn.t or 0
-        bn.lethalt=bn.lethalt or 0
-        local args={_sc={},c=0,spd=speed(bn),bn=bn}
-        if bn.t>=8 then
-            collide(bn,args)
-            if args.removed then goto removed end
-        end
-        bn.t=bn.t+1
-
-        bn.dy=bn.dy+grav
-
-        bn.x=bn.x+bn.dx
-        bn.y=bn.y+bn.dy
-        --bn.dx=bn.dx*0.98
-
-        pixelperfect(bn,bn.imgdata,ball,ball.imgdata,function(args)
-            plrbonus=plrbonus+1
-            playsnd(audio.get)
-            rem(bonuses,find(bonuses,args.bn))
-            return true
-        end,args)
-        ::removed::
-    end
-end
-
 function gameover(dt)
     local st=love.timer.getTime()
 
@@ -174,31 +115,18 @@ function replay(dt)
     --t=t+1
 end
 
-function speed(_ball)
-    return math.sqrt(math.pow(_ball.dx,2)+math.pow(_ball.dy,2))
-end
+function tutor(dt)
+    local st=love.timer.getTime()
 
-shouts={}
-function shout(msg,mx,my)
-    ins(shouts,{msg=msg,x=mx,y=my,t=0})
-end
-
-function check_same(_sc)
-    local sdx,sdy=0,0
-    local scsame=0
-    for i,s in ipairs(_sc) do
-        if s.dx~=nil and s.dy~=nil and s.dx~=sdx and s.dy~=sdy then
-            if sdx~=0 and sdy~=0 then
-            scsame=2
-            end
-            sdx=s.dx; sdy=s.dy
-        elseif s.dx~=nil and s.dy~=nil and s.dx==sdx and s.dy==sdy then
-            if scsame~=2 then
-                scsame=1
-            end
-        end
+    if love.keyboard.isDown('a') or love.keyboard.isDown('d') or love.keyboard.isDown('left') or love.keyboard.isDown('right') then
+    reset()
+    return
     end
-    return scsame
+
+    local et=love.timer.getTime()
+    while dt+et-st<1/60 do et=love.timer.getTime() end
+
+    t=t+1
 end
 
 function reset()
@@ -225,20 +153,6 @@ function reset()
     end
 
     t=0
-end
-
-function tutor(dt)
-    local st=love.timer.getTime()
-
-    if love.keyboard.isDown('a') or love.keyboard.isDown('d') or love.keyboard.isDown('left') or love.keyboard.isDown('right') then
-    reset()
-    return
-    end
-
-    local et=love.timer.getTime()
-    while dt+et-st<1/60 do et=love.timer.getTime() end
-
-    t=t+1
 end
 
 --love.update= update

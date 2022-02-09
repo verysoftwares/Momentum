@@ -111,3 +111,12 @@ function HSL(h, s, l, a)
     else              r,g,b = c,0,x
     end return (r+m)*255,(g+m)*255,(b+m)*255,a
 end
+
+function speed(_ball)
+    return math.sqrt(math.pow(_ball.dx,2)+math.pow(_ball.dy,2))
+end
+
+shouts={}
+function shout(msg,mx,my)
+    ins(shouts,{msg=msg,x=mx,y=my,t=0})
+end

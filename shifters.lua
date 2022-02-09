@@ -73,3 +73,21 @@ function spawn()
     end
     end
 end
+
+function check_same(_sc)
+    local sdx,sdy=0,0
+    local scsame=0
+    for i,s in ipairs(_sc) do
+        if s.dx~=nil and s.dy~=nil and s.dx~=sdx and s.dy~=sdy then
+            if sdx~=0 and sdy~=0 then
+            scsame=2
+            end
+            sdx=s.dx; sdy=s.dy
+        elseif s.dx~=nil and s.dy~=nil and s.dx==sdx and s.dy==sdy then
+            if scsame~=2 then
+                scsame=1
+            end
+        end
+    end
+    return scsame
+end

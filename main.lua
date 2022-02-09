@@ -2,6 +2,7 @@
     require 'load'
     require 'alias'
     require 'utility'
+    require 'input'
     require 'collide'
     require 'shifters'
     require 'particles'
