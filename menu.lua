@@ -9,10 +9,10 @@ function menu()
     if ctrl then
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
         if tapped('left') then 
-            cycle.dx=-8
+            cycle.dx=8
             cycle.flip=nil
         elseif tapped('right') then 
-            cycle.dx=8
+            cycle.dx=-8
             cycle.flip=nil
         end
         if tapped('z') then 
