@@ -7,8 +7,12 @@
     require 'shifters'
     require 'bonuses'
     require 'particles'
+    require 'menu'
     require 'update'
     require 'draw'
+
+love.update = menu
+love.draw = menudraw
 
 t = 0
 -- runtime.

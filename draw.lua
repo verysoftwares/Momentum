@@ -4,7 +4,7 @@
 canvas=lg.newCanvas(309,309)
 canvas2=lg.newCanvas(309,309)
 
-function draw()
+function gamedraw()
     lg.setCanvas(canvas)
     bg(153/255.0,152/255.0,100/255.0)
     fg(1,1,1,1)
@@ -194,5 +194,81 @@ function draw()
     lg.draw(canvas2,0,0,0,scale,scale)
 end
 
-love.draw= draw
+function menudraw()
+    lg.setCanvas(canvas)
+    bg(153/255.0,152/255.0,100/255.0)
+
+    title=title or ''
+    titlelock=titlelock or 1
+    if t%2==0 then
+    if #title<#'MOMENTUM' then
+        title=title..string.char(random(33,96))
+    end
+    for i=titlelock,math.min(#'MOMENTUM',#title) do
+        local ts=sub(title,1,i-1)
+        local te=sub(title,i+1,#title)
+        title = ts..string.char(random(33,96))..te
+    end
+    if t>32+24 and t%24==0 then
+        title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
+        titlelock=titlelock+1
+    end
+    end
+    if titlelock>#'MOMENTUM' then
+        tl_interval=tl_interval or random(12,64)
+        tl_interval=tl_interval-1
+        if tl_interval<=0 and not tl_chaos then
+            tl_chaos=random(12,38)
+            tl_chaos_i=random(1,#'MOMENTUM')
+            tl_interval=nil
+        end
+    end
+    if tl_chaos then
+        if t%2==0 then
+            title = sub(title,1,tl_chaos_i-1)..string.char(random(33,96))..sub(title,tl_chaos_i+1,#title)
+        end
+        tl_chaos=tl_chaos-1; if tl_chaos==0 then 
+            title = sub(title,1,tl_chaos_i-1)..sub('MOMENTUM',tl_chaos_i,tl_chaos_i)..sub(title,tl_chaos_i+1,#title)
+            tl_chaos=nil 
+        end
+    end
+
+    fg(0xcd/255,0xcd/255,0xc8/255)
+    rect('fill',0,24,309,lcdfont:getHeight('MOMENTUM')+24+2)
+    fg(0x29/255,0x23/255,0x2e/255)
+    rect('fill',309/2-lcdfont:getWidth('MOMENTUM')/2-1,24+8-4+2,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
+    
+    fg(1,1,1,1)
+    lg.setFont(lcdfont)
+    lg.print(title,309/2-lcdfont:getWidth('MOMENTUM')/2,24+24-1)
+    
+    if titlelock>#'MOMENTUM' then
+    smolrect=smolrect or {309/2,309-60+(smolfont:getHeight('MOMENTUM')+8)/2,0,0}
+    fg(0x3c/255,0x4c/255,0x25/255)
+    rect('fill',unpack(smolrect))
+    smolrect[1]=smolrect[1]+(0-smolrect[1])*0.12
+    smolrect[2]=smolrect[2]+(309-60-smolrect[2])*0.12
+    smolrect[3]=smolrect[3]+(309-smolrect[3])*0.12
+    smolrect[4]=smolrect[4]+(smolfont:getHeight('MOMENTUM')+8-smolrect[4])*0.12
+
+    if smolrect[4]>=smolfont:getHeight('MOMENTUM') then
+    ctrl=true
+    lg.setFont(smolfont)
+    local tx=309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
+    if cycle.x then tx=cycle.x end
+    for c=1,#(visualize(cycle[cycle.i])) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        fg(r/255.0,g/255.0,b/255.0,1)
+        lg.print(sub(visualize(cycle[cycle.i]),c,c),tx,309-60+8-3+sin(c*0.8+t*0.2)*3)
+        tx=tx+smolfont:getWidth(sub(visualize(cycle[cycle.i]),c,c))
+    end
+    end
+    end
+
+    fg(1,1,1,1)
+    lg.setCanvas()
+    lg.draw(canvas,0,0,0,scale,scale)
+end
+
+love.draw= menudraw
 

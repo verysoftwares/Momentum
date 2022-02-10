@@ -2,6 +2,7 @@ function love.load()
     lcdfont = lg.newFont('wares/advanced_pixel_lcd-7.ttf', 20)
     smolfont = lg.newFont('wares/nokiafc22.ttf', 8)
     explainfont = lg.newFont('wares/RobotoCondensed-Regular.ttf', 18)
+    titlefont = lg.newFont('wares/DaysOne-Regular.ttf', 48)
     lg.setFont(lcdfont)
     
     audio={}

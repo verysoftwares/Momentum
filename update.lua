@@ -153,4 +153,3 @@ function reset()
 end
 
 --love.update= update
-love.update=tutor
