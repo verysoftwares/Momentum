@@ -117,13 +117,9 @@ function NESWalign(args)
     local xforce=yforce*0.5
     
     if args._ball.y+13<args.s.y+grid then
-        if args._ball.y+13<args.s.y+grid then
-            args._ball.dy=-yforce
-        else
-            args._ball.dy=yforce
-            local ty=args.s.y-20+math.abs(args._ball.x-args.s.x)
-            if ty<args._ball.y then args._ball.y=ty end
-        end
+        
+        args._ball.dy=-yforce
+        
         if args._ball.x+13>=args.s.x+grid then
             --print('solidcoll northeast',t)
             local tx=args.s.x+40-2-math.abs(args._ball.y-args.s.y)
@@ -136,12 +132,9 @@ function NESWalign(args)
             if args._ball~=ball then args._ball.dx=-xforce end
         end
     else
-        if args._ball.y+13>=args.s.y+grid then
-            args._ball.dy=yforce
-        else
-            args._ball.dy=-yforce
-        end
-
+        
+        args._ball.dy=yforce
+        
         if args._ball.x+13<=args.s.x+grid then
             --print('solidcoll southwest',t)
             local tx=args.s.x-28-8+math.abs(args._ball.y-args.s.y)
