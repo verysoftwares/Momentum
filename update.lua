@@ -25,6 +25,7 @@ for i=1,5 do
     ins(shifters,{x=309-sx-43,y=sy})
 end
 spawn_t=2000
+spawn_dt=1000
 
 srndtop={x=0,y=0}
 srndbottom={x=0,y=flr(309/2)+1}
@@ -138,6 +139,7 @@ function reset()
         ins(shifters,{x=309-sx-43,y=sy})
     end
     spawn_t=2000
+    spawn_dt=1000
     spawners={}
 
     shouts={}
