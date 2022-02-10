@@ -5,7 +5,8 @@ for i=1,4 do
 end
 cycle_unlocks['Standard']=true
 cycle_unlocks['Options']=true
-function menu()
+
+function menu(dt)
     if ctrl then
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
         if tapped('left') then 
@@ -17,8 +18,12 @@ function menu()
         end
         if tapped('z') then 
             if cycle[cycle.i]=='Standard' then
-                love.update = tutor
-                love.draw = gamedraw
+                sc_t=t+1
+                title='MOMENTUM'
+                love.update = menufade
+                love.draw = menufadedraw
+                --love.update = tutor
+                --love.draw = gamedraw
                 return
             end
         end
@@ -49,4 +54,8 @@ function visualize(c)
         return '< '..c..' >'
     end
     return '< ??? >'
+end
+
+function menufade(dt)
+    t=t+1
 end
