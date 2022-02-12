@@ -32,6 +32,7 @@ function saveprogress()
 
     local out=fmt('hiscore_standard=%d\n',hiscore_standard)
     out=out..fmt('hiscore_chaotic=%d',hiscore_chaotic)
+
     love.filesystem.write(file, out)
 
     file = 'unlocks.soft'
@@ -43,6 +44,7 @@ function saveprogress()
         end
     end
     out=out..'}'
+
     love.filesystem.write(file, out)
 
     file = 'replays.soft'
