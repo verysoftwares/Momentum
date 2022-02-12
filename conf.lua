@@ -1,4 +1,6 @@
 scale=3
+debug=false
+
 function love.conf(t)
     t.window.title = 'by verysoftwares.itch.io'         -- The window title (string)
     t.window.icon = nil                 -- Filepath to an image to use as the window's icon (string)

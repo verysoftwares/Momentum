@@ -1,5 +1,3 @@
-debug=true
-
 score=0
 
 grid=flr(43/2+1)
