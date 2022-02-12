@@ -24,8 +24,9 @@ function menu(dt)
                 sc_t=t+1
                 title='MOMENTUM'
                 mode='Standard'
+                reset()
                 love.update = menufade
-                love.draw = menufadedraw
+                love.draw = menufadeout
                 --love.update = tutor
                 --love.draw = gamedraw
                 return
@@ -34,8 +35,9 @@ function menu(dt)
                 sc_t=t+1
                 title='MOMENTUM'
                 mode='Chaotic'
+                reset()
                 love.update = menufade
-                love.draw = menufadedraw
+                love.draw = menufadeout
                 return
             end
         end

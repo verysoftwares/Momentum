@@ -48,7 +48,7 @@ function update(dt)
     init()
 
     if love.keyboard.isDown('escape') then
-        love.event.push('quit')
+        back_to_menu()
     end
 
     if ball.bonus then ball.bonus=ball.bonus-1; if ball.bonus==0 then ball.bonus=nil end end
@@ -91,7 +91,7 @@ function gameover(dt)
     deltat=dt
 
     if love.keyboard.isDown('escape') then
-        love.event.push('quit')
+        back_to_menu()
     end
     if tapped('r') then
         reset()
@@ -125,7 +125,7 @@ function replay(dt)
     deltat=dt
 
     if love.keyboard.isDown('escape') then
-        love.event.push('quit')
+        back_to_menu()
     end
     if tapped('r') then
         love.update=update
@@ -174,6 +174,14 @@ function reset()
     end
 
     t=0
+end
+
+function back_to_menu()
+    love.update=menufade
+    love.draw=menufadein
+    cycle.x=309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
+    cycle.dx=nil
+    cycle.flip=nil
 end
 
 --love.update= update
