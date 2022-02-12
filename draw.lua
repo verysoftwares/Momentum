@@ -290,7 +290,7 @@ function menudraw()
         local te=sub(title,i+1,#title)
         title = ts..string.char(random(33,96))..te
     end
-    if t>32+24+32+24+16-60 and (t-12)%16==0 then
+    if t>32+24+32+24+16-60+16 and (t-6)%16==0 then
         if not onlyoncem2 then init(2); onlyoncem2=true end
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
@@ -318,6 +318,8 @@ function menudraw()
     bar_dist=bar_dist or 410
     lg.push()
     lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
     fg(0x29/255,0x23/255,0x2e/255)
@@ -440,6 +442,8 @@ function menufadeout()
 
     lg.push()
     lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
     fg(0x29/255,0x23/255,0x2e/255)
@@ -458,7 +462,7 @@ function menufadeout()
     lg.pop()
     
     if #title>0 then
-    bar_dist_y=bar_dist_y+4; if bar_dist_y>48 then bar_dist_y=48 end
+    bar_dist_y=bar_dist_y+4; if bar_dist_y>48-5 then bar_dist_y=48-5 end
     else
     bar_dist_y=bar_dist_y-4; if bar_dist_y<-185 then 
     --bar_dist_y=nil
@@ -496,7 +500,7 @@ function menufadein()
     smolrect=smolrect or {}
     titlelock = titlelock or 1
 
-    if t%2==0 and bar_dist_y==48 then
+    if t%2==0 and bar_dist_y==48-5 then
     if #title<#'MOMENTUM' then
         title=title..string.char(random(33,96))
     end
@@ -506,7 +510,7 @@ function menufadein()
         title = ts..string.char(random(33,96))..te
     end
     end
-    if bar_dist_y==48 and t%8==0 then
+    if bar_dist_y==48-5 and t%8==0 then
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
     end
@@ -526,6 +530,8 @@ function menufadein()
 
     lg.push()
     lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
     fg(0x29/255,0x23/255,0x2e/255)
@@ -552,7 +558,7 @@ function menufadein()
         audio.mewsic1:setVolume(0.7)
     end
     else
-    bar_dist_y=bar_dist_y+4; if bar_dist_y>48 then bar_dist_y=48 end
+    bar_dist_y=bar_dist_y+4; if bar_dist_y>48-5 then bar_dist_y=48-5 end
     end
 
     fg(1,1,1,1)
