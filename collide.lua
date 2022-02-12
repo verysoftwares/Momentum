@@ -49,7 +49,12 @@ function collide(_ball,args)
         _ball.lethalt=0
 
         if _ball==ball then
-            sc_t=t+1; love.update=gameover 
+            sc_t=t+1; 
+            if #unlocks>0 then
+            love.update=show_unlocks
+            else
+            love.update=gameover
+            end 
         else
             rem(bonuses,args.i)
             args.removed=true

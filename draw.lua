@@ -62,7 +62,7 @@ function gamedraw(nocap)
         lg.draw(b.img,flr(b.x),flr(b.y))
     end
 
-    if love.update~=gameover then
+    if love.update~=gameover and love.update~=show_unlocks then
     if ball.bonus then
         local r,g,b,a=HSL((t*6)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
@@ -108,7 +108,7 @@ function gamedraw(nocap)
     lg.setFont(lcdfont)
     lg.push()
     lg.rotate(-pi/4)
-    if love.update~=gameover or (love.update==gameover and t%64<32) then
+    if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
     lg.print(fmt('%.5d',score),-60+4,15+60+15)
     end
     lg.setFont(lcdfont)
@@ -126,7 +126,7 @@ function gamedraw(nocap)
     lg.pop()
     end
 
-    if love.update==gameover then
+    if love.update==gameover or love.update==show_unlocks then
     lg.setFont(smolfont)
     local tx=309/2-smolfont:getWidth('GAME OVER')/2
     for c=1,#('GAME OVER') do
@@ -142,7 +142,7 @@ function gamedraw(nocap)
         lg.print(sub('R to reset.',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('R to reset.',c,c))
     end
-    if t-sc_t>=90 then
+    if t-sc_t>=90 and love.update==gameover then
     tx=309/2-smolfont:getWidth('Replay in')/2
     for c=1,#('Replay in') do
         local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
@@ -174,6 +174,33 @@ function gamedraw(nocap)
             tx=tx+smolfont:getWidth(sub('Arrows or A/D to move',c,c))
         end
         
+    end
+
+    if love.update==show_unlocks then
+        fg(0.4,0.4,0.4,0.7)
+        rect('fill',0,0,309,309)
+
+        local msg=fmt('Unlocked %s!',unlocks[1])
+        if unlocks[1]=='Chaotic' then msg=fmt('Unlocked %s mode!',unlocks[1]) end
+
+        lg.setFont(smolfont)
+
+        tx=309/2-smolfont:getWidth(msg)/2
+        unlock_ty=unlock_ty or 309
+
+        fg(0x3c/255,0x4c/255,0x25/255,1)
+        local h=smolfont:getHeight('MOMENTUM')+8
+        rect('fill',0,unlock_ty,309,h)
+
+        for c=1,#(msg) do
+            local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+            fg(r/255.0,g/255.0,b/255.0,a/255.0)
+            lg.print(sub(msg,c,c),tx,unlock_ty+4)--+sin(c*0.8+t*0.2)*3)
+            tx=tx+smolfont:getWidth(sub(msg,c,c))
+        end
+       
+        unlock_ty=unlock_ty+(309/2-h/2-unlock_ty)*0.1
+        if math.abs(unlock_ty-(309/2-h/2))<1 then unlock_ty=309/2-h/2 end
     end
 
     fg(1,1,1,1)
@@ -219,7 +246,7 @@ function menudraw()
         local te=sub(title,i+1,#title)
         title = ts..string.char(random(33,96))..te
     end
-    if t>32+24+32+24+16+24-8 and t%24==0 then
+    if t>32+24+32+24+16+24-8-16 and t%24==0 then
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
     end

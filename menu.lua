@@ -19,14 +19,23 @@ function menu(dt)
             cycle.dx=-8
             cycle.flip=nil
         end
-        if tapped('z') then 
+        if tapped('z') or tapped('return') then 
             if cycle[cycle.i]=='Standard' then
                 sc_t=t+1
                 title='MOMENTUM'
+                mode='Standard'
                 love.update = menufade
                 love.draw = menufadedraw
                 --love.update = tutor
                 --love.draw = gamedraw
+                return
+            end
+            if cycle[cycle.i]=='Chaotic' and cycle_unlocks[cycle.i] then
+                sc_t=t+1
+                title='MOMENTUM'
+                mode='Chaotic'
+                love.update = menufade
+                love.draw = menufadedraw
                 return
             end
         end
@@ -65,3 +74,5 @@ function menufade(dt)
     
     t=t+1
 end
+
+unlocks={}

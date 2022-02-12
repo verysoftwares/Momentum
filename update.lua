@@ -73,7 +73,15 @@ function update(dt)
 
     bonus_mvmt()
 
-    if t>0 then score=score+1 end
+    if t>0 then 
+        score=score+1 
+        if mode=='Standard' and score>=5000 and not cycle_unlocks['Gallery'] and not find(unlocks,'Gallery') then
+            ins(unlocks,'Gallery')
+        end
+        if mode=='Standard' and score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
+            ins(unlocks,'Chaotic')
+        end
+    end
 
     t = t+1
 end
@@ -93,10 +101,29 @@ function gameover(dt)
     t=t+1
 end
 
+function show_unlocks(dt)
+    st=love.timer.getTime()
+    deltat=dt
+
+    if tapped('z') or tapped('return') then
+        cycle_unlocks[unlocks[1]]=true
+        rem(unlocks,1)
+        if #unlocks>0 then 
+            love.update=show_unlocks
+            unlock_ty=309
+        else
+            love.update=gameover
+            sc_t=t+1
+        end
+    end
+
+    t=t+1
+end
+
 function replay(dt)
     st=love.timer.getTime()
     deltat=dt
-    
+
     if love.keyboard.isDown('escape') then
         love.event.push('quit')
     end

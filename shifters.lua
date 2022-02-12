@@ -35,11 +35,17 @@ function shift(s)
 
     -- first time moving -> add spawner
     if s.myspawn==nil then
-    ins(spawners,{t=math.max(spawn_t,score+spawn_dt),x=s.x,y=s.y})
-    s.myspawn=spawners[#spawners]
-    spawn_t=spawn_t+spawn_dt
-    if spawn_dt>100 then spawn_dt=spawn_dt-50 end
-    --print(spawners[#spawners].t, spawn_t)
+    if mode=='Standard' then
+        ins(spawners,{t=spawn_t,x=s.x,y=s.y})
+        s.myspawn=spawners[#spawners]
+        spawn_t=spawn_t+spawn_dt
+    elseif mode=='Chaotic' then    
+        ins(spawners,{t=math.max(spawn_t,score+spawn_dt),x=s.x,y=s.y})
+        s.myspawn=spawners[#spawners]
+        spawn_t=spawn_t+spawn_dt
+        if spawn_dt>100 then spawn_dt=spawn_dt-50 end
+        --print(spawners[#spawners].t, spawn_t)
+        end
     end
 
     s.update=shiftupdate
