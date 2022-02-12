@@ -555,7 +555,7 @@ function menufadein()
 
     fg(1,1,1,1)
     lg.setCanvas()
-    lg.draw(old_canvas,0,0,0,scale,scale)
+    lg.draw(old_canvas)
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
 
