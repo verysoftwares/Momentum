@@ -476,7 +476,7 @@ function menufadeout()
 end
 
 function menufadein()
-    audio.mewsic1:setVolume(audio.mewsic:getVolume()-0.01)
+    audio.mewsic1:setVolume(audio.mewsic1:getVolume()-0.01)
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
