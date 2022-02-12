@@ -1,45 +1,42 @@
-function loadprogress(file)
-    local file = file or 'scores.soft'
+function loadprogress()
+    local file = 'scores.soft'
     local chunk = love.filesystem.load(file)
 
     if chunk then chunk() 
         print(fmt('loaded persistent data from %s',file))
-        --the saved table exists now
     else
         print(fmt('no save file %s',file))
     end 
 
-    local file = 'unlocks.soft'
-    local chunk = love.filesystem.load(file)
+    file = 'unlocks.soft'
+    chunk = love.filesystem.load(file)
 
     if chunk then chunk() 
         print(fmt('loaded persistent data from %s',file))
-        --the saved table exists now
     else
         print(fmt('no save file %s',file))
     end 
 
-    local file = 'replays.soft'
-    local chunk = love.filesystem.load(file)
+    file = 'replays.soft'
+    chunk = love.filesystem.load(file)
 
     if chunk then chunk() 
         print(fmt('loaded persistent data from %s',file))
-        --the saved table exists now
     else
         print(fmt('no save file %s',file))
     end 
 end
 
-function saveprogress(file)
-    local file = file or 'scores.soft'
+function saveprogress()
+    local file = 'scores.soft'
 
     local out=fmt('hiscore_standard=%d\n',hiscore_standard)
     out=out..fmt('hiscore_chaotic=%d',hiscore_chaotic)
     love.filesystem.write(file, out)
 
-    local file = 'unlocks.soft'
+    file = 'unlocks.soft'
 
-    local out='cycle_unlocks={'
+    out='cycle_unlocks={'
     for i,c in ipairs(cycle) do
         if cycle_unlocks[c] then
         out=out..c..'=true,'
@@ -48,9 +45,9 @@ function saveprogress(file)
     out=out..'}'
     love.filesystem.write(file, out)
 
-    local file = 'replays.soft'
+    file = 'replays.soft'
 
-    local out='gallery={'
+    out='gallery={'
     for i,rp in ipairs(gallery) do
         out=out..'{'
         for j,keys in ipairs(rp) do
