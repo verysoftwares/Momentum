@@ -185,7 +185,7 @@ function back_to_menu()
     fg(1,1,1,1)
     lg.draw(canvas)
     lg.draw(canvas2)
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4)
     lg.setCanvas(cn)
     cycle.x=309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
     cycle.dx=nil
