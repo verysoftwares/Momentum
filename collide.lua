@@ -61,6 +61,7 @@ function collide(_ball,args)
             if not find(gallery,rp) then 
                 ins(gallery,rp) 
                 rp.score=score+1
+                rp.mode=mode
             end
             saveprogress()
         else

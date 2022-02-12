@@ -60,6 +60,7 @@ function saveprogress(file)
             end
             out=out..'},'
         end
+        out=out..fmt('score=%d,',rp.score)..fmt('mode=%s,',rp.mode)
         out=out..'},'
     end
     out=out..'}'
