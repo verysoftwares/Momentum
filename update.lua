@@ -106,7 +106,6 @@ function show_unlocks(dt)
     deltat=dt
 
     if tapped('z') or tapped('return') then
-        cycle_unlocks[unlocks[1]]=true
         rem(unlocks,1)
         if #unlocks>0 then 
             love.update=show_unlocks

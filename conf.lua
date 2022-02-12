@@ -9,7 +9,7 @@ function love.conf(t)
 
     t.console = true                    -- Attach a console (boolean, Windows only)
 
-    t.identity = nil                    -- The name of the save directory (string)
+    t.identity = 'verysoftwares'                    -- The name of the save directory (string)
     t.appendidentity = false            -- Search files in source directory before save directory (boolean)
     t.version = "11.4"                  -- The LÖVE version this game was made for (string)
     t.accelerometerjoystick = true      -- Enable the accelerometer on iOS and Android by exposing it as a Joystick (boolean)

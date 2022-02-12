@@ -1,8 +1,8 @@
 cycle={i=1,'Standard','Chaotic','Gallery','Options','Quit'}
 cycle_unlocks={}
-for i=1,#cycle do
-    cycle_unlocks[cycle[i]]=false
-end
+--for i=1,#cycle do
+--    cycle_unlocks[cycle[i]]=false
+--end
 cycle_unlocks['Standard']=true
 cycle_unlocks['Options']=true
 cycle_unlocks['Quit']=true

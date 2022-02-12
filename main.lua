@@ -2,6 +2,7 @@
     require 'load'
     require 'alias'
     require 'utility'
+    require 'file-io'
     require 'input'
     require 'collide'
     require 'shifters'
@@ -18,6 +19,8 @@ love.update = tutor
 love.draw = gamedraw
 mode='Standard'
 end
+
+loadprogress()
 
 t = 0
 -- runtime.
