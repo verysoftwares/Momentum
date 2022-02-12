@@ -42,7 +42,8 @@ function init()
 end
 
 function update(dt)
-    local st=love.timer.getTime()
+    st=love.timer.getTime()
+    deltat=dt
     
     init()
 
@@ -74,14 +75,12 @@ function update(dt)
 
     if t>0 then score=score+1 end
 
-    local et=love.timer.getTime()
-    while dt+et-st<1/60 do et=love.timer.getTime() end
-    
     t = t+1
 end
 
 function gameover(dt)
-    local st=love.timer.getTime()
+    st=love.timer.getTime()
+    deltat=dt
 
     if love.keyboard.isDown('escape') then
         love.event.push('quit')
@@ -91,13 +90,13 @@ function gameover(dt)
         return
     end
 
-    local et=love.timer.getTime()
-    while dt+et-st<1/60 do et=love.timer.getTime() end
-
     t=t+1
 end
 
 function replay(dt)
+    st=love.timer.getTime()
+    deltat=dt
+    
     if love.keyboard.isDown('escape') then
         love.event.push('quit')
     end
@@ -112,15 +111,13 @@ function replay(dt)
 end
 
 function tutor(dt)
-    local st=love.timer.getTime()
+    st=love.timer.getTime()
+    dt=dt
 
     if love.keyboard.isDown('a') or love.keyboard.isDown('d') or love.keyboard.isDown('left') or love.keyboard.isDown('right') then
     reset()
     return
     end
-
-    local et=love.timer.getTime()
-    while dt+et-st<1/60 do et=love.timer.getTime() end
 
     t=t+1
 end

@@ -7,6 +7,9 @@ cycle_unlocks['Standard']=true
 cycle_unlocks['Options']=true
 
 function menu(dt)
+    st=love.timer.getTime()
+    deltat=dt
+
     if ctrl then
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
         if tapped('left') then 
@@ -57,5 +60,8 @@ function visualize(c)
 end
 
 function menufade(dt)
+    st=love.timer.getTime()
+    deltat=dt
+    
     t=t+1
 end

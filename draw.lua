@@ -6,7 +6,7 @@ canvas2=lg.newCanvas(309,309)
 -- rotated text layer
 canvas3=lg.newCanvas(309+200,309+200)
 
-function gamedraw()
+function gamedraw(nocap)
     lg.setCanvas(canvas)
     bg(153/255.0,152/255.0,100/255.0)
     fg(1,1,1,1)
@@ -194,6 +194,11 @@ function gamedraw()
     fg(1,1,1,1)
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas2,0,0,0,scale,scale)
+
+    if not nocap then
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
+    end
 end
 
 function menudraw()
@@ -287,10 +292,13 @@ function menudraw()
     lg.setCanvas()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
 end
 
 function menufadedraw()
-    gamedraw()
+    gamedraw(true)
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
@@ -361,6 +369,9 @@ function menufadedraw()
     lg.setCanvas()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
 end
 
 love.draw= menudraw
