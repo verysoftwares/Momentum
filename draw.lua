@@ -291,7 +291,8 @@ function menudraw()
         local te=sub(title,i+1,#title)
         title = ts..string.char(random(33,96))..te
     end
-    if t>32+24+32+24+16 and t%24==0 then
+    if t>32+24+32+24+16-60 and (t-12)%16==0 then
+        init(2)
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
     end
@@ -475,7 +476,7 @@ function menufadeout()
 end
 
 function menufadein()
-    audio.mewsic:setVolume(audio.mewsic:getVolume()-0.01)
+    audio.mewsic1:setVolume(audio.mewsic:getVolume()-0.01)
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
@@ -545,8 +546,8 @@ function menufadein()
     if bar_dist_y<=0 then 
         bar_dist_y=0
         love.update=menu; love.draw=menudraw
-        audio.mewsic:stop()
-        audio.mewsic:setVolume(0.7)
+        audio.mewsic1:stop()
+        audio.mewsic1:setVolume(0.7)
     end
     else
     bar_dist_y=bar_dist_y+4; if bar_dist_y>48 then bar_dist_y=48 end

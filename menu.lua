@@ -11,6 +11,11 @@ function menu(dt)
     st=love.timer.getTime()
     deltat=dt
 
+    if t==0 then init(3) end
+    if audio.mewsic2:tell()>=4.6252154195011-2 then
+        audio.mewsic3:stop()
+    end
+
     if ctrl then
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
         if tapped('left') then 

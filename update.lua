@@ -35,9 +35,9 @@ grav=0.06
 
 rp={i=1}
 
-function init()
-    if not audio.mewsic:isPlaying() then
-        audio.mewsic:play()
+function init(n)
+    if not audio['mewsic'..n]:isPlaying() then
+        audio['mewsic'..n]:play()
     end
 end
 
@@ -45,7 +45,7 @@ function update(dt)
     st=love.timer.getTime()
     deltat=dt
     
-    init()
+    init(1)
 
     if love.keyboard.isDown('escape') then
         back_to_menu()
