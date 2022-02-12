@@ -246,6 +246,7 @@ function gamedraw(nocap)
         lg.setCanvas(cn)
     end
 
+    fg(1,1,1,1)
     for i=#particles,1,-1 do
         local p=particles[i]
         p.i = p.i or i
