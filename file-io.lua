@@ -18,6 +18,16 @@ function loadprogress(file)
     else
         print(fmt('no save file %s',file))
     end 
+
+    local file = 'replays.soft'
+    local chunk = love.filesystem.load(file)
+
+    if chunk then chunk() 
+        print(fmt('loaded persistent data from %s',file))
+        --the saved table exists now
+    else
+        print(fmt('no save file %s',file))
+    end 
 end
 
 function saveprogress(file)
@@ -36,5 +46,23 @@ function saveprogress(file)
         end
     end
     out=out..'}'
+    love.filesystem.write(file, out)
+
+    local file = 'replays.soft'
+
+    local out='gallery={'
+    for i,rp in ipairs(gallery) do
+        out=out..'{'
+        for j,keys in ipairs(rp) do
+            out=out..'{'
+            for k,key in ipairs(keys) do
+                out=out..'\''..key..'\''..','
+            end
+            out=out..'},'
+        end
+        out=out..'},'
+    end
+    out=out..'}'
+
     love.filesystem.write(file, out)
 end

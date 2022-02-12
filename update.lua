@@ -189,6 +189,7 @@ function back_to_menu()
     cycle.x=309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
     cycle.dx=nil
     cycle.flip=nil
+    onlyoncem2=nil
 end
 
 --love.update= update

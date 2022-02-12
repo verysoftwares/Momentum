@@ -58,6 +58,10 @@ function collide(_ball,args)
             else
             love.update=gameover
             end 
+            if not find(gallery,rp) then 
+                ins(gallery,rp) 
+                rp.score=score+1
+            end
             saveprogress()
         else
             rem(bonuses,args.i)

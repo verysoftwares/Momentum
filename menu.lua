@@ -7,6 +7,8 @@ cycle_unlocks['Standard']=true
 cycle_unlocks['Options']=true
 cycle_unlocks['Quit']=true
 
+gallery={}
+
 function menu(dt)
     st=love.timer.getTime()
     deltat=dt

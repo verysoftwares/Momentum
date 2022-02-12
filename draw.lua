@@ -291,7 +291,7 @@ function menudraw()
         title = ts..string.char(random(33,96))..te
     end
     if t>32+24+32+24+16-60 and (t-12)%16==0 then
-        init(2)
+        if not onlyoncem2 then init(2); onlyoncem2=true end
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
     end
@@ -398,6 +398,7 @@ function menudraw()
 end
 
 function menufadeout()
+    audio.mewsic2:setVolume(audio.mewsic2:getVolume()-0.01)
     gamedraw(true)
 
     lg.setCanvas(canvas3)
@@ -461,6 +462,8 @@ function menufadeout()
     else
     bar_dist_y=bar_dist_y-4; if bar_dist_y<-185 then 
     --bar_dist_y=nil
+    audio.mewsic2:stop()
+    audio.mewsic2:setVolume(0.7)
     love.update=tutor; love.draw=gamedraw
     end
     end
