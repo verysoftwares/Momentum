@@ -227,7 +227,6 @@ function gamedraw(nocap)
         lg.setFont(smolfont)
 
         tx=309/2-smolfont:getWidth(msg)/2
-        unlock_ty=unlock_ty or 309
 
         fg(0x3c/255,0x4c/255,0x25/255,1)
         local h=smolfont:getHeight('MOMENTUM')+8

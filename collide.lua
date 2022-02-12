@@ -53,6 +53,7 @@ function collide(_ball,args)
             if score+1>_G['hiscore_'..string.lower(mode)] then _G['hiscore_'..string.lower(mode)]=score+1 end
             if #unlocks>0 then
             love.update=show_unlocks
+            unlock_ty=309
             else
             love.update=gameover
             end 
