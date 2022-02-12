@@ -1,4 +1,4 @@
-debug=false
+debug=true
 
 score=0
 
@@ -139,7 +139,7 @@ end
 
 function tutor(dt)
     st=love.timer.getTime()
-    dt=dt
+    deltat=dt
 
     if love.keyboard.isDown('a') or love.keyboard.isDown('d') or love.keyboard.isDown('left') or love.keyboard.isDown('right') then
     reset()

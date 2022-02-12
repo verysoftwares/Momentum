@@ -5,13 +5,19 @@ canvas=lg.newCanvas(309,309)
 canvas2=lg.newCanvas(309,309)
 -- rotated text layer
 canvas3=lg.newCanvas(309+200,309+200)
-
+-- for UI elements
+canvas4=lg.newCanvas(309,309)
+        
 function gamedraw(nocap)
     lg.setCanvas(canvas)
     bg(153/255.0,152/255.0,100/255.0)
     fg(1,1,1,1)
     lg.draw(images.bg1)
 
+    lg.setCanvas(canvas4)
+    bg(0,0,0,0)
+    lg.setCanvas(canvas3)
+    bg(0,0,0,0)
     lg.setCanvas(canvas2)
     bg(0,0,0,0)
 
@@ -102,28 +108,54 @@ function gamedraw(nocap)
     circ('fill',309-60-12,309-40+12,12.8)
     fg(r,g,b,a)
     lg.setFont(smolfont)
-    lg.print('Shift to use.',309-60-12,309-40+12+12+4)
+    lg.push()
+    local cn=lg.getCanvas()
+    lg.setCanvas(canvas3)
+    --lg.rotate(-pi/4)
+    lg.print('Shift to use.',309-100-40+4+4,309-100-10+150+40-4)
+    lg.setCanvas(cn)
+    lg.pop()
     end
 
     lg.setFont(lcdfont)
     lg.push()
     lg.rotate(-pi/4)
     if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
-    lg.print(fmt('%.5d',score),-60+4,15+60+15)
+    -- low res
+    --lg.print(fmt('%.5d',score),-60+4,15+60+15)
     end
     lg.setFont(lcdfont)
-    if plrbonus>0 then lg.print(plrbonus,-60+4+20+20,15+60+15+15+260) end
+    --if plrbonus>0 then lg.print(plrbonus,-60+4+20+20,15+60+15+15+260) end
     lg.pop()
+
+    lg.setFont(lcdfont)
+    local cn=lg.getCanvas()
+    lg.setCanvas(canvas3)
+    if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
+    lg.print(fmt('%.5d',score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
+    end
+    lg.setFont(lcdfont)
+    if plrbonus>0 then lg.print(plrbonus,-60+4+20+20+100+100+16+2,15+60+15+15+260+100-100+2-1) end
+    lg.setCanvas(cn)
+
     if love.update==replay then
-    lg.push()
-    lg.rotate(pi/4)
     if t%64<32 then
     local r,g,b,a=lg.getColor()
     fg(0xb0/255,0x20/255,0x40/255,1)
-    lg.print('REPLAY',60+80+10+1,-60-80+20-12+2+2)
+    lg.push()
+    lg.rotate(pi/4)
+    -- low res
+    --lg.print('REPLAY',60+80+10+1,-60-80+20-12+2+2)
+    lg.pop()
+    local cn=lg.getCanvas()
+    lg.push()
+    lg.setCanvas(canvas3)
+    lg.rotate(pi/2)
+    lg.print('REPLAY',200-40-10+3-1,-300-40-10+3)
+    lg.pop()
+    lg.setCanvas(cn)
     fg(r,g,b,a)
     end
-    lg.pop()
     end
 
     if love.update==gameover or love.update==show_unlocks then
@@ -177,8 +209,15 @@ function gamedraw(nocap)
     end
 
     if love.update==show_unlocks then
+        local cn=lg.getCanvas()
+        lg.setCanvas(canvas3)
         fg(0.4,0.4,0.4,0.7)
-        rect('fill',0,0,309,309)
+        rect('fill',0,0,309+200,309+200)
+        --lg.setCanvas(canvas3)
+        --fg(0.4,0.4,0.4,0.7)
+        --rect('fill',0,0,309+200,309+200)
+        --lg.setCanvas(canvas2)
+        lg.setCanvas(canvas4)
 
         local msg=fmt('Unlocked %s!',unlocks[1])
         if unlocks[1]=='Chaotic' then msg=fmt('Unlocked %s mode!',unlocks[1]) end
@@ -201,6 +240,8 @@ function gamedraw(nocap)
        
         unlock_ty=unlock_ty+(309/2-h/2-unlock_ty)*0.1
         if math.abs(unlock_ty-(309/2-h/2))<1 then unlock_ty=309/2-h/2 end
+
+        lg.setCanvas(cn)
     end
 
     for i=#particles,1,-1 do
@@ -220,7 +261,9 @@ function gamedraw(nocap)
     fg(1,1,1,1)
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas2,0,0,0,scale,scale)
-
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.draw(canvas4,0,0,0,scale,scale)
+    
     if not nocap then
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
@@ -439,6 +482,13 @@ function menufadein()
     else
     bg(0,0,0,0)
     end
+
+    -- for debug
+    bar_dist = bar_dist or 0
+    bar_dist_y=bar_dist_y or -185
+    title = title or ''
+    smolrect=smolrect or {}
+    titlelock = titlelock or 1
 
     if t%2==0 and bar_dist_y==48 then
     if #title<#'MOMENTUM' then
