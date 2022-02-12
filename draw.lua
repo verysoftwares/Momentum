@@ -135,12 +135,12 @@ function gamedraw(nocap)
         lg.print(sub('GAME OVER',c,c),tx,309/2-40+2+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('GAME OVER',c,c))
     end
-    tx=309/2-smolfont:getWidth('R to reset.')/2
-    for c=1,#('R to reset.') do
+    tx=309/2-smolfont:getWidth('R to reset, Esc for menu.')/2
+    for c=1,#('R to reset, Esc for menu.') do
         local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
-        lg.print(sub('R to reset.',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
-        tx=tx+smolfont:getWidth(sub('R to reset.',c,c))
+        lg.print(sub('R to reset, Esc for menu.',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
+        tx=tx+smolfont:getWidth(sub('R to reset, Esc for menu.',c,c))
     end
     if t-sc_t>=90 and love.update==gameover then
     tx=309/2-smolfont:getWidth('Replay in')/2
@@ -203,7 +203,6 @@ function gamedraw(nocap)
         if math.abs(unlock_ty-(309/2-h/2))<1 then unlock_ty=309/2-h/2 end
     end
 
-    fg(1,1,1,1)
     for i=#particles,1,-1 do
         local p=particles[i]
         p.i = p.i or i
@@ -312,6 +311,34 @@ function menudraw()
         lg.print(sub(visualize(cycle[cycle.i]),c,c),100+tx-40,30+309-60+8-3+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub(visualize(cycle[cycle.i]),c,c))
     end
+
+    local function rainbowprint(msg)
+    local tx=309/2-smolfont:getWidth(msg)/2
+    for c=1,#(msg) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        fg(r/255.0,g/255.0,b/255.0,1)
+        lg.print(sub(msg,c,c),100+tx-40,30+309-60+8-3-24+4)
+        tx=tx+smolfont:getWidth(sub(msg,c,c))
+    end
+    end
+
+    if not cycle.dx and cycle[cycle.i]=='Quit' then
+    rainbowprint('Back to reality...')
+    end
+    if not cycle.dx and cycle[cycle.i]=='Standard' then
+    rainbowprint('The classic Momentum experience!')
+    end
+    if not cycle.dx and (cycle[cycle.i]=='Options' or (cycle[cycle.i]=='Gallery' and cycle_unlocks['Gallery'])) then
+    rainbowprint('Not yet implemented.')
+    end
+    if not cycle.dx and cycle[cycle.i]=='Chaotic' then
+    local msg='10000 points in Standard mode to unlock!'
+    if cycle_unlocks['Chaotic'] then msg='Play with accelerated spawners!' end
+    rainbowprint(msg)
+    end
+    if not cycle.dx and (cycle[cycle.i]=='Gallery' and not cycle_unlocks['Gallery']) then
+    rainbowprint('5000 points in Standard mode to unlock!')
+    end
     end
     end
 
@@ -402,6 +429,8 @@ function menufadeout()
 end
 
 function menufadein()
+    audio.mewsic:setVolume(audio.mewsic:getVolume()-0.01)
+
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
     lg.setCanvas(canvas)
@@ -462,7 +491,9 @@ function menufadein()
     bar_dist_y=bar_dist_y-4; 
     if bar_dist_y<=0 then 
         bar_dist_y=0
-        love.update=menu; love.draw=menudraw 
+        love.update=menu; love.draw=menudraw
+        audio.mewsic:stop()
+        audio.mewsic:setVolume(0.7)
     end
     else
     bar_dist_y=bar_dist_y+4; if bar_dist_y>48 then bar_dist_y=48 end
@@ -470,6 +501,7 @@ function menufadein()
 
     fg(1,1,1,1)
     lg.setCanvas()
+    lg.draw(old_canvas,0,0,0,scale,scale)
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
 

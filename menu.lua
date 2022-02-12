@@ -1,10 +1,11 @@
-cycle={i=1,'Standard','Chaotic','Gallery','Options'}
+cycle={i=1,'Standard','Chaotic','Gallery','Options','Quit'}
 cycle_unlocks={}
-for i=1,4 do
+for i=1,#cycle do
     cycle_unlocks[cycle[i]]=false
 end
 cycle_unlocks['Standard']=true
 cycle_unlocks['Options']=true
+cycle_unlocks['Quit']=true
 
 function menu(dt)
     st=love.timer.getTime()
@@ -31,7 +32,7 @@ function menu(dt)
                 --love.draw = gamedraw
                 return
             end
-            if cycle[cycle.i]=='Chaotic' and cycle_unlocks[cycle.i] then
+            if cycle[cycle.i]=='Chaotic' and cycle_unlocks[cycle[cycle.i]] then
                 sc_t=t+1
                 title='MOMENTUM'
                 mode='Chaotic'
@@ -39,6 +40,9 @@ function menu(dt)
                 love.update = menufade
                 love.draw = menufadeout
                 return
+            end
+            if cycle[cycle.i]=='Quit' then
+                love.event.push('quit')
             end
         end
 

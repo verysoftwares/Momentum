@@ -179,6 +179,13 @@ end
 function back_to_menu()
     love.update=menufade
     love.draw=menufadein
+    old_canvas=old_canvas or lg.newCanvas(309,309)
+    local cn=lg.getCanvas()
+    lg.setCanvas(old_canvas)
+    fg(1,1,1,1)
+    lg.draw(canvas)
+    lg.draw(canvas2)
+    lg.setCanvas(cn)
     cycle.x=309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
     cycle.dx=nil
     cycle.flip=nil
