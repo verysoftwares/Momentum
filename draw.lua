@@ -316,7 +316,7 @@ function menudraw()
         end
     end
 
-    bar_dist=bar_dist or 400
+    bar_dist=bar_dist or 410
     lg.push()
     lg.rotate(-pi/4)
     fg(0xcd/255,0xcd/255,0xc8/255)
