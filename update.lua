@@ -1,4 +1,6 @@
 score=0
+hiscore_standard=0
+hiscore_chaotic=0
 
 grid=flr(43/2+1)
 

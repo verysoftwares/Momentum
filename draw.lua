@@ -134,6 +134,8 @@ function gamedraw(nocap)
     if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
     lg.print(fmt('%.5d',score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
     end
+    lg.setFont(smolfont)
+    lg.print(fmt('Hi score %.5d',_G['hiscore_'..string.lower(mode)]),-60+4+100+100+16+2,15+60+15+100-100+2-1-32+6)
     lg.setFont(lcdfont)
     if plrbonus>0 then lg.print(plrbonus,-60+4+20+20+100+100+16+2,15+60+15+15+260+100-100+2-1) end
     lg.setCanvas(cn)

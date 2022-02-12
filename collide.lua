@@ -50,6 +50,8 @@ function collide(_ball,args)
 
         if _ball==ball then
             sc_t=t+1; 
+            if mode=='Standard' and score>hiscore_standard then hiscore_standard=score end
+            if mode=='Chaotic' and score>hiscore_chaotic then hiscore_chaotic=score end
             if #unlocks>0 then
             love.update=show_unlocks
             else
