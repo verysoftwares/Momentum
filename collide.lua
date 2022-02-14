@@ -160,7 +160,7 @@ function solidcoll(args)
     else
     local tx=s.x-20+math.abs(_ball.y-s.y)
     if tx<_ball.x then aligned=true; _ball.x=tx end
-    if _ball~=ball then _ball.dx=-xforce end
+    if _ball~=args.w.ball then _ball.dx=-xforce end
     end
     end
     else
