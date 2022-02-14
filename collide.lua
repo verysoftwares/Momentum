@@ -63,6 +63,7 @@ function collide(_ball,args,w)
                 ins(gallery,w.rp) 
                 w.rp.score=w.score+1
                 w.rp.mode=w.mode
+                w.rp.time=os.time()
             end
             if not rep then saveprogress(w) end
         else
