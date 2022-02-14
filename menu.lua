@@ -101,7 +101,13 @@ function rp_gallery(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
+    if tapped('escape') then
+        love.update=menufade
+        love.draw=galleryfadeout
+    end
+
     if t-sc_t==-1 then
+        gallery.i=1
         preview1=lg.newCanvas(309*scale,309*scale)
         worldprev1=new_world()
         preview2=lg.newCanvas(309*scale,309*scale)
@@ -113,7 +119,6 @@ function rp_gallery(dt,w)
         end
     end
 
-    gallery.i=gallery.i or 1
     if tapped('left') and gallery[1] then 
         gallery.i=gallery.i-1
         if gallery.i<1 then gallery.i=1 

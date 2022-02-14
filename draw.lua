@@ -649,7 +649,7 @@ function galleryfadein()
     
     bar_dist=bar_dist+4; if bar_dist>280 then bar_dist=280 end
     --bar_dist_y=nil
-    bar_xh=bar_xh+2; if bar_xh>8 then bar_xh=8 end
+    bar_xh=bar_xh+0.2; if bar_xh>8 then bar_xh=8 end
     bar_xw=bar_xw+2; if bar_xw>120+16 then
     bar_xw=120+16
     if bar_dist==280 then 
@@ -782,6 +782,75 @@ vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ) {
     return tc;
 }
 ]])
+
+function galleryfadeout()
+    lg.setCanvas(canvas3)
+    bg(0,0,0,0)
+
+    lg.setCanvas(canvas)
+    bg(153/255.0,152/255.0,100/255.0)
+   
+    if t%2==0 then
+    if #title<#'MOMENTUM' then
+        title=title..string.char(random(33,96))
+    end
+    for i=titlelock,math.min(#'MOMENTUM',#title) do
+        local ts=sub(title,1,i-1)
+        local te=sub(title,i+1,#title)
+        title = ts..string.char(random(33,96))..te
+    end
+    end
+    if t%8==0 then
+        title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
+        titlelock=titlelock+1
+    end
+
+    fg(1,1,1,1)
+    lg.setCanvas(canvas3)
+    lg.setFont(lcdfont)
+    lg.print(title,309/2+60-80-10+4-1-bar_dist,24+24-1+60+60-40+20+10+2)
+    lg.setCanvas(canvas)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
+    fg(0xcd/255,0xcd/255,0xc8/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    fg(0x29/255,0x23/255,0x2e/255)
+    rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
+    lg.pop()
+    
+    lg.push()
+    lg.rotate(-pi/4)
+    lg.translate(-120-40+8-1-1,30-1)
+    fg(0x3c/255,0x4c/255,0x25/255)
+    smolrect[1]=0-60
+    smolrect[2]=309-60
+    smolrect[3]=309+120
+    smolrect[4]=smolfont:getHeight('MOMENTUM')+8
+    rect('fill',smolrect[1],smolrect[2]+bar_dist,smolrect[3],smolrect[4])
+    lg.pop()
+    
+    bar_dist=bar_dist-4; if bar_dist<0 then bar_dist=0 end
+    --bar_dist_y=nil
+    bar_xh=bar_xh-0.2; if bar_xh<0 then bar_xh=0 end
+    bar_xw=bar_xw-2; if bar_xw<0 then
+    bar_xw=0
+    if bar_dist==0 and title=='MOMENTUM' then 
+    love.update=menu; love.draw=menudraw
+    sc_t=t+1
+    end
+    end
+
+    fg(1,1,1,1)
+    lg.setCanvas()
+    lg.draw(canvas,0,0,0,scale,scale)
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
+end
 
 love.draw= menudraw
 
