@@ -145,12 +145,12 @@ function NESWalign(args)
         if args._ball.x+13>=args.s.x+grid then
             --print('solidcoll northeast',t)
             local tx=args.s.x+40-2-math.abs(args._ball.y-args.s.y)
-            if tx>=args._ball.x then aligned=true; args._ball.x=tx end
+            if tx>=args._ball.x then args.aligned=true; args._ball.x=tx end
             if args._ball~=ball then args._ball.dx=xforce end
         else
             --print('solidcoll northwest',t)
             local tx=args.s.x-20+math.abs(args._ball.y-args.s.y)
-            if tx<args._ball.x then aligned=true; args._ball.x=tx end
+            if tx<args._ball.x then args.aligned=true; args._ball.x=tx end
             if args._ball~=ball then args._ball.dx=-xforce end
         end
     else
@@ -160,12 +160,12 @@ function NESWalign(args)
         if args._ball.x+13<=args.s.x+grid then
             --print('solidcoll southwest',t)
             local tx=args.s.x-28-8+math.abs(args._ball.y-args.s.y)
-            if tx<args._ball.x then aligned=true; args._ball.x=tx end
+            if tx<args._ball.x then args.aligned=true; args._ball.x=tx end
             if args._ball~=ball then args._ball.dx=-xforce end
         else
             --print('solidcoll southeast',t)
             local tx=args.s.x+40+8+8-2-math.abs(args._ball.y-args.s.y)
-            if tx>=args._ball.x then aligned=true; args._ball.x=tx end
+            if tx>=args._ball.x then args.aligned=true; args._ball.x=tx end
             if args._ball~=ball then args._ball.dx=xforce end
         end
     end
