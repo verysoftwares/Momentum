@@ -1,6 +1,8 @@
 -- input, working both for live input
 -- and recorded input (replays).
-function input()
+function input(w)
+    local ball=w.ball
+    local rp=w.rp
     local press=false
     if ((love.keyboard.isDown('a') or love.keyboard.isDown('left')) and love.update~=replay) or (love.update==replay and find(rp[rp.i],'a')) then
         press=true
@@ -18,9 +20,9 @@ function input()
         ball.dx=ball.dx+xspeed
         if love.update~=replay then ins(rp[#rp],'d') end
     end
-    if (plrbonus>0 and ((tapped('lshift') or tapped('rshift')) and love.update~=replay) and not ball.bonus) or (love.update==replay and find(rp[rp.i],'shift')) then
+    if (w.plrbonus>0 and ((tapped('lshift') or tapped('rshift')) and love.update~=replay) and not ball.bonus) or (love.update==replay and find(rp[rp.i],'shift')) then
         ball.bonus=65
-        plrbonus=plrbonus-1
+        w.plrbonus=w.plrbonus-1
         playsnd(audio.powerup)
         --print('bonus')
         if love.update~=replay then ins(rp[#rp],'shift') end

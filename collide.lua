@@ -22,11 +22,11 @@ function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
 end
 
 -- ball collision setup
-function collide(_ball,args)
-    aligned=false
-    touch=false
+function collide(_ball,args,w)
+    args.aligned=false
+    args.touch=false
     
-    ballcollide(_ball,args)
+    ballcollide(_ball,args,w)
     c=args.c
 
     -- collisions forgiven for 5 frames
@@ -41,17 +41,17 @@ function collide(_ball,args)
     -- _ball is destroyed
     if (c>29 and (_ball.lethalt>=5 or headon(args._sc)) and (#args._sc>=2 and scsame~=1)) or _ball.y>=309 then 
         if not (_ball.y>=309) then
-            particlespam(_ball)
+            particlespam(_ball,w)
             playsnd(audio.crush)
         else
             playsnd(audio.fall)
         end
         _ball.lethalt=0
 
-        if _ball==ball then
+        if _ball==w.ball then
             local rep=love.update==replay
-            sc_t=t+1; 
-            if score+1>_G['hiscore_'..string.lower(mode)] then _G['hiscore_'..string.lower(mode)]=score+1 end
+            sc_t=w.t+1; 
+            if w.score+1>_G['hiscore_'..string.lower(w.mode)] then _G['hiscore_'..string.lower(w.mode)]=w.score+1 end
             if #unlocks>0 then
             for i,u in ipairs(unlocks) do cycle_unlocks[u]=true end
             love.update=show_unlocks
@@ -59,14 +59,14 @@ function collide(_ball,args)
             else
             love.update=gameover
             end 
-            if not find(gallery,rp) then 
-                ins(gallery,rp) 
-                rp.score=score+1
-                rp.mode=mode
+            if not find(gallery,w.rp) then 
+                ins(gallery,w.rp) 
+                w.rp.score=w.score+1
+                w.rp.mode=w.mode
             end
-            if not rep then saveprogress() end
+            if not rep then saveprogress(w) end
         else
-            rem(bonuses,args.i)
+            rem(w.bonuses,args.i)
             args.removed=true
         end
     end
@@ -74,11 +74,12 @@ end
 
 -- collide with top of the map
 -- and with all shifters
-function ballcollide(_ball,args)
+function ballcollide(_ball,args,w)
     args._ball=_ball
+    args.w=w
     pixelperfect(args._ball,args._ball.imgdata,srndtop,surroundtopdata,ceilcoll,args)
-    for i=#shifters,1,-1 do
-        local s=shifters[i]
+    for i=#w.shifters,1,-1 do
+        local s=w.shifters[i]
         args.si=i; args.s=s
         pixelperfect(args._ball,args._ball.imgdata,s,shifterdata,solidcoll,args)
     end
@@ -102,12 +103,12 @@ end
 
 -- shifters
 function solidcoll(args)
-    if args._ball==ball and ball.bonus then
-        particlespam(args.s)
-        rem(shifters,args.si)
-        score=score+250
+    if args._ball==args.w.ball and args.w.ball.bonus then
+        particlespam(args.s,args.w)
+        rem(args.w.shifters,args.si)
+        args.w.score=args.w.score+250
         playsnd(audio.crush)
-        shout(250,ball.x+13,ball.y+13)
+        shout(250,args.w.ball.x+13,args.w.ball.y+13,args.w)
         return true
     end
 
@@ -115,13 +116,13 @@ function solidcoll(args)
         ins(args._sc,args.s)
     end
     args.c=args.c+1
-    if not touch and args._ball==ball then
-        score=score+20
-        shout(20,ball.x+13,ball.y+13)
+    if not args.touch and args._ball==args.w.ball then
+        args.w.score=args.w.score+20
+        shout(20,args.w.ball.x+13,args.w.ball.y+13,args.w)
         playsnd(audio.bump)
-        touch=true
+        args.touch=true
     end
-    if args._ball==ball and not args.s.update then shift(args.s) end
+    if args._ball==args.w.ball and not args.s.update then shift(args.s,args.w) end
 
     NESWalign(args)
 end

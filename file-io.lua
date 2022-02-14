@@ -27,7 +27,7 @@ function loadprogress()
     end 
 end
 
-function saveprogress()
+function saveprogress(w)
     local file = 'scores.soft'
 
     local out=fmt('hiscore_standard=%d\n',hiscore_standard)

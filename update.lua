@@ -1,31 +1,7 @@
-score=0
 hiscore_standard=0
 hiscore_chaotic=0
 
 grid=flr(43/2+1)
-
-ball={x=309/2-12, y=96, dx=0, dy=0, img=lg.newCanvas(26,26)}
-lg.setCanvas(ball.img)
-fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
-circ('fill',13,13,13)
-fg(0xf0/255.0,0xf0/255.0,0xf0/255.0)
-circ('fill',13,13,12.8)
-lg.setCanvas()
-ball.imgdata=ball.img:newImageData()
-ball.lethalt=0
-
-bonuses={}
-plrbonus=0
-if debug then plrbonus=10 end
-
-shifters={}
-for i=1,5 do
-    local sx,sy=grid*i+1,309/2-grid+grid*i+1
-    ins(shifters,{x=sx,y=sy})
-    ins(shifters,{x=309-sx-43,y=sy})
-end
-spawn_t=2000
-spawn_dt=1000
 
 srndtop={x=0,y=0}
 srndbottom={x=0,y=flr(309/2)+1}
@@ -33,7 +9,7 @@ srndbottom={x=0,y=flr(309/2)+1}
 xspeed=0.065
 grav=0.06
 
-rp={i=1}
+main_wld=new_world()
 
 function init(n)
     if not audio['mewsic'..n]:isPlaying() then
@@ -41,7 +17,8 @@ function init(n)
     end
 end
 
-function update(dt)
+function update(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     if dt~=nil then deltat=dt end
 
@@ -51,48 +28,49 @@ function update(dt)
         back_to_menu()
     end
 
+    local ball=w.ball
     if ball.bonus then ball.bonus=ball.bonus-1; if ball.bonus==0 then ball.bonus=nil end end
 
-    if love.update~=replay then ins(rp,{}) end
-    input()
-    if love.update==replay then rp.i=rp.i+1 end
+    if love.update~=replay then ins(w.rp,{}) end
+    input(w)
+    if love.update==replay then w.rp.i=w.rp.i+1 end
 
-    for i,s in ipairs(shifters) do
-        if s.update then s.update(s) end
+    for i,s in ipairs(w.shifters) do
+        if s.update then s.update(s,w) end
     end
 
     local args={_sc={},c=0,spd=speed(ball)}
-    collide(ball,args)
+    collide(ball,args,w)
     
     ball.dy=ball.dy+grav
 
     ball.x=ball.x+ball.dx
     ball.y=ball.y+ball.dy
     
-    spawn()
+    spawn(w)
 
-    bonus_mvmt()
+    bonus_mvmt(w)
 
-    floaters_update()
+    floaters_update(w)
 
-    if t>0 then 
-        score=score+1 
-        if mode=='Standard' and score>=5000 and not cycle_unlocks['Gallery'] and not find(unlocks,'Gallery') then
+    if w.t>0 then 
+        w.score=w.score+1 
+        if w.mode=='Standard' and w.score>=5000 and not cycle_unlocks['Gallery'] and not find(unlocks,'Gallery') then
             ins(unlocks,'Gallery')
         end
-        if mode=='Standard' and score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
+        if w.mode=='Standard' and w.score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
             ins(unlocks,'Chaotic')
         end
     end
 
-    t = t+1
+    w.t = w.t+1
 end
 
-function floaters_update()
-    for i,s in ipairs(shouts) do s.proc=false end
-    for i=#shouts,1,-1 do
-        local s=shouts[i]
-        for i2,s2 in ipairs(shouts) do
+function floaters_update(w)
+    for i,s in ipairs(w.shouts) do s.proc=false end
+    for i=#w.shouts,1,-1 do
+        local s=w.shouts[i]
+        for i2,s2 in ipairs(w.shouts) do
             if not s2.proc and not s.proc and s2~=s and AABB(s2.x,s2.y,smolfont:getWidth(s2.msg),8,s.x,s.y,smolfont:getWidth(s.msg),8) then
             s2.x=s2.x+2
             s.x=s.x-2
@@ -103,19 +81,20 @@ function floaters_update()
         end
         s.y=s.y-1
         s.t=s.t+1
-        if s.t>90 then rem(shouts,i) end
+        if s.t>90 then rem(w.shouts,i) end
     end
 
-    for i=#particles,1,-1 do
-        local p=particles[i]    
+    for i=#w.particles,1,-1 do
+        local p=w.particles[i]    
         p.i = p.i or i
         p.x=p.x+p.dx; p.y=p.y+p.dy
         p.dy=p.dy+grav
-        if p.y>=309 then rem(particles,i) end
+        if p.y>=309 then rem(w.particles,i) end
     end
 end
 
-function gameover(dt)
+function gameover(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     deltat=dt
 
@@ -126,12 +105,13 @@ function gameover(dt)
         reset()
         return
     end
-    floaters_update()
+    floaters_update(w)
 
-    t=t+1
+    w.t=w.t+1
 end
 
-function show_unlocks(dt)
+function show_unlocks(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     deltat=dt
 
@@ -142,15 +122,16 @@ function show_unlocks(dt)
             unlock_ty=309
         else
             love.update=gameover
-            sc_t=t+1
+            sc_t=w.t+1
         end
     end
-    floaters_update()
+    floaters_update(w)
 
-    t=t+1
+    w.t=w.t+1
 end
 
-function replay(dt)
+function replay(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     if dt~=nil then deltat=dt end
 
@@ -159,15 +140,16 @@ function replay(dt)
     end
     if tapped('r') then
         love.update=update
-        reset()
+        reset(w)
         return
     end
-    if rp.i==1 then reset() end
-    update(dt)
+    if w.rp.i==1 then reset() end
+    update(dt,w)
     --t=t+1
 end
 
-function tutor(dt)
+function tutor(dt,w)
+    w = w or main_wld
     st=love.timer.getTime()
     deltat=dt
 
@@ -176,36 +158,7 @@ function tutor(dt)
     return
     end
 
-    t=t+1
-end
-
-function reset(noresettime)
-    score=0
-    ball.x=309/2-12; ball.y=96; ball.dx=0; ball.dy=0; ball.bonus=nil
-    plrbonus=0
-    if debug then plrbonus=10 end
-    bonuses={}
-
-    shifters={}
-    for i=1,5 do
-        local sx,sy=grid*i+1,309/2-grid+grid*i+1
-        ins(shifters,{x=sx,y=sy})
-        ins(shifters,{x=309-sx-43,y=sy})
-    end
-    spawn_t=2000
-    spawn_dt=1000
-    spawners={}
-
-    shouts={}
-
-    if love.update~=replay and love.update~=rp_gallery then 
-        rp={i=1} 
-        love.update=update
-    end
-
-    if not noresettime then
-    t=0
-    end
+    w.t=w.t+1
 end
 
 function back_to_menu()

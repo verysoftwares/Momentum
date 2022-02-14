@@ -8,6 +8,7 @@
     require 'shifters'
     require 'bonuses'
     require 'particles'
+    require 'worlds'
     require 'menu'
     require 'update'
     require 'draw'

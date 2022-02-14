@@ -10,7 +10,8 @@ canvas4=lg.newCanvas(309,309)
 -- for gallery rendering
 vcanvas=lg.newCanvas(309*scale,309*scale)
         
-function gamedraw(nocap,virtual_canvas)
+function gamedraw(nocap,virtual_canvas,w)
+    w=w or main_wld
     lg.setCanvas(canvas)
     if virtual_canvas then bg(0,0,0,0)
     else
@@ -27,7 +28,7 @@ function gamedraw(nocap,virtual_canvas)
     bg(0,0,0,0)
 
     -- trails
-    for i,s in ipairs(shifters) do
+    for i,s in ipairs(w.shifters) do
         local r=0
         if s.update then
             local ox,oy=0,-1
@@ -47,7 +48,7 @@ function gamedraw(nocap,virtual_canvas)
     end
 
     -- actual shifters
-    for i,s in ipairs(shifters) do
+    for i,s in ipairs(w.shifters) do
         lg.draw(images.shift,flr(s.x),flr(s.y))
         if s.update then
             local r=0
@@ -58,41 +59,41 @@ function gamedraw(nocap,virtual_canvas)
         end
     end
 
-    for i,sp in ipairs(spawners) do
-        if score+500>=sp.t then
-            if t%32<16 then
+    for i,sp in ipairs(w.spawners) do
+        if w.score+500>=sp.t then
+            if w.t%32<16 then
             lg.draw(images.alert,flr(sp.x),flr(sp.y))
             end
             lg.setFont(smolfont)
-            lg.print(sp.t-score,flr(sp.x)+8+4+2,flr(sp.y)+grid-2-2-1)
+            lg.print(sp.t-w.score,flr(sp.x)+8+4+2,flr(sp.y)+grid-2-2-1)
         end
     end
 
-    for i=#bonuses,1,-1 do
-        local b=bonuses[i]
+    for i=#w.bonuses,1,-1 do
+        local b=w.bonuses[i]
         lg.draw(b.img,flr(b.x),flr(b.y))
     end
 
     if love.update~=gameover and love.update~=show_unlocks then
-    if ball.bonus then
+    if w.ball.bonus then
         local r,g,b,a=HSL((t*6)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
     else
         fg(1,1,1,1)
     end
-    lg.draw(ball.img,flr(ball.x),flr(ball.y))
+    lg.draw(w.ball.img,flr(w.ball.x),flr(w.ball.y))
     end
     
     lg.setFont(smolfont)
-    for i=#shouts,1,-1 do
-        local s=shouts[i]
+    for i=#w.shouts,1,-1 do
+        local s=w.shouts[i]
         lg.print(s.msg,s.x,s.y)
     end
 
     -- to stop color bleeding messing with transparency
     if virtual_canvas then fg(1,1,1,1) end
     
-    if plrbonus>0 and not virtual_canvas then
+    if w.plrbonus>0 and not virtual_canvas then
     lg.setFont(smolfont)
     lg.push()
     local cn=lg.getCanvas()
@@ -106,7 +107,7 @@ function gamedraw(nocap,virtual_canvas)
     lg.setFont(lcdfont)
     lg.push()
     lg.rotate(-pi/4)
-    if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
+    if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and w.t%64<32) then
     -- low res
     --lg.print(fmt('%.5d',score),-60+4,15+60+15)
     end
@@ -117,19 +118,19 @@ function gamedraw(nocap,virtual_canvas)
     lg.setFont(lcdfont)
     local cn=lg.getCanvas()
     lg.setCanvas(canvas3)
-    if not virtual_canvas and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
-    lg.print(fmt('%.5d',score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
+    if not virtual_canvas and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and w.t%64<32) then
+    lg.print(fmt('%.5d',w.score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
     end
     if not virtual_canvas then
     lg.setFont(smolfont)
-    lg.print(fmt('Hi score %.5d',_G['hiscore_'..string.lower(mode)]),-60+4+100+100+16+2,15+60+15+100-100+2-1-32+6)
+    lg.print(fmt('Hi score %.5d',_G['hiscore_'..string.lower(w.mode)]),-60+4+100+100+16+2,15+60+15+100-100+2-1-32+6)
     lg.setFont(lcdfont)
-    if plrbonus>0 then lg.print(plrbonus,-60+4+20+20+100+100+16+2,15+60+15+15+260+100-100+2-1) end
+    if w.plrbonus>0 then lg.print(w.plrbonus,-60+4+20+20+100+100+16+2,15+60+15+15+260+100-100+2-1) end
     end
     lg.setCanvas(cn)
     
     if love.update==replay and not virtual_canvas then
-    if t%64<32 then
+    if w.t%64<32 then
     local r,g,b,a=lg.getColor()
     fg(0xb0/255,0x20/255,0x40/255,1)
     lg.push()
@@ -152,33 +153,33 @@ function gamedraw(nocap,virtual_canvas)
     lg.setFont(smolfont)
     local tx=309/2-smolfont:getWidth('GAME OVER')/2
     for c=1,#('GAME OVER') do
-        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
-        lg.print(sub('GAME OVER',c,c),tx,309/2-40+2+sin(c*0.8+t*0.2)*3)
+        lg.print(sub('GAME OVER',c,c),tx,309/2-40+2+sin(c*0.8+w.t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('GAME OVER',c,c))
     end
     tx=309/2-smolfont:getWidth('R to reset, Esc for menu')/2
     for c=1,#('R to reset, Esc for menu') do
-        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
         lg.print(sub('R to reset, Esc for menu',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('R to reset, Esc for menu',c,c))
     end
-    if t-sc_t>=90 and love.update==gameover then
+    if w.t-sc_t>=90 and love.update==gameover then
     tx=309/2-smolfont:getWidth('Replay in')/2
     for c=1,#('Replay in') do
-        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
         lg.print(sub('Replay in',c,c),tx,309/2+14+14+14-40+2)--+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('Replay in',c,c))
     end
-    local n=tostring(flr(5-(t-sc_t-90+1)/60))
+    local n=tostring(flr(5-(w.t-sc_t-90+1)/60))
 
-    if n=='0' then rp.i=1; love.update=replay end
+    if n=='0' then w.rp.i=1; love.update=replay end
 
     tx=309/2-smolfont:getWidth(n)/2
     for c=1,#(n) do
-        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
         lg.print(sub(n,c,c),tx,309/2+14+14+14+14-40+2)--+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub(n,c,c))
@@ -190,7 +191,7 @@ function gamedraw(nocap,virtual_canvas)
         lg.setFont(smolfont)
         tx=309/2-smolfont:getWidth('Arrows or A/D to move')/2
         for c=1,#('Arrows or A/D to move') do
-            local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+            local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
             fg(r/255.0,g/255.0,b/255.0,a/255.0)
             lg.print(sub('Arrows or A/D to move',c,c),tx,309/2+14+6-40+2)--+sin(c*0.8+t*0.2)*3)
             tx=tx+smolfont:getWidth(sub('Arrows or A/D to move',c,c))
@@ -221,7 +222,7 @@ function gamedraw(nocap,virtual_canvas)
         rect('fill',0,unlock_ty,309,h)
 
         for c=1,#(msg) do
-            local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+            local r,g,b,a=HSL(((w.t+c*4)*2)%256,224,224,255)
             fg(r/255.0,g/255.0,b/255.0,a/255.0)
             lg.print(sub(msg,c,c),tx,unlock_ty+4)--+sin(c*0.8+t*0.2)*3)
             tx=tx+smolfont:getWidth(sub(msg,c,c))
@@ -234,8 +235,8 @@ function gamedraw(nocap,virtual_canvas)
     end
 
     fg(1,1,1,1)
-    for i=#particles,1,-1 do
-        local p=particles[i]
+    for i=#w.particles,1,-1 do
+        local p=w.particles[i]
         lg.push()
         lg.translate(p.x+2,p.y+2)
         lg.rotate((p.i+t)*0.1)
@@ -243,8 +244,8 @@ function gamedraw(nocap,virtual_canvas)
         lg.pop()
     end
 
-    if ball.bonus and not virtual_canvas then 
-        local r,g,b,a=HSL((t*6)%256,224,224,255)
+    if w.ball.bonus and not virtual_canvas then 
+        local r,g,b,a=HSL((w.t*6)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
     end
     --if not virtual_canvas then
@@ -252,7 +253,7 @@ function gamedraw(nocap,virtual_canvas)
     lg.draw(images.bg2b,0,flr(309/2)+1)
     --end
 
-    if plrbonus>0 and not virtual_canvas then
+    if w.plrbonus>0 and not virtual_canvas then
     local r,g,b,a=lg.getColor()
     --fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
     --circ('fill',309-60-12,309-40+12,13)
@@ -664,85 +665,73 @@ function galleryfadein()
 end
 
 function gallerydraw()
-    if t-sc_t==0 and gallery[1] then 
-        rp=gallery[1]
-        rp.i=1
-        mode=rp.mode
-        reset(true)
+    if t-sc_t==0 and gallery[1] then
+        reset(main_wld,true)
+        main_wld.rp=gallery[1]
+        main_wld.rp.i=1
+        main_wld.mode=main_wld.rp.mode
     end
-    
+
+    lg.setCanvas(preview1)
+    bg(0,0,0,0)
+    lg.setCanvas(preview2)
+    bg(0,0,0,0)
+
     if gallery[gallery.i-1] then
-        if not preview1 then
-            preview1=lg.newCanvas(309*scale,309*scale)
-            reset(true)
-            
-            local old_rp=rp
-            rp=gallery[gallery.i-1]
-            rp.i=1
-            mode=rp.mode
-            local old_playsnd=playsnd
-            playsnd=function() end
-            love.update=replay
-            
-            for i=1,math.min(400,#rp) do
-            update()
-            end
-            
-            playsnd=old_playsnd
-            rp=old_rp
-            mode=rp.mode
-
-            love.update=rp_gallery
-            love.draw=gallerydraw
-            gamedraw(true,preview1)
-
-            reset(true)
-        end
+        local old_playsnd=playsnd
+        playsnd=function() end
+        love.update=replay
+        update(nil,worldprev1)
+        playsnd=old_playsnd
+        love.update=rp_gallery
+        love.draw=gallerydraw
+        gamedraw(true,preview1,worldprev1)
+        if not worldprev1.rp[worldprev1.rp.i] then worldprev1.rp.i=1; reset(worldprev1,true) end
     end
 
     if gallery[gallery.i+1] then
-        if not preview2 then
-            preview2=lg.newCanvas(309*scale,309*scale)
-            reset(true)
-            
-            local old_rp=rp
-            rp=gallery[gallery.i+1]
-            rp.i=1
-            mode=rp.mode
-            local old_playsnd=playsnd
-            playsnd=function() end
-            love.update=replay
-            
-            for i=1,math.min(400,#rp) do
-            update()
-            end
-            
-            playsnd=old_playsnd
-            rp=old_rp
-            mode=rp.mode
-
-            love.update=rp_gallery
-            love.draw=gallerydraw
-            gamedraw(true,preview2)
-
-            reset(true)
-        end
+        local old_playsnd=playsnd
+        playsnd=function() end
+        love.update=replay
+        update(nil,worldprev2)
+        playsnd=old_playsnd
+        love.update=rp_gallery
+        love.draw=gallerydraw
+        gamedraw(true,preview2,worldprev2)
+        if not worldprev2.rp[worldprev2.rp.i] then worldprev2.rp.i=1; reset(worldprev2,true) end
     end
 
     lg.setCanvas(vcanvas)
     bg(0,0,0,0)
 
     if gallery[1] then
-    if not rp[rp.i] then reset(true); rp.i=1 end
+    if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
     love.update=replay
-    update()
+    update(nil,main_wld)
     love.update=rp_gallery
     love.draw=gallerydraw
-    gamedraw(true,vcanvas)
+    gamedraw(true,vcanvas,main_wld)
     end
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
+
+    if gallery[gallery.i-1] then
+    fg(0xb0/255,0x20/255,0x40/255,1)
+    lg.setFont(smolfont)
+    lg.print(gallery[gallery.i-1].score,309/2+20-100,309/2+100-60-20+4-1)
+    end
+    if gallery[gallery.i] then
+    fg(0xb0/255,0x20/255,0x40/255,1)
+    lg.setFont(smolfont)
+    lg.print(gallery[gallery.i].score,309/2+20+100-50-10,309/2-10-10+5)
+    end
+    if gallery[gallery.i+1] then
+    fg(0xb0/255,0x20/255,0x40/255,1)
+    lg.setFont(smolfont)
+    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10,309/2+100-60-20+4-1)
+    end
+
     if not gallery[1] then
         fg(0xb0/255,0x20/255,0x40/255,1)
         lg.setFont(smolfont)
@@ -765,7 +754,6 @@ function gallerydraw()
     
     lg.setCanvas()
     lg.draw(canvas,0,0,0,scale,scale)
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
     lg.setShader(graytrans)
     if preview1 then 
     lg.draw(preview1,100-40+100-20-15+2+60-100-50,200+100-40-20-15+2-60+100+100+100+100+50,0,0.3,0.3)
@@ -775,6 +763,7 @@ function gallerydraw()
     lg.draw(preview2,100-40+100-20-15+2+60+100+100+100+100+50,200+100-40-20-15+2-60-100-50,0,0.3,0.3)
     end
     lg.setShader()
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end

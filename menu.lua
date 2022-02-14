@@ -9,7 +9,8 @@ cycle_unlocks['Quit']=true
 
 gallery={}
 
-function menu(dt)
+function menu(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     deltat=dt
 
@@ -31,8 +32,8 @@ function menu(dt)
             if cycle[cycle.i]=='Standard' then
                 sc_t=t+1
                 title='MOMENTUM'
-                mode='Standard'
-                reset()
+                w.mode='Standard'
+                reset(w)
                 love.update = menufade
                 love.draw = menufadeout
                 --love.update = tutor
@@ -42,8 +43,8 @@ function menu(dt)
             if cycle[cycle.i]=='Chaotic' and cycle_unlocks[cycle[cycle.i]] then
                 sc_t=t+1
                 title='MOMENTUM'
-                mode='Chaotic'
-                reset()
+                w.mode='Chaotic'
+                reset(w)
                 love.update = menufade
                 love.draw = menufadeout
                 return
@@ -95,25 +96,52 @@ function menufade(dt)
     t=t+1
 end
 
-function rp_gallery(dt)
+function rp_gallery(dt,w)
+    w=w or main_wld
     st=love.timer.getTime()
     deltat=dt
+
+    if t-sc_t==-1 then
+        preview1=lg.newCanvas(309*scale,309*scale)
+        worldprev1=new_world()
+        preview2=lg.newCanvas(309*scale,309*scale)
+        worldprev2=new_world()
+        if #gallery>1 then
+            worldprev2.rp=gallery[2]
+            worldprev2.rp.i=1
+            worldprev2.mode=worldprev2.rp.mode
+        end
+    end
 
     gallery.i=gallery.i or 1
     if tapped('left') and gallery[1] then 
         gallery.i=gallery.i-1
-        if gallery.i<1 then gallery.i=1 end
-        rp=gallery[gallery.i]
-        rp.i=1
-        reset(true)
-        preview1=nil; preview2=nil
+        if gallery.i<1 then gallery.i=1 
+        else
+        worldprev2=main_wld
+        main_wld=worldprev1
+        worldprev1=new_world()
+        worldprev1.rp=gallery[gallery.i-1]
+        if worldprev1.rp then 
+            worldprev1.rp.i=1 
+            worldprev1.mode=worldprev1.rp.mode
+        end
+        end
+        --reset(w,true)
+        --preview1=nil; preview2=nil
     elseif tapped('right') and gallery[1] then 
         gallery.i=gallery.i+1
-        if gallery.i>#gallery then gallery.i=#gallery end
-        rp=gallery[gallery.i]
-        rp.i=1
-        reset(true)
-        preview1=nil; preview2=nil
+        if gallery.i>#gallery then gallery.i=#gallery
+        else
+        worldprev1=main_wld
+        main_wld=worldprev2
+        worldprev2=new_world()
+        worldprev2.rp=gallery[gallery.i+1]
+        if worldprev2.rp then 
+            worldprev2.rp.i=1 
+            worldprev2.mode=worldprev2.rp.mode
+        end
+        end
     end
 
     t=t+1

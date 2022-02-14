@@ -116,9 +116,8 @@ function speed(_ball)
     return math.sqrt(math.pow(_ball.dx,2)+math.pow(_ball.dy,2))
 end
 
-shouts={}
-function shout(msg,mx,my)
-    ins(shouts,{msg=msg,x=mx,y=my,t=0})
+function shout(msg,mx,my,w)
+    ins(w.shouts,{msg=msg,x=mx,y=my,t=0})
 end
 
 function playsnd(snd)
