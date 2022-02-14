@@ -86,9 +86,22 @@ function gamedraw(nocap,virtual_canvas)
     if virtual_canvas then fg(1,1,1,1) end
 
     lg.setFont(smolfont)
+    for i,s in ipairs(shouts) do s.proc=false end
     for i=#shouts,1,-1 do
         local s=shouts[i]
         lg.print(s.msg,s.x,s.y)
+        for i2,s2 in ipairs(shouts) do
+            if not s2.proc and not s.proc and s2~=s and AABB(s2.x,s2.y,smolfont:getWidth(s2.msg),8,s.x,s.y,smolfont:getWidth(s.msg),8) then
+            s2.x=s2.x+2
+            s.x=s.x-2
+            s.y=s.y-1
+            s2.y=s2.y+1
+            s.proc=true; s2.proc=true
+            end
+        end
+        s.y=s.y-1
+        s.t=s.t+1
+        if s.t>90 then rem(shouts,i) end
     end
 
     if plrbonus>0 and not virtual_canvas then
@@ -241,11 +254,15 @@ function gamedraw(nocap,virtual_canvas)
     fg(1,1,1,1)
     for i=#particles,1,-1 do
         local p=particles[i]
+        p.i = p.i or i
         lg.push()
         lg.translate(p.x+2,p.y+2)
         lg.rotate((p.i+t)*0.1)
         lg.draw(p.img,0,0,0,sin((p.i+t)*0.1))
         lg.pop()
+        p.x=p.x+p.dx; p.y=p.y+p.dy
+        p.dy=p.dy+grav
+        if p.y>=309 then rem(particles,i) end
     end
 
     if ball.bonus and not virtual_canvas then 

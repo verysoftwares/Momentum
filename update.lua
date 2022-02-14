@@ -71,31 +71,6 @@ function update(dt)
     
     spawn()
 
-    for i,s in ipairs(shouts) do s.proc=false end
-    for i=#shouts,1,-1 do
-        local s=shouts[i]
-        for i2,s2 in ipairs(shouts) do
-            if not s2.proc and not s.proc and s2~=s and AABB(s2.x,s2.y,smolfont:getWidth(s2.msg),8,s.x,s.y,smolfont:getWidth(s.msg),8) then
-            s2.x=s2.x+2
-            s.x=s.x-2
-            s.y=s.y-1
-            s2.y=s2.y+1
-            s.proc=true; s2.proc=true
-            end
-        end
-        s.y=s.y-1
-        s.t=s.t+1
-        if s.t>90 then rem(shouts,i) end
-    end
-
-    for i=#particles,1,-1 do
-        local p=particles[i]    
-        p.i = p.i or i
-        p.x=p.x+p.dx; p.y=p.y+p.dy
-        p.dy=p.dy+grav
-        if p.y>=309 then rem(particles,i) end
-    end
-
     bonus_mvmt()
 
     if t>0 then 
