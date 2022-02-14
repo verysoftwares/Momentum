@@ -50,7 +50,6 @@ function collide(_ball,args,w)
 
         if _ball==w.ball then
             local rep=love.update==replay
-            sc_t=w.t+1; 
             if w.score+1>_G['hiscore_'..string.lower(w.mode)] then _G['hiscore_'..string.lower(w.mode)]=w.score+1 end
             if #unlocks>0 then
             for i,u in ipairs(unlocks) do cycle_unlocks[u]=true end
@@ -65,7 +64,11 @@ function collide(_ball,args,w)
                 w.rp.mode=w.mode
                 w.rp.time=os.time()
             end
-            if not rep then saveprogress(w) end
+            w.ball.bonus=nil
+            if not rep then 
+                sc_t=w.t+1; 
+                saveprogress(w) 
+            end
         else
             rem(w.bonuses,args.i)
             args.removed=true

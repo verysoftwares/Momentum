@@ -118,6 +118,7 @@ function gamedraw(nocap,virtual_canvas,w)
     lg.setFont(lcdfont)
     local cn=lg.getCanvas()
     lg.setCanvas(canvas3)
+    fg(1,1,1,1)
     if not virtual_canvas and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and w.t%64<32) then
     lg.print(fmt('%.5d',w.score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
     end
@@ -396,7 +397,7 @@ function menudraw()
     if not cycle.dx and cycle[cycle.i]=='Standard' then
     rainbowprint('The classic Momentum experience!')
     end
-    if not cycle.dx and (cycle[cycle.i]=='Options' or (cycle[cycle.i]=='Gallery' and cycle_unlocks['Gallery'])) then
+    if not cycle.dx and cycle[cycle.i]=='Options' then
     rainbowprint('Not yet implemented.')
     end
     if not cycle.dx and cycle[cycle.i]=='Chaotic' then
@@ -404,8 +405,10 @@ function menudraw()
     if cycle_unlocks['Chaotic'] then msg='Play with accelerated spawners!' end
     rainbowprint(msg)
     end
-    if not cycle.dx and (cycle[cycle.i]=='Gallery' and not cycle_unlocks['Gallery']) then
-    rainbowprint('5000 points in Standard mode to unlock!')
+    if not cycle.dx and cycle[cycle.i]=='Gallery' then
+    local msg='5000 points in Standard mode to unlock!'
+    if cycle_unlocks['Gallery'] then msg='View and highlight replays!' end
+    rainbowprint(msg)
     end
     end
     end
@@ -615,7 +618,8 @@ function galleryfadein()
    
     bar_dist=bar_dist or 0
     bar_xw=bar_xw or 0
-    
+    bar_xh=bar_xh or 0
+
     fg(1,1,1,1)
     lg.setCanvas(canvas3)
     lg.setFont(lcdfont)
@@ -625,9 +629,9 @@ function galleryfadein()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
-    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
     fg(0xcd/255,0xcd/255,0xc8/255)
-    rect('fill',0+60-80-100-30-60-20,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
     fg(0x29/255,0x23/255,0x2e/255)
     rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
     lg.pop()
@@ -645,8 +649,9 @@ function galleryfadein()
     
     bar_dist=bar_dist+4; if bar_dist>280 then bar_dist=280 end
     --bar_dist_y=nil
-    bar_xw=bar_xw+2; if bar_xw>120 then
-    bar_xw=120
+    bar_xh=bar_xh+2; if bar_xh>8 then bar_xh=8 end
+    bar_xw=bar_xw+2; if bar_xw>120+16 then
+    bar_xw=120+16
     if bar_dist==280 then 
     audio.mewsic2:stop()
     audio.mewsic2:setVolume(0.7)
@@ -705,31 +710,30 @@ function gallerydraw()
     bg(0,0,0,0)
 
     if gallery[1] then
-    if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
     love.update=replay
     update(nil,main_wld)
     love.update=rp_gallery
     love.draw=gallerydraw
     gamedraw(true,vcanvas,main_wld)
+    if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
     end
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
-    if gallery[gallery.i-1] then
     fg(0xb0/255,0x20/255,0x40/255,1)
     lg.setFont(smolfont)
-    lg.print(gallery[gallery.i-1].score,309/2+20-100,309/2+100-60-20+4-1)
+    if gallery[gallery.i-1] then
+    lg.print(gallery[gallery.i-1].score,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].score)/2,309/2+100-60-20+4-1-2)
+    lg.print(gallery[gallery.i-1].mode,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2)
     end
     if gallery[gallery.i] then
-    fg(0xb0/255,0x20/255,0x40/255,1)
-    lg.setFont(smolfont)
-    lg.print(gallery[gallery.i].score,309/2+20+100-50-10,309/2-10-10+5)
+    lg.print(gallery[gallery.i].score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2,309/2-10-10+5-8)
+    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2,309/2-10-10+5+200-60+8-8+12+6-4)
     end
     if gallery[gallery.i+1] then
-    fg(0xb0/255,0x20/255,0x40/255,1)
-    lg.setFont(smolfont)
-    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10,309/2+100-60-20+4-1)
+    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2,309/2+100-60-20+4-1-2)
+    lg.print(gallery[gallery.i+1].mode,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2)
     end
 
     if not gallery[1] then
@@ -744,9 +748,9 @@ function gallerydraw()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
-    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
     fg(0xcd/255,0xcd/255,0xc8/255)
-    rect('fill',0+60-80-100-30-60-20,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
     lg.pop()
 
     fg(1,1,1,1)
@@ -756,11 +760,11 @@ function gallerydraw()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.setShader(graytrans)
     if preview1 then 
-    lg.draw(preview1,100-40+100-20-15+2+60-100-50,200+100-40-20-15+2-60+100+100+100+100+50,0,0.3,0.3)
+    lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14)/3*scale,0,0.3,0.3)
     end
-    lg.draw(vcanvas,100-40+100-20-15+2+60,200+100-40-20-15+2-60,0,0.6,0.6)
+    lg.draw(vcanvas,(100-40+100-20-15+2+60-8-16-14)/3*scale,(200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale,0,0.6666,0.6666)
     if preview2 then 
-    lg.draw(preview2,100-40+100-20-15+2+60+100+100+100+100+50,200+100-40-20-15+2-60-100-50,0,0.3,0.3)
+    lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14)/3*scale,(200+100-40-20-15+2-60-100-50-8+14)/3*scale,0,0.3,0.3)
     end
     lg.setShader()
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)

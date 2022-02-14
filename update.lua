@@ -143,7 +143,7 @@ function replay(dt,w)
         reset(w)
         return
     end
-    if w.rp.i==1 then reset() end
+    if w.rp.i==1 then reset(w) end
     update(dt,w)
     --t=t+1
 end
