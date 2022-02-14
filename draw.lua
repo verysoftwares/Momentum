@@ -664,8 +664,7 @@ function galleryfadein()
 end
 
 function gallerydraw()
-    if t-sc_t==0 then 
-        if not gallery[1] then return end
+    if t-sc_t==0 and gallery[1] then 
         rp=gallery[1]
         rp.i=1
         mode=rp.mode
@@ -730,15 +729,25 @@ function gallerydraw()
         end
     end
 
+    lg.setCanvas(vcanvas)
+    bg(0,0,0,0)
+
+    if gallery[1] then
     if not rp[rp.i] then reset(true); rp.i=1 end
     love.update=replay
     update()
     love.update=rp_gallery
     love.draw=gallerydraw
     gamedraw(true,vcanvas)
+    end
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
+    if not gallery[1] then
+        fg(0xb0/255,0x20/255,0x40/255,1)
+        lg.setFont(smolfont)
+        lg.print('No replays available!',309/2+20,309/2+80-30+8)
+    end
 
     lg.setCanvas(canvas)
     bg(153/255.0,152/255.0,100/255.0)

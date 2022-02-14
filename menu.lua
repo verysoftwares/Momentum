@@ -100,14 +100,14 @@ function rp_gallery(dt)
     deltat=dt
 
     gallery.i=gallery.i or 1
-    if tapped('left') then 
+    if tapped('left') and gallery[1] then 
         gallery.i=gallery.i-1
         if gallery.i<1 then gallery.i=1 end
         rp=gallery[gallery.i]
         rp.i=1
         reset(true)
         preview1=nil; preview2=nil
-    elseif tapped('right') then 
+    elseif tapped('right') and gallery[1] then 
         gallery.i=gallery.i+1
         if gallery.i>#gallery then gallery.i=#gallery end
         rp=gallery[gallery.i]
