@@ -24,7 +24,10 @@ function loadprogress()
         print(fmt('loaded persistent data from %s',file))
     else
         print(fmt('no save file %s',file))
-    end 
+    end
+
+    if cycle2[cycle2.i]=='Most recent first' then table.sort(gallery,function(a,b) return a.time>b.time end) end
+    if cycle2[cycle2.i]=='Highest score first' then table.sort(gallery,function(a,b) return a.score>b.score end) end
 end
 
 function saveprogress(w)

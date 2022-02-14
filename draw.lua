@@ -644,7 +644,7 @@ function galleryfadein()
     smolrect[2]=309-60
     smolrect[3]=309+120
     smolrect[4]=smolfont:getHeight('MOMENTUM')+8
-    rect('fill',smolrect[1],smolrect[2]+bar_dist,smolrect[3],smolrect[4])
+    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
     lg.pop()
     
     bar_dist=bar_dist+4; if bar_dist>280 then bar_dist=280 end
@@ -718,8 +718,43 @@ function gallerydraw()
     if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
     end
 
+    lg.setCanvas(canvas)
+    bg(153/255.0,152/255.0,100/255.0)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    lg.translate(-120-40+8-1-1,30-1)
+    fg(0x3c/255,0x4c/255,0x25/255)
+    smolrect[1]=0-60
+    smolrect[2]=309-60
+    smolrect[3]=309+120
+    smolrect[4]=smolfont:getHeight('MOMENTUM')+8
+    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
+    lg.pop()
+
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
+
+    if gall_state==nil and #gallery>1 then
+    lg.setFont(lcdfont)
+    --local r,g,b,a=HSL((t*2)%256,224,224,255)
+    --fg(r/255.0,g/255.0,b/255.0,1)
+    fg(1,1,1,1)
+    lg.print('<',309/2-30,309/2+60)
+    lg.print('>',309/2+100+60-20,309/2+60)
+    end
+
+    lg.setFont(smolfont)
+    local tx=309/2-smolfont:getWidth(visualize(cycle2[cycle2.i]))/2
+    if cycle2.x then tx=cycle2.x end
+    for c=1,#(visualize(cycle2[cycle2.i])) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local bounce=sin(c*0.8+t*0.2)*3
+        if gall_state~='sort' then bounce=0 end
+        fg(r/255.0,g/255.0,b/255.0,1)
+        lg.print(sub(visualize(cycle2[cycle2.i]),c,c),100+tx-40,30+309-60+60+8-3+bounce)
+        tx=tx+smolfont:getWidth(sub(visualize(cycle2[cycle2.i]),c,c))
+    end
 
     fg(0xb0/255,0x20/255,0x40/255,1)
     lg.setFont(smolfont)
@@ -743,8 +778,7 @@ function gallerydraw()
     end
 
     lg.setCanvas(canvas)
-    bg(153/255.0,152/255.0,100/255.0)
-
+    
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
@@ -829,7 +863,7 @@ function galleryfadeout()
     smolrect[2]=309-60
     smolrect[3]=309+120
     smolrect[4]=smolfont:getHeight('MOMENTUM')+8
-    rect('fill',smolrect[1],smolrect[2]+bar_dist,smolrect[3],smolrect[4])
+    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
     lg.pop()
     
     bar_dist=bar_dist-4; if bar_dist<0 then bar_dist=0 end
