@@ -15,11 +15,6 @@
 
 love.update = menu
 love.draw = menudraw
-if debug then
-love.update = tutor
-love.draw = gamedraw
-mode='Standard'
-end
 
 loadprogress()
 

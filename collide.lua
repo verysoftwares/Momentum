@@ -63,6 +63,8 @@ function collide(_ball,args,w)
                 w.rp.score=w.score+1
                 w.rp.mode=w.mode
                 w.rp.time=os.time()
+                if cycle2[cycle2.i]=='Most recent first' then table.sort(gallery,function(a,b) return a.time>b.time end) end
+                if cycle2[cycle2.i]=='Highest score first' then table.sort(gallery,function(a,b) return a.score>b.score end) end
             end
             w.ball.bonus=nil
             if not rep then 

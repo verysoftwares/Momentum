@@ -84,7 +84,7 @@ end
 
 -- how to display current selection in cycle
 function visualize(c)
-    if love.update==menu then
+    if love.update~=rp_gallery then
     if cycle_unlocks[c] then
         return '< '..c..' >'
     end

@@ -99,6 +99,7 @@ function gamedraw(nocap,virtual_canvas,w)
     local cn=lg.getCanvas()
     lg.setCanvas(canvas3)
     --lg.rotate(-pi/4)
+    fg(1,1,1,1)
     lg.print('Shift to use.',309-100-40+4+4,309-100-10+150+40-4)
     lg.setCanvas(cn)
     lg.pop()
@@ -298,7 +299,8 @@ function menudraw()
         local te=sub(title,i+1,#title)
         title = ts..string.char(random(33,96))..te
     end
-    if t>32+24+32+24+16-60 and (t-12)%16==0 then
+    
+    if t>32+24+32+24+16-60 and (t-4)%16==0 then
         if not onlyoncem2 then init(2); onlyoncem2=true end
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
@@ -324,11 +326,17 @@ function menudraw()
     end
 
     bar_dist=bar_dist or 412
+    fg(153/255.0,152/255.0,100/255.0)
     lg.push()
     lg.rotate(-pi/4)
-    --fg(0x68/255,0x70/255,0x4b/255)
-    --for ry=0,309,grid do
-    --for rx=0,309,grid do
+    rect('fill',0+60-80-100-30-60-20-100+10,24+60+80-30-309-10,309+200,309)
+    rect('fill',-50-70-50-20,309-60+30-1,309+100,309)
+    lg.pop()
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    --for ry=-grid,309,grid do
+    --for rx=-grid,309,grid do
     --rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
     --end
     --end
@@ -338,15 +346,10 @@ function menudraw()
     rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
     fg(0x29/255,0x23/255,0x2e/255)
     rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
+    --fg(153/255.0,152/255.0,100/255.0)
+    --rect('fill',0+60-80-100-30-60-20,24+60+80-30+60-2,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+24+8+4+2)
     lg.pop()
     bar_dist=bar_dist-8; if bar_dist<0 then bar_dist=0 end
-    fg(153/255.0,152/255.0,100/255.0)
-    lg.push()
-    lg.rotate(-pi/4)
-    rect('fill',0+60-80-100-30-60-20-100+10,24+60+80-30-309-10,309+200,309)
-    rect('fill',-50-70-50-20,309-60+30-1,309+100,309)
-    lg.pop()
-    
 
     fg(1,1,1,1)
     lg.setCanvas(canvas3)
@@ -407,7 +410,7 @@ function menudraw()
     end
     if not cycle.dx and cycle[cycle.i]=='Gallery' then
     local msg='5000 points in Standard mode to unlock!'
-    if cycle_unlocks['Gallery'] then msg='View and highlight replays!' end
+    if cycle_unlocks['Gallery'] then msg='View past replays!' end
     rainbowprint(msg)
     end
     end
@@ -742,6 +745,10 @@ function gallerydraw()
     fg(1,1,1,1)
     lg.print('<',309/2-30,309/2+60)
     lg.print('>',309/2+100+60-20,309/2+60)
+    --lg.push()
+    --lg.rotate(-pi/4)
+    --lg.print('>',309/2-t,309/2+60-t)
+    --lg.pop()
     end
 
     lg.setFont(smolfont)
@@ -759,16 +766,16 @@ function gallerydraw()
     fg(0xb0/255,0x20/255,0x40/255,1)
     lg.setFont(smolfont)
     if gallery[gallery.i-1] then
-    lg.print(gallery[gallery.i-1].score,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].score)/2,309/2+100-60-20+4-1-2)
-    lg.print(gallery[gallery.i-1].mode,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2)
+    lg.print(gallery[gallery.i-1].score,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].score)/2,309/2+100-60-20+4-1-2-3+1)
+    lg.print(gallery[gallery.i-1].mode,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
     end
     if gallery[gallery.i] then
-    lg.print(gallery[gallery.i].score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2,309/2-10-10+5-8)
-    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2,309/2-10-10+5+200-60+8-8+12+6-4)
+    lg.print(gallery[gallery.i].score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2+3,309/2-10-10+5-8)
+    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2+3,309/2-10-10+5+200-60+8-8+12+6-4)
     end
     if gallery[gallery.i+1] then
-    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2,309/2+100-60-20+4-1-2)
-    lg.print(gallery[gallery.i+1].mode,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2)
+    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2+3,309/2+100-60-20+4-1-2-3)
+    lg.print(gallery[gallery.i+1].mode,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
     end
 
     if not gallery[1] then
@@ -794,11 +801,11 @@ function gallerydraw()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.setShader(graytrans)
     if preview1 then 
-    lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14)/3*scale,0,0.3,0.3)
+    lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14-4-4)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14-12-4)/3*scale,0,0.3333,0.3333)
     end
     lg.draw(vcanvas,(100-40+100-20-15+2+60-8-16-14)/3*scale,(200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale,0,0.6666,0.6666)
     if preview2 then 
-    lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14)/3*scale,(200+100-40-20-15+2-60-100-50-8+14)/3*scale,0,0.3,0.3)
+    lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
     end
     lg.setShader()
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
@@ -872,6 +879,7 @@ function galleryfadeout()
     bar_xw=bar_xw-2; if bar_xw<0 then
     bar_xw=0
     if bar_dist==0 and title=='MOMENTUM' then 
+    onlyoncem2=nil
     love.update=menu; love.draw=menudraw
     sc_t=t+1
     end
