@@ -48,6 +48,13 @@ function menu(dt)
                 love.draw = menufadeout
                 return
             end
+            if cycle[cycle.i]=='Gallery' and cycle_unlocks[cycle[cycle.i]] then
+                sc_t=t+1
+                title='MOMENTUM'
+                love.update = menufade
+                love.draw = galleryfadein
+                return
+            end
             if cycle[cycle.i]=='Quit' then
                 love.event.push('quit')
             end
@@ -82,6 +89,13 @@ function visualize(c)
 end
 
 function menufade(dt)
+    st=love.timer.getTime()
+    deltat=dt
+    
+    t=t+1
+end
+
+function rp_gallery(dt)
     st=love.timer.getTime()
     deltat=dt
     

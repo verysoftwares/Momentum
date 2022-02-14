@@ -7,12 +7,17 @@ canvas2=lg.newCanvas(309,309)
 canvas3=lg.newCanvas(309+200,309+200)
 -- for UI elements
 canvas4=lg.newCanvas(309,309)
+-- for gallery rendering
+vcanvas=lg.newCanvas(309*scale,309*scale)
         
-function gamedraw(nocap)
+function gamedraw(nocap,virtual_canvas)
     lg.setCanvas(canvas)
-    bg(153/255.0,152/255.0,100/255.0)
+    if virtual_canvas then bg(0,0,0,0)
+    else
+    bg(0xcd/255.0,0xcd/255.0,0xc8/255.0)
+    end
     fg(1,1,1,1)
-    lg.draw(images.bg1)
+    lg.draw(images.bg1_t)
 
     lg.setCanvas(canvas4)
     bg(0,0,0,0)
@@ -77,6 +82,8 @@ function gamedraw(nocap)
     end
     lg.draw(ball.img,flr(ball.x),flr(ball.y))
     end
+    -- to stop color bleeding messing with transparency
+    if virtual_canvas then fg(1,1,1,1) end
 
     lg.setFont(smolfont)
     for i,s in ipairs(shouts) do s.proc=false end
@@ -97,10 +104,7 @@ function gamedraw(nocap)
         if s.t>90 then rem(shouts,i) end
     end
 
-    lg.draw(images.bg2a)
-    lg.draw(images.bg2b,0,flr(309/2)+1)
-
-    if plrbonus>0 then
+    if plrbonus>0 and not virtual_canvas then
     local r,g,b,a=lg.getColor()
     --fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
     --circ('fill',309-60-12,309-40+12,13)
@@ -131,16 +135,18 @@ function gamedraw(nocap)
     lg.setFont(lcdfont)
     local cn=lg.getCanvas()
     lg.setCanvas(canvas3)
-    if (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
+    if not virtual_canvas and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and t%64<32) then
     lg.print(fmt('%.5d',score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
     end
+    if not virtual_canvas then
     lg.setFont(smolfont)
     lg.print(fmt('Hi score %.5d',_G['hiscore_'..string.lower(mode)]),-60+4+100+100+16+2,15+60+15+100-100+2-1-32+6)
     lg.setFont(lcdfont)
     if plrbonus>0 then lg.print(plrbonus,-60+4+20+20+100+100+16+2,15+60+15+15+260+100-100+2-1) end
+    end
     lg.setCanvas(cn)
-
-    if love.update==replay then
+    
+    if love.update==replay and not virtual_canvas then
     if t%64<32 then
     local r,g,b,a=lg.getColor()
     fg(0xb0/255,0x20/255,0x40/255,1)
@@ -169,12 +175,12 @@ function gamedraw(nocap)
         lg.print(sub('GAME OVER',c,c),tx,309/2-40+2+sin(c*0.8+t*0.2)*3)
         tx=tx+smolfont:getWidth(sub('GAME OVER',c,c))
     end
-    tx=309/2-smolfont:getWidth('R to reset, Esc for menu.')/2
-    for c=1,#('R to reset, Esc for menu.') do
+    tx=309/2-smolfont:getWidth('R to reset, Esc for menu')/2
+    for c=1,#('R to reset, Esc for menu') do
         local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,a/255.0)
-        lg.print(sub('R to reset, Esc for menu.',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
-        tx=tx+smolfont:getWidth(sub('R to reset, Esc for menu.',c,c))
+        lg.print(sub('R to reset, Esc for menu',c,c),tx,309/2+14-40+2)--+sin(c*0.8+t*0.2)*3)
+        tx=tx+smolfont:getWidth(sub('R to reset, Esc for menu',c,c))
     end
     if t-sc_t>=90 and love.update==gameover then
     tx=309/2-smolfont:getWidth('Replay in')/2
@@ -259,7 +265,20 @@ function gamedraw(nocap)
         if p.y>=309 then rem(particles,i) end
     end
 
+    if ball.bonus and not virtual_canvas then 
+        local r,g,b,a=HSL((t*6)%256,224,224,255)
+        fg(r/255.0,g/255.0,b/255.0,a/255.0)
+    end
+    --if not virtual_canvas then
+    lg.draw(images.bg2a)
+    lg.draw(images.bg2b,0,flr(309/2)+1)
+    --end
+
     lg.setCanvas()
+    if virtual_canvas then
+        lg.setCanvas(vcanvas)
+        bg(0,0,0,0)
+    end
     fg(1,1,1,1)
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas2,0,0,0,scale,scale)
@@ -290,7 +309,7 @@ function menudraw()
         local te=sub(title,i+1,#title)
         title = ts..string.char(random(33,96))..te
     end
-    if t>32+24+32+24+16-60+16 and (t-6)%16==0 then
+    if t>32+24+32+24+16-60 and (t-12)%16==0 then
         if not onlyoncem2 then init(2); onlyoncem2=true end
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
@@ -315,9 +334,15 @@ function menudraw()
         end
     end
 
-    bar_dist=bar_dist or 410
+    bar_dist=bar_dist or 412
     lg.push()
     lg.rotate(-pi/4)
+    --fg(0x68/255,0x70/255,0x4b/255)
+    --for ry=0,309,grid do
+    --for rx=0,309,grid do
+    --rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    --end
+    --end
     fg(0x68/255,0x70/255,0x4b/255)
     rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
@@ -326,6 +351,13 @@ function menudraw()
     rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
     lg.pop()
     bar_dist=bar_dist-8; if bar_dist<0 then bar_dist=0 end
+    fg(153/255.0,152/255.0,100/255.0)
+    lg.push()
+    lg.rotate(-pi/4)
+    rect('fill',0+60-80-100-30-60-20-100+10,24+60+80-30-309-10,309+200,309)
+    rect('fill',-50-70-50-20,309-60+30-1,309+100,309)
+    lg.pop()
+    
 
     fg(1,1,1,1)
     lg.setCanvas(canvas3)
@@ -414,7 +446,7 @@ function menufadeout()
     fg(153/255.0,152/255.0,100/255.0)
     lg.push()
     lg.rotate(-pi/4)
-    rect('fill',0+60-80-100-30-60-20-100+10,24+60+80-30+bar_dist_y-309,309+200,309)
+    rect('fill',0+60-80-100-30-60-20-100+10,24+60+80-30+bar_dist_y-309-10,309+200,309)
     rect('fill',-50-70-50-20,309-60+30-1-bar_dist_y,309+100,309)
     lg.pop()
     end
@@ -570,6 +602,133 @@ function menufadein()
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
 end
+
+function galleryfadein()
+    audio.mewsic2:setVolume(audio.mewsic2:getVolume()-0.01)
+
+    lg.setCanvas(canvas3)
+    bg(0,0,0,0)
+
+    lg.setCanvas(canvas)
+    bg(153/255.0,152/255.0,100/255.0)
+
+    if titlelock>#'MOMENTUM' then titlelock=#'MOMENTUM' end
+    for i=#title,titlelock,-1 do
+        local ts=sub(title,1,i-1)
+        local te=sub(title,i+1,#title)
+        title = ts..string.char(random(33,96))..te
+    end
+    if t%8==0 and titlelock>1 then
+        titlelock=titlelock-1
+    end
+    if titlelock==1 and t%8==0 and #title>0 then
+        title=sub(title,1,#title-1)
+    end
+   
+    bar_dist=bar_dist or 0
+    bar_xw=bar_xw or 0
+    
+    fg(1,1,1,1)
+    lg.setCanvas(canvas3)
+    lg.setFont(lcdfont)
+    lg.print(title,309/2+60-80-10+4-1-bar_dist,24+24-1+60+60-40+20+10+2)
+    lg.setCanvas(canvas)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
+    fg(0xcd/255,0xcd/255,0xc8/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    fg(0x29/255,0x23/255,0x2e/255)
+    rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
+    lg.pop()
+    
+    lg.push()
+    lg.rotate(-pi/4)
+    lg.translate(-120-40+8-1-1,30-1)
+    fg(0x3c/255,0x4c/255,0x25/255)
+    smolrect[1]=0-60
+    smolrect[2]=309-60
+    smolrect[3]=309+120
+    smolrect[4]=smolfont:getHeight('MOMENTUM')+8
+    rect('fill',smolrect[1],smolrect[2]+bar_dist,smolrect[3],smolrect[4])
+    lg.pop()
+    
+    bar_dist=bar_dist+4; if bar_dist>280 then bar_dist=280 end
+    --bar_dist_y=nil
+    bar_xw=bar_xw+2; if bar_xw>120 then
+    bar_xw=120
+    if bar_dist==280 then 
+    audio.mewsic2:stop()
+    audio.mewsic2:setVolume(0.7)
+    love.update=rp_gallery; love.draw=gallerydraw
+    sc_t=t+1
+    end
+    end
+
+    fg(1,1,1,1)
+    lg.setCanvas()
+    lg.draw(canvas,0,0,0,scale,scale)
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
+end
+
+function gallerydraw()
+    if t-sc_t==0 then 
+        if not gallery[1] then return end
+        rp=gallery[1]
+        rp.i=1
+        mode=rp.mode
+        reset(true)
+    end
+    
+    if not rp[rp.i] then reset(true); rp.i=1 end
+    love.update=replay
+    update()
+    love.update=rp_gallery
+    love.draw=gallerydraw
+    gamedraw(true,true)
+
+    lg.setCanvas(canvas3)
+    bg(0,0,0,0)
+
+    lg.setCanvas(canvas)
+    bg(153/255.0,152/255.0,100/255.0)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
+    fg(0xcd/255,0xcd/255,0xc8/255)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    lg.pop()
+
+    fg(1,1,1,1)
+    --lg.setCanvas(canvas)
+    
+    lg.setCanvas()
+    lg.draw(canvas,0,0,0,scale,scale)
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.setShader(graytrans)
+    lg.draw(vcanvas,100-40+100-20-15+2+60,200+100-40-20-15+2-60,0,0.6,0.6)
+    lg.setShader()
+
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
+end
+
+graytrans=lg.newShader([[
+vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ) {
+    vec4 tc = Texel(tex, texture_coords);
+    if (tc.r==0.803921568627451 && tc.g==0.803921568627451 && tc.b==0.7843137254901961) {
+        return vec4(0,0,0,0);
+    }
+    return tc;
+}
+]])
 
 love.draw= menudraw
 

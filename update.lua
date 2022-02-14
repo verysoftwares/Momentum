@@ -43,9 +43,9 @@ end
 
 function update(dt)
     st=love.timer.getTime()
-    deltat=dt
-    
-    init(1)
+    if dt~=nil then deltat=dt end
+
+    if love.update==update then init(1) end
 
     if love.keyboard.isDown('escape') then
         back_to_menu()
@@ -121,7 +121,7 @@ end
 
 function replay(dt)
     st=love.timer.getTime()
-    deltat=dt
+    if dt~=nil then deltat=dt end
 
     if love.keyboard.isDown('escape') then
         back_to_menu()
@@ -148,7 +148,7 @@ function tutor(dt)
     t=t+1
 end
 
-function reset()
+function reset(noresettime)
     score=0
     ball.x=309/2-12; ball.y=96; ball.dx=0; ball.dy=0; ball.bonus=nil
     plrbonus=0
@@ -167,12 +167,14 @@ function reset()
 
     shouts={}
 
-    if love.update~=replay then 
+    if love.update~=replay and love.update~=rp_gallery then 
         rp={i=1} 
         love.update=update
     end
 
+    if not noresettime then
     t=0
+    end
 end
 
 function back_to_menu()

@@ -24,6 +24,7 @@ function love.load()
     
     images={}
     images.bg1=lg.newImage('wares/surroundbg.png')
+    images.bg1_t=lg.newImage('wares/surroundbg_trans.png')
     images.bg2a=lg.newImage('wares/surroundtop.png')
     images.bg2b=lg.newImage('wares/surroundbottom.png')
     
