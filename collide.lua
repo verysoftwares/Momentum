@@ -129,8 +129,65 @@ function solidcoll(args)
         args.touch=true
     end
     if args._ball==args.w.ball and not args.s.update then shift(args.s,args.w) end
+    
+    local yforce=1+args.spd*0.4
+    local xforce=yforce*0.5
+    local _ball=args._ball
+    local s=args.s
+    if _ball.y+13<s.y+grid then
+    if _ball.y+13<s.y+grid then
+        _ball.dy=-yforce
+        --print('minus yforce',t)
+        --local ty=s.y+21+math.abs(ball.x-s.x)
+        --if ty<ball.y then ball.y=ty 
+        --else ball.y=ball.y+ball.dy end
+        --end
+    else
+        _ball.dy=yforce
+        --print('plus yforce',t)
+        --local ty=s.y+25-math.abs(ball.x-s.x)
+        --if ty<ball.y then ball.y=ty end
+        local ty=s.y-20+math.abs(_ball.x-s.x)
+        if ty<_ball.y then _ball.y=ty end
+    end
+    if 1 then --not aligned then
+    if _ball.x+13>=s.x+grid then
+    --local tx=s.x+21+math.abs(ball.y-s.y)
+    --if tx>=ball.x then ball.x=tx end
+    local tx=s.x+40-2-math.abs(_ball.y-s.y)
+    if tx>=_ball.x then aligned=true; _ball.x=tx end
+    if _ball~=args.w.ball then _ball.dx=xforce end
+    else
+    local tx=s.x-20+math.abs(_ball.y-s.y)
+    if tx<_ball.x then aligned=true; _ball.x=tx end
+    if _ball~=ball then _ball.dx=-xforce end
+    end
+    end
+    else
+        --print('down collision')
+        if _ball.y+13>s.y+grid then
+            _ball.dy=yforce
+        else
+            _ball.dy=-yforce
+        end
 
-    NESWalign(args)
+        if 1 then--not aligned then
+        if _ball.x+13<=s.x+grid then
+            local tx=s.x-28-8+math.abs(_ball.y-s.y)
+            if tx<_ball.x then aligned=true; _ball.x=tx end
+            if _ball~=args.w.ball then _ball.dx=-xforce end
+        else
+            local tx=s.x+40+8+8-2-math.abs(_ball.y-s.y)
+            if tx>=_ball.x then aligned=true; _ball.x=tx end
+            if _ball~=args.w.ball then _ball.dx=xforce end
+        end
+        end
+        --if s.update then
+        --    if s.dy==1 then ball.y=ball.y+1 end
+        --end
+    end
+
+    --NESWalign(args)
 end
 
 -- align ball/powerup based on collision data
