@@ -49,6 +49,7 @@ function collide(_ball,args)
         _ball.lethalt=0
 
         if _ball==ball then
+            local rep=love.update==replay
             sc_t=t+1; 
             if score+1>_G['hiscore_'..string.lower(mode)] then _G['hiscore_'..string.lower(mode)]=score+1 end
             if #unlocks>0 then
@@ -63,7 +64,7 @@ function collide(_ball,args)
                 rp.score=score+1
                 rp.mode=mode
             end
-            saveprogress()
+            if not rep then saveprogress() end
         else
             rem(bonuses,args.i)
             args.removed=true

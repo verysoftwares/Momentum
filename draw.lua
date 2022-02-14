@@ -82,22 +82,17 @@ function gamedraw(nocap,virtual_canvas)
     end
     lg.draw(ball.img,flr(ball.x),flr(ball.y))
     end
-    -- to stop color bleeding messing with transparency
-    if virtual_canvas then fg(1,1,1,1) end
-
+    
     lg.setFont(smolfont)
     for i=#shouts,1,-1 do
         local s=shouts[i]
         lg.print(s.msg,s.x,s.y)
     end
 
+    -- to stop color bleeding messing with transparency
+    if virtual_canvas then fg(1,1,1,1) end
+    
     if plrbonus>0 and not virtual_canvas then
-    local r,g,b,a=lg.getColor()
-    --fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
-    --circ('fill',309-60-12,309-40+12,13)
-    fg(0xf0/255.0,0xa0/255.0,0xb0/255.0)
-    circ('fill',309-60-12,309-40+12,12.8)
-    fg(r,g,b,a)
     lg.setFont(smolfont)
     lg.push()
     local cn=lg.getCanvas()
@@ -257,9 +252,18 @@ function gamedraw(nocap,virtual_canvas)
     lg.draw(images.bg2b,0,flr(309/2)+1)
     --end
 
+    if plrbonus>0 and not virtual_canvas then
+    local r,g,b,a=lg.getColor()
+    --fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
+    --circ('fill',309-60-12,309-40+12,13)
+    fg(0xf0/255.0,0xa0/255.0,0xb0/255.0)
+    circ('fill',309-60-12,309-40+12,12.8)
+    fg(r,g,b,a)
+    end
+
     lg.setCanvas()
     if virtual_canvas then
-        lg.setCanvas(vcanvas)
+        lg.setCanvas(virtual_canvas)
         bg(0,0,0,0)
     end
     fg(1,1,1,1)
@@ -668,12 +672,70 @@ function gallerydraw()
         reset(true)
     end
     
+    if gallery[gallery.i-1] then
+        if not preview1 then
+            preview1=lg.newCanvas(309*scale,309*scale)
+            reset(true)
+            
+            local old_rp=rp
+            rp=gallery[gallery.i-1]
+            rp.i=1
+            mode=rp.mode
+            local old_playsnd=playsnd
+            playsnd=function() end
+            love.update=replay
+            
+            for i=1,math.min(400,#rp) do
+            update()
+            end
+            
+            playsnd=old_playsnd
+            rp=old_rp
+            mode=rp.mode
+
+            love.update=rp_gallery
+            love.draw=gallerydraw
+            gamedraw(true,preview1)
+
+            reset(true)
+        end
+    end
+
+    if gallery[gallery.i+1] then
+        if not preview2 then
+            preview2=lg.newCanvas(309*scale,309*scale)
+            reset(true)
+            
+            local old_rp=rp
+            rp=gallery[gallery.i+1]
+            rp.i=1
+            mode=rp.mode
+            local old_playsnd=playsnd
+            playsnd=function() end
+            love.update=replay
+            
+            for i=1,math.min(400,#rp) do
+            update()
+            end
+            
+            playsnd=old_playsnd
+            rp=old_rp
+            mode=rp.mode
+
+            love.update=rp_gallery
+            love.draw=gallerydraw
+            gamedraw(true,preview2)
+
+            reset(true)
+        end
+    end
+
     if not rp[rp.i] then reset(true); rp.i=1 end
     love.update=replay
     update()
     love.update=rp_gallery
     love.draw=gallerydraw
-    gamedraw(true,true)
+    gamedraw(true,vcanvas)
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
@@ -696,7 +758,13 @@ function gallerydraw()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
     lg.setShader(graytrans)
+    if preview1 then 
+    lg.draw(preview1,100-40+100-20-15+2+60-100-50,200+100-40-20-15+2-60+100+100+100+100+50,0,0.3,0.3)
+    end
     lg.draw(vcanvas,100-40+100-20-15+2+60,200+100-40-20-15+2-60,0,0.6,0.6)
+    if preview2 then 
+    lg.draw(preview2,100-40+100-20-15+2+60+100+100+100+100+50,200+100-40-20-15+2-60-100-50,0,0.3,0.3)
+    end
     lg.setShader()
 
     local et=love.timer.getTime()

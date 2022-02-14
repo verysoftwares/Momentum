@@ -59,7 +59,7 @@ function saveprogress()
             end
             out=out..'},'
         end
-        out=out..fmt('score=%d,',rp.score)..fmt('mode=\'%s\',',rp.mode)
+        out=out..fmt('score=%d,',rp.score)..fmt('mode=\'%s\',',rp.mode)..fmt('time=%d',os.time())
         out=out..'},'
     end
     out=out..'}'

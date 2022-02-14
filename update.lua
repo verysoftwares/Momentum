@@ -71,6 +71,24 @@ function update(dt)
     
     spawn()
 
+    bonus_mvmt()
+
+    floaters_update()
+
+    if t>0 then 
+        score=score+1 
+        if mode=='Standard' and score>=5000 and not cycle_unlocks['Gallery'] and not find(unlocks,'Gallery') then
+            ins(unlocks,'Gallery')
+        end
+        if mode=='Standard' and score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
+            ins(unlocks,'Chaotic')
+        end
+    end
+
+    t = t+1
+end
+
+function floaters_update()
     for i,s in ipairs(shouts) do s.proc=false end
     for i=#shouts,1,-1 do
         local s=shouts[i]
@@ -95,20 +113,6 @@ function update(dt)
         p.dy=p.dy+grav
         if p.y>=309 then rem(particles,i) end
     end
-
-    bonus_mvmt()
-
-    if t>0 then 
-        score=score+1 
-        if mode=='Standard' and score>=5000 and not cycle_unlocks['Gallery'] and not find(unlocks,'Gallery') then
-            ins(unlocks,'Gallery')
-        end
-        if mode=='Standard' and score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
-            ins(unlocks,'Chaotic')
-        end
-    end
-
-    t = t+1
 end
 
 function gameover(dt)
@@ -122,6 +126,7 @@ function gameover(dt)
         reset()
         return
     end
+    floaters_update()
 
     t=t+1
 end
@@ -140,6 +145,7 @@ function show_unlocks(dt)
             sc_t=t+1
         end
     end
+    floaters_update()
 
     t=t+1
 end
