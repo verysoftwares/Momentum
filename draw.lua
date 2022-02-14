@@ -335,19 +335,19 @@ function menudraw()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
-    --for ry=-grid,309,grid do
-    --for rx=-grid,309,grid do
-    --rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
-    --end
-    --end
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
     fg(0x68/255,0x70/255,0x4b/255)
     rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30-10,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20+bar_dist,24+60+80-30,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
     fg(0x29/255,0x23/255,0x2e/255)
     rect('fill',309/2-1-100-90-40-20+4+2-1-bar_dist,24+8-4+2+100+12-1,lcdfont:getWidth('MOMENTUM'),lcdfont:getHeight('MOMENTUM')+24-10)
-    --fg(153/255.0,152/255.0,100/255.0)
-    --rect('fill',0+60-80-100-30-60-20,24+60+80-30+60-2,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+24+8+4+2)
+    fg(153/255.0,152/255.0,100/255.0)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30+60-2,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+24+8+4+2)
     lg.pop()
     bar_dist=bar_dist-8; if bar_dist<0 then bar_dist=0 end
 
@@ -469,6 +469,21 @@ function menufadeout()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    if rx+ry<bar_dist_y+160 or rx+ry>smolrect[2]-bar_dist_y+30 then
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
+    end
+    lg.pop()
+    lg.push()
+    lg.rotate(-pi/4)
+    if #title>0 then
+    fg(153/255.0,152/255.0,100/255.0)
+    rect('fill',0+60-80-100-30-60-20,24+60+80-30+60-2,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+24+8+4+2-bar_dist_y)
+    end
+    fg(0x68/255,0x70/255,0x4b/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30-10+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
@@ -557,6 +572,17 @@ function menufadein()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    if rx+ry<bar_dist_y+160 or rx+ry>smolrect[2]-bar_dist_y+30 then
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
+    end
+    lg.pop()
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30-10+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30+bar_dist_y,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2)
@@ -629,6 +655,17 @@ function galleryfadein()
     lg.print(title,309/2+60-80-10+4-1-bar_dist,24+24-1+60+60-40+20+10+2)
     lg.setCanvas(canvas)
 
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    if rx+ry<24+60+80-30-10-bar_xh or rx+ry>smolrect[2]+16+16+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35) then
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
+    end
+    lg.pop()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
@@ -724,17 +761,6 @@ function gallerydraw()
     lg.setCanvas(canvas)
     bg(153/255.0,152/255.0,100/255.0)
 
-    lg.push()
-    lg.rotate(-pi/4)
-    lg.translate(-120-40+8-1-1,30-1)
-    fg(0x3c/255,0x4c/255,0x25/255)
-    smolrect[1]=0-60
-    smolrect[2]=309-60
-    smolrect[3]=309+120
-    smolrect[4]=smolfont:getHeight('MOMENTUM')+8
-    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
-    lg.pop()
-
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
@@ -771,7 +797,7 @@ function gallerydraw()
     end
     if gallery[gallery.i] then
     lg.print(gallery[gallery.i].score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2+3,309/2-10-10+5-8)
-    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2+3,309/2-10-10+5+200-60+8-8+12+6-4)
+    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2+3,309/2-10-10+5+200-60+8-8+12+6-4+2)
     end
     if gallery[gallery.i+1] then
     lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2+3,309/2+100-60-20+4-1-2-3)
@@ -789,9 +815,32 @@ function gallerydraw()
     lg.push()
     lg.rotate(-pi/4)
     fg(0x68/255,0x70/255,0x4b/255)
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    if rx+ry<24+60+80-30-10-bar_xh or rx+ry>smolrect[2]+16+16+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35) then
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
+    end
+    lg.pop()
+
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30-10-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+20+bar_xw)
     fg(0xcd/255,0xcd/255,0xc8/255)
     rect('fill',0+60-80-100-30-60-20,24+60+80-30-bar_xh,309+200,lcdfont:getHeight('MOMENTUM')+24+2+2+bar_xw)
+    lg.pop()
+
+    lg.push()
+    lg.rotate(-pi/4)
+    lg.translate(-120-40+8-1-1,30-1)
+    fg(0x3c/255,0x4c/255,0x25/255)
+    smolrect[1]=0-60
+    smolrect[2]=309-60
+    smolrect[3]=309+120
+    smolrect[4]=smolfont:getHeight('MOMENTUM')+8
+    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
     lg.pop()
 
     fg(1,1,1,1)
@@ -851,6 +900,18 @@ function galleryfadeout()
     lg.setFont(lcdfont)
     lg.print(title,309/2+60-80-10+4-1-bar_dist,24+24-1+60+60-40+20+10+2)
     lg.setCanvas(canvas)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    fg(0x68/255,0x70/255,0x4b/255)
+    for ry=-grid,309,grid do
+    for rx=-grid,309,grid do
+    if rx+ry<24+60+80-30-10-bar_xh or rx+ry>smolrect[2]+16+16+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35) then
+    rect('fill',rx-ry-t%(grid*2),rx+ry,grid,grid)
+    end
+    end
+    end
+    lg.pop()
 
     lg.push()
     lg.rotate(-pi/4)
