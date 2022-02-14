@@ -80,7 +80,7 @@ function spawn(w)
         ::skip::
         ins(w.shifters,{x=sp.x,y=sp.y})
         if spawnblocked then
-            particlespam(w.shifters[#w.shifters])
+            particlespam(w.shifters[#w.shifters],w)
             playsnd(audio.crush)
             rem(w.shifters,#w.shifters)
         end
