@@ -35,7 +35,8 @@ function menu(dt,w)
                 title='MOMENTUM'
                 w.mode='Standard'
                 reset(w)
-                playsnd(audio.shutter1)
+                audio.shutter:seek(2.603)
+                playsnd(audio.shutter)
                 love.update = menufade
                 love.draw = menufadeout
                 --love.update = tutor
@@ -47,7 +48,8 @@ function menu(dt,w)
                 title='MOMENTUM'
                 w.mode='Chaotic'
                 reset(w)
-                playsnd(audio.shutter1)
+                audio.shutter:seek(2.603)
+                playsnd(audio.shutter)
                 love.update = menufade
                 love.draw = menufadeout
                 return

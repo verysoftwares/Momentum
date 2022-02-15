@@ -505,9 +505,10 @@ function menufadeout()
     if #title>0 then
     bar_dist_y=bar_dist_y+4; if bar_dist_y>48-5 then bar_dist_y=48-5 end
     else
-    if bar_dist_y==48-5 then playsnd(audio.shutter2) end
+    if bar_dist_y==48-5 then playsnd(audio.shutter) end
     bar_dist_y=bar_dist_y-4; if bar_dist_y<-185 then 
     --bar_dist_y=nil
+    audio.shutter:stop()
     audio.mewsic2:stop()
     audio.mewsic2:setVolume(1)
     love.update=tutor; love.draw=gamedraw
@@ -524,7 +525,7 @@ function menufadeout()
 end
 
 function menufadein()
-    if bar_dist_y==-185 then playsnd(audio.shutterlong) end
+    if bar_dist_y==-185 then audio.shutter:seek(2.0); playsnd(audio.shutter) end
     audio.mewsic1:setVolume(audio.mewsic1:getVolume()-0.01)
 
     lg.setCanvas(canvas3)
@@ -604,7 +605,7 @@ function menufadein()
     lg.pop()
 
     if title=='MOMENTUM' then
-    if bar_dist_y==48-5 then playsnd(audio.shutter1) end
+    if bar_dist_y==48-5 then audio.shutter:seek(2.603); playsnd(audio.shutter) end
     bar_dist_y=bar_dist_y-4; 
     if bar_dist_y<=0 then 
         bar_dist_y=0
@@ -627,7 +628,8 @@ function menufadein()
 end
 
 function galleryfadein()
-    if bar_dist==0 then playsnd(audio.shutter2) end
+    if bar_dist==0 then playsnd(audio.shutter) end
+    if audio.shutter:tell()>=1.061 then audio.shutter:stop() end
     audio.mewsic2:setVolume(audio.mewsic2:getVolume()-0.01)
 
     lg.setCanvas(canvas3)
@@ -878,7 +880,7 @@ vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ) {
 ]])
 
 function galleryfadeout()
-    if bar_dist==280 then playsnd(audio.shutterlong) end
+    if bar_dist==280 then audio.shutter:seek(1.803); playsnd(audio.shutter) end
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
