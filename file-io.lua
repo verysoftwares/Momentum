@@ -26,6 +26,8 @@ function loadprogress()
         print(fmt('no save file %s',file))
     end
 
+    for i,g in ipairs(gallery) do g.saved=true end
+
     if cycle2[cycle2.i]=='Most recent first' then table.sort(gallery,function(a,b) return a.time>b.time end) end
     if cycle2[cycle2.i]=='Highest score first' then table.sort(gallery,function(a,b) return a.score>b.score end) end
 end
@@ -52,9 +54,16 @@ function saveprogress(w)
 
     file = 'replays.soft'
 
-    out='gallery={'
+    local info = love.filesystem.getInfo('replays.soft', {})
+    if not info then
+        out='gallery={}\n'
+        love.filesystem.write(file, out)
+    end
+        
+    out=''
     for i,rp in ipairs(gallery) do
-        out=out..'{'
+        if not rp.saved then
+        out=out..'ins(gallery,{'
         for j,keys in ipairs(rp) do
             out=out..'{'
             for k,key in ipairs(keys) do
@@ -63,9 +72,10 @@ function saveprogress(w)
             out=out..'},'
         end
         out=out..fmt('score=%d,',rp.score)..fmt('mode=\'%s\',',rp.mode)..fmt('time=%d',rp.time)
-        out=out..'},'
+        out=out..'})\n'
+        rp.saved=true
+        end
     end
-    out=out..'}'
 
-    love.filesystem.write(file, out)
+    love.filesystem.append(file, out)
 end
