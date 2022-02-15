@@ -300,7 +300,7 @@ function menudraw()
         title = ts..string.char(random(33,96))..te
     end
     
-    if t>32+24+32+24+16-60 and (t-4)%16==0 then
+    if t>32+24+32+24+16-60 and (t-14)%16==0 then
         if not onlyoncem2 then init(2); onlyoncem2=true end
         title=sub(title,1,titlelock-1)..sub('MOMENTUM',titlelock,titlelock)..sub(title,titlelock+1,#title)
         titlelock=titlelock+1
