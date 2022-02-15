@@ -509,7 +509,7 @@ function menufadeout()
     bar_dist_y=bar_dist_y-4; if bar_dist_y<-185 then 
     --bar_dist_y=nil
     audio.mewsic2:stop()
-    audio.mewsic2:setVolume(0.7)
+    audio.mewsic2:setVolume(1)
     love.update=tutor; love.draw=gamedraw
     end
     end
@@ -610,7 +610,7 @@ function menufadein()
         bar_dist_y=0
         love.update=menu; love.draw=menudraw
         audio.mewsic1:stop()
-        audio.mewsic1:setVolume(0.7)
+        audio.mewsic1:setVolume(1)
     end
     else
     bar_dist_y=bar_dist_y+4; if bar_dist_y>48-5 then bar_dist_y=48-5 end
@@ -698,7 +698,7 @@ function galleryfadein()
     bar_xw=120+16
     if bar_dist==280 then 
     audio.mewsic2:stop()
-    audio.mewsic2:setVolume(0.7)
+    audio.mewsic2:setVolume(1)
     love.update=rp_gallery; love.draw=gallerydraw
     sc_t=t+1
     end
