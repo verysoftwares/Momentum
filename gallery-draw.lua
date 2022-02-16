@@ -105,7 +105,7 @@ function gallerydraw()
     local old_update=love.update
     local old_draw=love.draw
 
-    if gallery[gallery.i-1] then
+    if gallery[gallery.i-1] and love.draw==gallerydraw then
         local old_playsnd=playsnd
         playsnd=function() end
         love.update=replay
@@ -117,7 +117,7 @@ function gallerydraw()
         if not worldprev1.rp[worldprev1.rp.i] then worldprev1.rp.i=1; reset(worldprev1,true) end
     end
 
-    if gallery[gallery.i+1] then
+    if gallery[gallery.i+1] and love.draw==gallerydraw then
         local old_playsnd=playsnd
         playsnd=function() end
         love.update=replay
@@ -147,7 +147,7 @@ function gallerydraw()
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
-    if gall_state==nil and #gallery>1 and love.draw==gallerydraw then
+    if gall_state==nil and #gallery>1 then
     lg.setFont(lcdfont)
     --local r,g,b,a=HSL((t*2)%256,224,224,255)
     --fg(r/255.0,g/255.0,b/255.0,1)
@@ -238,14 +238,14 @@ function gallerydraw()
     lg.setCanvas()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.setShader(graytrans)
-    if preview1 then 
+    if preview1 and love.draw==gallerydraw then 
     lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14-4-4)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14-12-4)/3*scale,0,0.3333,0.3333)
     end
     vc_x=vc_x or (100-40+100-20-15+2+60-8-16-14)/3*scale
     vc_y=vc_y or (200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale
     vc_scale=vc_scale or 0.6666
     lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
-    if preview2 then 
+    if preview2 and love.draw==gallerydraw then 
     lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
     end
     lg.setShader()
@@ -358,7 +358,7 @@ end
 function galleryzoom()
     bar_xh=bar_xh+4
     bar_xw=bar_xw+8
-    if bar_xh>150 then bar_xh=150; bar_xw=300 end
+    if bar_xh>150 then bar_xh=150; bar_xw=450 end
     
     vc_x=vc_x+(0-vc_x)*0.1
     vc_y=vc_y+(0-vc_y)*0.1
