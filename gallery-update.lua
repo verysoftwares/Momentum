@@ -115,10 +115,5 @@ function rp_zoom(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
-    if tapped('escape') then
-        love.update=rp_gallery
-        love.draw=gallerydraw
-    end
-
     t=t+1
 end
