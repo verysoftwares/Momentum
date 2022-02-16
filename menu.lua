@@ -112,6 +112,8 @@ function rp_gallery(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
+    init(4)
+
     if tapped('escape') then
         love.update=menufade
         love.draw=galleryfadeout

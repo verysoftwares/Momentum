@@ -881,6 +881,9 @@ vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords ) {
 
 function galleryfadeout()
     if bar_dist==280 then audio.shutter:seek(1.803); playsnd(audio.shutter) end
+
+    audio.mewsic4:setVolume(audio.mewsic4:getVolume()-0.01)
+
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
@@ -948,6 +951,8 @@ function galleryfadeout()
     bar_xw=0
     if bar_dist==0 and title=='MOMENTUM' then 
     onlyoncem2=nil
+    audio.mewsic4:stop()
+    audio.mewsic4:setVolume(1)
     love.update=menu; love.draw=menudraw
     sc_t=t+1
     end
