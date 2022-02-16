@@ -57,6 +57,7 @@ function reset(w,noresettime)
     w.spawners={}
 
     w.shouts={}
+    w.particles={}
 
     if love.update~=replay and love.update~=rp_gallery and love.update~=rp_zoom then 
         w.rp={i=1} 
