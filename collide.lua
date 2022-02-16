@@ -49,8 +49,7 @@ function collide(_ball,args,w)
         _ball.lethalt=0
 
         if _ball==w.ball then
-            local rep=love.update==replay
-            if w.score+1>_G['hiscore_'..string.lower(w.mode)] then _G['hiscore_'..string.lower(w.mode)]=w.score+1 end
+            local rep=love.update==replay            
             if #unlocks>0 then
             for i,u in ipairs(unlocks) do cycle_unlocks[u]=true end
             love.update=show_unlocks

@@ -63,6 +63,7 @@ function update(dt,w)
         if w.mode=='Standard' and w.score>=10000 and not cycle_unlocks['Chaotic'] and not find(unlocks,'Chaotic') then
             ins(unlocks,'Chaotic')
         end
+        if w.score>_G['hiscore_'..string.lower(w.mode)] then _G['hiscore_'..string.lower(w.mode)]=w.score end
     end
 
     w.t = w.t+1
