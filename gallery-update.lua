@@ -115,6 +115,25 @@ function rp_zoom(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
+    if tapped('left') then
+    end
+    if love.keyboard.isDown('right') then
+        rhold=rhold or 0
+        if rhold==0 or rhold>15 then
+        for i=1,19 do
+        love.update=replay
+        update(nil,main_wld)
+        love.update=rp_zoom
+        love.draw=galleryzoom
+        --gamedraw(true,vcanvas,main_wld)
+        if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
+        end
+        end
+        rhold=rhold+1
+    elseif not love.keyboard.isDown('right') then
+        rhold=nil
+    end
+
     if tapped('escape') then
         love.update=rp_gallery
         love.draw=gallerydraw

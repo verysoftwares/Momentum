@@ -87,13 +87,13 @@ end
 
 -- how to display current selection in cycle
 function visualize(c)
-    if love.update~=rp_gallery then
+    if love.update~=rp_gallery and love.update~=rp_zoom then
     if cycle_unlocks[c] then
         return '< '..c..' >'
     end
     return '< ??? >'
     end
-    if love.update==rp_gallery then
+    if love.update==rp_gallery or love.update==rp_zoom then
         if gall_state==nil then return c end
         if gall_state=='sort' then return '< '..c..' >' end
     end

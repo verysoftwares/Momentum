@@ -229,7 +229,7 @@ function gallerydraw()
         lg.print(sub(visualize(cycle2[cycle2.i]),c,c),100+tx-40,30+309-60+60+8-3+bar_xh-8+bounce)
         tx=tx+smolfont:getWidth(sub(visualize(cycle2[cycle2.i]),c,c))
     end
-
+    
     fg(1,1,1,1)
     --lg.setCanvas(canvas)
     
@@ -366,7 +366,7 @@ end
 function galleryzoom()
     bar_xh=bar_xh+4
     bar_xw=bar_xw+8
-    if bar_xh>150 then bar_xh=150; bar_xw=450 end
+    if bar_xh>150 then bar_xh=150; bar_xw=450-30 end
     
     vc_x=vc_x+(0-vc_x)*0.1
     vc_y=vc_y+(0-vc_y)*0.1
