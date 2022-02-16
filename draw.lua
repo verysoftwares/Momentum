@@ -629,7 +629,6 @@ end
 
 function galleryfadein()
     if bar_dist==0 then playsnd(audio.shutter) end
-    if audio.shutter:tell()>=1.061 then audio.shutter:stop() end
     audio.mewsic2:setVolume(audio.mewsic2:getVolume()-0.01)
 
     lg.setCanvas(canvas3)
@@ -699,6 +698,7 @@ function galleryfadein()
     bar_xw=bar_xw+2; if bar_xw>120+16 then
     bar_xw=120+16
     if bar_dist==280 then 
+    audio.shutter:stop()
     audio.mewsic2:stop()
     audio.mewsic2:setVolume(1)
     love.update=rp_gallery; love.draw=gallerydraw
