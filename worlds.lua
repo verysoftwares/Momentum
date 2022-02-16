@@ -58,7 +58,7 @@ function reset(w,noresettime)
 
     w.shouts={}
 
-    if love.update~=replay and love.update~=rp_gallery then 
+    if love.update~=replay and love.update~=rp_gallery and love.update~=rp_zoom then 
         w.rp={i=1} 
         love.update=update
     end

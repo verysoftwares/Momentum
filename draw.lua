@@ -728,14 +728,17 @@ function gallerydraw()
     lg.setCanvas(preview2)
     bg(0,0,0,0)
 
+    local old_update=love.update
+    local old_draw=love.draw
+
     if gallery[gallery.i-1] then
         local old_playsnd=playsnd
         playsnd=function() end
         love.update=replay
         update(nil,worldprev1)
         playsnd=old_playsnd
-        love.update=rp_gallery
-        love.draw=gallerydraw
+        love.update=old_update
+        love.draw=old_draw
         gamedraw(true,preview1,worldprev1)
         if not worldprev1.rp[worldprev1.rp.i] then worldprev1.rp.i=1; reset(worldprev1,true) end
     end
@@ -746,8 +749,8 @@ function gallerydraw()
         love.update=replay
         update(nil,worldprev2)
         playsnd=old_playsnd
-        love.update=rp_gallery
-        love.draw=gallerydraw
+        love.update=old_update
+        love.draw=old_draw
         gamedraw(true,preview2,worldprev2)
         if not worldprev2.rp[worldprev2.rp.i] then worldprev2.rp.i=1; reset(worldprev2,true) end
     end
@@ -758,8 +761,8 @@ function gallerydraw()
     if gallery[1] then
     love.update=replay
     update(nil,main_wld)
-    love.update=rp_gallery
-    love.draw=gallerydraw
+    love.update=old_update
+    love.draw=old_draw
     gamedraw(true,vcanvas,main_wld)
     if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
     end
@@ -770,7 +773,7 @@ function gallerydraw()
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
 
-    if gall_state==nil and #gallery>1 then
+    if gall_state==nil and #gallery>1 and love.draw==gallerydraw then
     lg.setFont(lcdfont)
     --local r,g,b,a=HSL((t*2)%256,224,224,255)
     --fg(r/255.0,g/255.0,b/255.0,1)
@@ -846,7 +849,13 @@ function gallerydraw()
     smolrect[2]=309-60
     smolrect[3]=309+120
     smolrect[4]=smolfont:getHeight('MOMENTUM')+8
-    rect('fill',smolrect[1],smolrect[2]+math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35),smolrect[3],smolrect[4])
+    local sry
+    if love.draw==gallerydraw then
+        sry=math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35)
+    else
+        sry=(30+309-60+60+8-3)-(309-60)-35+bar_xh
+    end
+    rect('fill',smolrect[1],smolrect[2]+sry,smolrect[3],smolrect[4])
     lg.pop()
 
     fg(1,1,1,1)
@@ -858,12 +867,17 @@ function gallerydraw()
     if preview1 then 
     lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14-4-4)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14-12-4)/3*scale,0,0.3333,0.3333)
     end
-    lg.draw(vcanvas,(100-40+100-20-15+2+60-8-16-14)/3*scale,(200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale,0,0.6666,0.6666)
+    vc_x=vc_x or (100-40+100-20-15+2+60-8-16-14)/3*scale
+    vc_y=vc_y or (200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale
+    vc_scale=vc_scale or 0.6666
+    lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
     if preview2 then 
     lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
     end
     lg.setShader()
+    if love.draw==gallerydraw then
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    end
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
@@ -963,6 +977,33 @@ function galleryfadeout()
     lg.draw(canvas,0,0,0,scale,scale)
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
 
+    local et=love.timer.getTime()
+    while deltat+et-st<1/60 do et=love.timer.getTime() end
+end
+
+function galleryzoom()
+    bar_xh=bar_xh+4
+    bar_xw=bar_xw+8
+    if bar_xh>150 then bar_xh=150; bar_xw=300 end
+    
+    vc_x=vc_x+(0-vc_x)*0.1
+    vc_y=vc_y+(0-vc_y)*0.1
+    vc_scale=vc_scale+(1-vc_scale)*0.1
+    if math.abs(vc_x-0)<1 then 
+        vc_x=0;vc_y=0;vc_scale=1 
+        love.update=replay
+        update(nil,main_wld)
+        love.update=rp_zoom
+        love.draw=galleryzoom
+        gamedraw(true,vcanvas,main_wld)
+        if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
+        
+        lg.setCanvas()
+        lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
+    else
+        gallerydraw()
+    end
+    
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
 end

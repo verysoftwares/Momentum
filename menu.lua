@@ -209,6 +209,18 @@ function rp_gallery(dt,w)
         end
     end
 
+    if gall_state==nil and gallery[1] and tapped('z') then
+        love.update=rp_zoom
+        love.draw=galleryzoom
+    end
+
+    t=t+1
+end
+
+function rp_zoom(dt,w)
+    w=w or main_wld
+    st=love.timer.getTime()
+    deltat=dt
 
     t=t+1
 end
