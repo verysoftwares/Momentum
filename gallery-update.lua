@@ -124,7 +124,7 @@ function rp_zoom(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
-    if love.keyboard.isDown('left') then
+    if love.keyboard.isDown('left') or love.keyboard.isDown('a') then
         lhold=lhold or 0
         if lhold==0 or lhold>15 then
         local skipto=main_wld.t-20
@@ -151,7 +151,7 @@ function rp_zoom(dt,w)
     else
         lhold=nil
     end
-    if love.keyboard.isDown('right') then
+    if love.keyboard.isDown('right') or love.keyboard.isDown('d') then
         rhold=rhold or 0
         if rhold==0 or rhold>15 then
         for i=1,19 do
@@ -192,6 +192,6 @@ function simulate(w,canv,mute,nodraw)
         if w==worldprev1 then target=worldcache[1] end
         if w==worldprev2 then target=worldcache[3] end
         target[w.t]=deepcopy(w)
-        print(fmt('added cache for %d',w.t))
+        --print(fmt('added cache for %d',w.t))
     end
 end

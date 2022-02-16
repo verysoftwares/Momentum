@@ -91,7 +91,7 @@ function gamedraw(nocap,virtual_canvas,w)
     -- to stop color bleeding messing with transparency
     if virtual_canvas then fg(1,1,1,1) end
     
-    if w.plrbonus>0 and not virtual_canvas then
+    if w.plrbonus>0 and love.update~=replay and not virtual_canvas then
     lg.setFont(smolfont)
     lg.push()
     local cn=lg.getCanvas()
@@ -114,14 +114,16 @@ function gamedraw(nocap,virtual_canvas,w)
     --if plrbonus>0 then lg.print(plrbonus,-60+4+20+20,15+60+15+15+260) end
     lg.pop()
 
+    local rpz_allowed=love.update==rp_zoom and vc_scale and vc_scale>0.9
+
     lg.setFont(lcdfont)
     local cn=lg.getCanvas()
     lg.setCanvas(canvas3)
     fg(1,1,1,1)
-    if not virtual_canvas and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and w.t%64<32) then
+    if (not virtual_canvas or rpz_allowed) and (love.update~=gameover and love.update~=show_unlocks) or ((love.update==gameover or love.update==show_unlocks) and w.t%64<32) then
     lg.print(fmt('%.5d',w.score),-60+4+100+100+16+2,15+60+15+100-100+2-1)
     end
-    if not virtual_canvas then
+    if (not virtual_canvas or rpz_allowed) then
     lg.setFont(smolfont)
     lg.print(fmt('Hi score %.5d',_G['hiscore_'..string.lower(w.mode)]),-60+4+100+100+16+2,15+60+15+100-100+2-1-32+6)
     lg.setFont(lcdfont)
@@ -129,7 +131,7 @@ function gamedraw(nocap,virtual_canvas,w)
     end
     lg.setCanvas(cn)
     
-    if love.update==replay and not virtual_canvas then
+    if (love.update==replay and not virtual_canvas) or rpz_allowed then
     if w.t%64<32 then
     local r,g,b,a=lg.getColor()
     fg(0xb0/255,0x20/255,0x40/255,1)
@@ -142,11 +144,31 @@ function gamedraw(nocap,virtual_canvas,w)
     lg.push()
     lg.setCanvas(canvas3)
     lg.rotate(pi/2)
+    lg.setFont(lcdfont)
     lg.print('REPLAY',200-40-10+3-1,-300-40-10+3)
     lg.pop()
     lg.setCanvas(cn)
     fg(r,g,b,a)
     end
+    end
+    
+    if rpz_allowed then
+    local r,g,b,a=lg.getColor()
+    fg(0xb0/255,0x20/255,0x40/255,1)
+    local cn=lg.getCanvas()
+    lg.push()
+    lg.setCanvas(canvas3)
+    lg.rotate(pi/2)
+    lg.setFont(smolfont)
+    local msg=fmt('Frame %d/%d',w.t+1,#w.rp)
+    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250)
+    msg='Left and right to'
+    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+12)
+    msg='rewind/fast forward.'
+    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+12+8)
+    lg.pop()
+    lg.setCanvas(cn)
+    fg(r,g,b,a)
     end
 
     if love.update==gameover or love.update==show_unlocks then
@@ -253,7 +275,7 @@ function gamedraw(nocap,virtual_canvas,w)
     lg.draw(images.bg2b,0,flr(309/2)+1)
     --end
 
-    if w.plrbonus>0 and not virtual_canvas then
+    if w.plrbonus>0 and (not virtual_canvas or rpz_allowed) then
     local r,g,b,a=lg.getColor()
     --fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
     --circ('fill',309-60-12,309-40+12,13)
