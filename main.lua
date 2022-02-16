@@ -9,9 +9,12 @@
     require 'bonuses'
     require 'particles'
     require 'worlds'
-    require 'menu'
-    require 'update'
-    require 'draw'
+    require 'game-update'
+    require 'game-draw'
+    require 'menu-update'
+    require 'menu-draw'
+    require 'gallery-update'
+    require 'gallery-draw'
 
 love.update = menu
 love.draw = menudraw
