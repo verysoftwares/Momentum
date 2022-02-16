@@ -76,6 +76,7 @@ function galleryfadein()
     audio.mewsic2:stop()
     audio.mewsic2:setVolume(1)
     love.update=rp_gallery; love.draw=gallerydraw
+    worldcache={{},{},{}}
     sc_t=t+1
     end
     end
@@ -91,7 +92,7 @@ end
 
 function gallerydraw()
     if t-sc_t==0 and gallery[1] then
-        reset(main_wld,true)
+        reset(main_wld)
         main_wld.rp=gallery[1]
         main_wld.rp.i=1
         main_wld.mode=main_wld.rp.mode
@@ -102,43 +103,19 @@ function gallerydraw()
     lg.setCanvas(preview2)
     bg(0,0,0,0)
 
-    local old_update=love.update
-    local old_draw=love.draw
-
     if gallery[gallery.i-1] and love.draw==gallerydraw then
-        local old_playsnd=playsnd
-        playsnd=function() end
-        love.update=replay
-        update(nil,worldprev1)
-        playsnd=old_playsnd
-        love.update=old_update
-        love.draw=old_draw
-        gamedraw(true,preview1,worldprev1)
-        if not worldprev1.rp[worldprev1.rp.i] then worldprev1.rp.i=1; reset(worldprev1,true) end
+        simulate(worldprev1,preview1,true)
     end
 
     if gallery[gallery.i+1] and love.draw==gallerydraw then
-        local old_playsnd=playsnd
-        playsnd=function() end
-        love.update=replay
-        update(nil,worldprev2)
-        playsnd=old_playsnd
-        love.update=old_update
-        love.draw=old_draw
-        gamedraw(true,preview2,worldprev2)
-        if not worldprev2.rp[worldprev2.rp.i] then worldprev2.rp.i=1; reset(worldprev2,true) end
+        simulate(worldprev2,preview2,true)
     end
 
     lg.setCanvas(vcanvas)
     bg(0,0,0,0)
 
     if gallery[1] then
-    love.update=replay
-    update(nil,main_wld)
-    love.update=old_update
-    love.draw=old_draw
-    gamedraw(true,vcanvas,main_wld)
-    if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
+    simulate(main_wld,vcanvas)
     end
 
     lg.setCanvas(canvas)
@@ -229,7 +206,7 @@ function gallerydraw()
         lg.print(sub(visualize(cycle2[cycle2.i]),c,c),100+tx-40,30+309-60+60+8-3+bar_xh-8+bounce)
         tx=tx+smolfont:getWidth(sub(visualize(cycle2[cycle2.i]),c,c))
     end
-    
+
     fg(1,1,1,1)
     --lg.setCanvas(canvas)
     
@@ -373,13 +350,8 @@ function galleryzoom()
     vc_scale=vc_scale+(1-vc_scale)*0.1
     if math.abs(vc_x-0)<1 then 
         vc_x=0;vc_y=0;vc_scale=1 
-        love.update=replay
-        update(nil,main_wld)
-        love.update=rp_zoom
-        love.draw=galleryzoom
-        gamedraw(true,vcanvas,main_wld)
-        if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
-        
+        simulate(main_wld,vcanvas)
+
         lg.setCanvas()
         lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
     else

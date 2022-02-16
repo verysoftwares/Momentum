@@ -3,6 +3,7 @@
     require 'alias'
     require 'utility'
     require 'file-io'
+    require 'deep'
     require 'input'
     require 'collide'
     require 'shifters'

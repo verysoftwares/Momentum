@@ -1,4 +1,7 @@
 cycle2={i=1,'Most recent first','Highest score first'}
+-- for skipping back in time in replays:
+-- cached points in time to simulate from 
+worldcache={{},{},{}}
 
 function rp_gallery(dt,w)
     w=w or main_wld
@@ -37,6 +40,9 @@ function rp_gallery(dt,w)
             worldprev1.rp.i=1 
             worldprev1.mode=worldprev1.rp.mode
         end
+        worldcache[3]=worldcache[2]
+        worldcache[2]=worldcache[1]
+        worldcache[1]={}
         end
         --reset(w,true)
         --preview1=nil; preview2=nil
@@ -52,6 +58,9 @@ function rp_gallery(dt,w)
             worldprev2.rp.i=1 
             worldprev2.mode=worldprev2.rp.mode
         end
+        worldcache[1]=worldcache[2]
+        worldcache[2]=worldcache[3]
+        worldcache[3]={}
         end
     end
     if gallery[1] and gall_state==nil and tapped('down') then
@@ -102,7 +111,7 @@ function rp_gallery(dt,w)
         end
     end
 
-    if gall_state==nil and gallery[1] and tapped('z') then
+    if gall_state==nil and gallery[1] and (tapped('z') or tapped('return')) then
         love.update=rp_zoom
         love.draw=galleryzoom
     end
@@ -115,22 +124,42 @@ function rp_zoom(dt,w)
     st=love.timer.getTime()
     deltat=dt
 
-    if tapped('left') then
+    if love.keyboard.isDown('left') then
+        lhold=lhold or 0
+        if lhold==0 or lhold>15 then
+        local skipto=main_wld.t-20
+        local seektime=skipto-skipto%50
+        while 1 do
+            if seektime<=0 then
+                seektime=0
+                reset(main_wld)
+                main_wld.rp.i=1
+                break
+            end
+            if worldcache[2][seektime] then 
+                main_wld=deepcopy(worldcache[2][seektime])
+                main_wld.t=seektime
+                break 
+            end
+            seektime=seektime-50
+        end
+        for i=seektime,skipto do
+            simulate(main_wld,nil,true,true)
+        end
+        end
+        lhold=lhold+1
+    else
+        lhold=nil
     end
     if love.keyboard.isDown('right') then
         rhold=rhold or 0
         if rhold==0 or rhold>15 then
         for i=1,19 do
-        love.update=replay
-        update(nil,main_wld)
-        love.update=rp_zoom
-        love.draw=galleryzoom
-        --gamedraw(true,vcanvas,main_wld)
-        if not main_wld.rp[main_wld.rp.i] then reset(main_wld,true); main_wld.rp.i=1 end
+        simulate(main_wld,nil,true,true)
         end
         end
         rhold=rhold+1
-    elseif not love.keyboard.isDown('right') then
+    else
         rhold=nil
     end
 
@@ -140,4 +169,29 @@ function rp_zoom(dt,w)
     end
 
     t=t+1
+end
+
+function simulate(w,canv,mute,nodraw)
+    local old_update=love.update
+    local old_draw=love.draw
+    local old_playsnd=playsnd
+    if mute then
+    playsnd=function() end
+    end
+    love.update=replay
+    update(nil,w)
+    if mute then playsnd=old_playsnd end
+    love.update=old_update
+    love.draw=old_draw
+    if not nodraw then
+    gamedraw(true,canv,w)
+    end
+    if not w.rp[w.rp.i] then reset(w); w.rp.i=1 end
+    if w.t>0 and w.t%50==0 then
+        local target=worldcache[2]
+        if w==worldprev1 then target=worldcache[1] end
+        if w==worldprev2 then target=worldcache[3] end
+        target[w.t]=deepcopy(w)
+        print(fmt('added cache for %d',w.t))
+    end
 end
