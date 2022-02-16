@@ -146,7 +146,7 @@ function gallerydraw()
 
     lg.setCanvas(canvas3)
     bg(0,0,0,0)
-
+    if love.draw==gallerydraw and vc_scale and vc_scale<0.67 then
     if gall_state==nil and #gallery>1 then
     lg.setFont(lcdfont)
     --local r,g,b,a=HSL((t*2)%256,224,224,255)
@@ -158,18 +158,6 @@ function gallerydraw()
     --lg.rotate(-pi/4)
     --lg.print('>',309/2-t,309/2+60-t)
     --lg.pop()
-    end
-
-    lg.setFont(smolfont)
-    local tx=309/2-smolfont:getWidth(visualize(cycle2[cycle2.i]))/2
-    if cycle2.x then tx=cycle2.x end
-    for c=1,#(visualize(cycle2[cycle2.i])) do
-        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
-        local bounce=sin(c*0.8+t*0.2)*3
-        if gall_state~='sort' then bounce=0 end
-        fg(r/255.0,g/255.0,b/255.0,1)
-        lg.print(sub(visualize(cycle2[cycle2.i]),c,c),100+tx-40,30+309-60+60+8-3+bounce)
-        tx=tx+smolfont:getWidth(sub(visualize(cycle2[cycle2.i]),c,c))
     end
 
     fg(0xb0/255,0x20/255,0x40/255,1)
@@ -191,6 +179,7 @@ function gallerydraw()
         fg(0xb0/255,0x20/255,0x40/255,1)
         lg.setFont(smolfont)
         lg.print('No replays available!',309/2+20,309/2+80-30+8)
+    end
     end
 
     lg.setCanvas(canvas)
@@ -224,13 +213,22 @@ function gallerydraw()
     smolrect[3]=309+120
     smolrect[4]=smolfont:getHeight('MOMENTUM')+8
     local sry
-    if love.draw==gallerydraw then
-        sry=math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35)
-    else
-        sry=(30+309-60+60+8-3)-(309-60)-35+bar_xh
-    end
+    sry=math.min(bar_dist,(30+309-60+60+8-3)-(309-60)-35+bar_xh-8)
     rect('fill',smolrect[1],smolrect[2]+sry,smolrect[3],smolrect[4])
     lg.pop()
+
+    lg.setCanvas(canvas3)
+    lg.setFont(smolfont)
+    local tx=309/2-smolfont:getWidth(visualize(cycle2[cycle2.i]))/2
+    if cycle2.x then tx=cycle2.x end
+    for c=1,#(visualize(cycle2[cycle2.i])) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        local bounce=sin(c*0.8+t*0.2)*3
+        if gall_state~='sort' then bounce=0 end
+        fg(r/255.0,g/255.0,b/255.0,1)
+        lg.print(sub(visualize(cycle2[cycle2.i]),c,c),100+tx-40,30+309-60+60+8-3+bar_xh-8+bounce)
+        tx=tx+smolfont:getWidth(sub(visualize(cycle2[cycle2.i]),c,c))
+    end
 
     fg(1,1,1,1)
     --lg.setCanvas(canvas)
@@ -244,14 +242,24 @@ function gallerydraw()
     vc_x=vc_x or (100-40+100-20-15+2+60-8-16-14)/3*scale
     vc_y=vc_y or (200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale
     vc_scale=vc_scale or 0.6666
+
+    if love.draw==gallerydraw then
+    bar_xh=bar_xh-4; if bar_xh<8 then bar_xh=8 end
+    bar_xw=bar_xw-8; if bar_xw<120+16 then
+    bar_xw=120+16 end
+    vc_x=vc_x+(149/3*scale-vc_x)*0.1
+    vc_y=vc_y+(140/3*scale-vc_y)*0.1
+    vc_scale=vc_scale+(0.6666-vc_scale)*0.1
+    end
+
     lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
     if preview2 and love.draw==gallerydraw then 
     lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
     end
     lg.setShader()
-    if love.draw==gallerydraw then
+    --if love.draw==gallerydraw then
     lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
-    end
+    --end
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
