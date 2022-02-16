@@ -22,10 +22,12 @@ function update(dt,w)
     st=love.timer.getTime()
     if dt~=nil then deltat=dt end
 
-    if love.update==update then init(1) end
+    if love.update==update then 
+        init(1) 
 
-    if love.keyboard.isDown('escape') then
-        back_to_menu()
+        if love.keyboard.isDown('escape') then
+            back_to_menu()
+        end
     end
 
     local ball=w.ball
