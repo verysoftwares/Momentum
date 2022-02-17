@@ -6,6 +6,7 @@ function love.load()
     lg.setFont(lcdfont)
     
     audio={}
+    mvol=mvol or 1
     audio.mewsic1= love.audio.newSource('wares/foothold-full.ogg','stream')
     --audio.mewsic1:setVolume(0.7)
     audio.mewsic1:setLooping(true)
@@ -17,6 +18,7 @@ function love.load()
     audio.mewsic3:setLooping(false)
     audio.mewsic4= love.audio.newSource('wares/foothold3.ogg','stream')
     audio.mewsic4:setLooping(true)
+    svol=svol or 1
     audio.bump= love.audio.newSource('wares/bump.mp3','static')
     audio.crush= love.audio.newSource('wares/340899__passairmangrace__cansmash2-crunchy-bip.wav','static')
     --audio.crush= love.audio.newSource('wares/497704__miksmusic__bone-crush-1.wav','static')

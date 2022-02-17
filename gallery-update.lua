@@ -10,7 +10,7 @@ function rp_gallery(dt,w)
 
     init(4)
 
-    if tapped('escape') then
+    if tapped('escape') or tapped('x') then
         love.update=menufade
         love.draw=galleryfadeout
     end
@@ -150,7 +150,7 @@ function rp_zoom(dt,w)
         rhold=nil
     end
 
-    if tapped('escape') then
+    if tapped('escape') or tapped('x') then
         love.update=rp_gallery
         love.draw=gallerydraw
     end

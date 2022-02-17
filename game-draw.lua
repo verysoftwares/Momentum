@@ -290,10 +290,20 @@ function gamedraw(nocap,virtual_canvas,w)
         bg(0,0,0,0)
     end
     fg(1,1,1,1)
-    lg.draw(canvas,0,0,0,scale,scale)
-    lg.draw(canvas2,0,0,0,scale,scale)
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
-    lg.draw(canvas4,0,0,0,scale,scale)
+    local wx,wy=0,0
+    if love.window.getFullscreen() and not virtual_canvas then        
+        bg(0x29/255,0x23/255,0x2e/255)
+        wx,wy=love.window.getMode()
+        wx=wx/2;wy=wy/2
+        wx=wx-(309*scale)/2; wy=wy-(309*scale)/2
+        wx=flr(wx); wy=flr(wy)
+        lg.setScissor(wx,wy,309*scale,309*scale)
+    end
+    lg.draw(canvas,wx,wy,0,scale,scale)
+    lg.draw(canvas2,wx,wy,0,scale,scale)
+    lg.draw(canvas3,wx+(-309/2-250-60)/3*scale,wy+(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.draw(canvas4,wx,wy,0,scale,scale)
+    lg.setScissor()
     
     if not nocap then
     local et=love.timer.getTime()

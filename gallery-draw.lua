@@ -74,7 +74,7 @@ function galleryfadein()
     if bar_dist==280 then 
     audio.shutter:stop()
     audio.mewsic2:stop()
-    audio.mewsic2:setVolume(1)
+    audio.mewsic2:setVolume(mvol)
     love.update=rp_gallery; love.draw=gallerydraw
     worldcache={{},{},{}}
     sc_t=t+1
@@ -83,8 +83,18 @@ function galleryfadein()
 
     fg(1,1,1,1)
     lg.setCanvas()
-    lg.draw(canvas,0,0,0,scale,scale)
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    local wx,wy=0,0
+    if love.window.getFullscreen() then        
+        bg(0x29/255,0x23/255,0x2e/255)
+        wx,wy=love.window.getMode()
+        wx=wx/2;wy=wy/2
+        wx=wx-(309*scale)/2; wy=wy-(309*scale)/2
+        wx=flr(wx); wy=flr(wy)
+        lg.setScissor(wx,wy,309*scale,309*scale)
+    end
+    lg.draw(canvas,wx,wy,0,scale,scale)
+    lg.draw(canvas3,wx+(-309/2-250-60)/3*scale,wy+(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.setScissor()
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
@@ -211,10 +221,19 @@ function gallerydraw()
     --lg.setCanvas(canvas)
     
     lg.setCanvas()
-    lg.draw(canvas,0,0,0,scale,scale)
+    local wx,wy=0,0
+    if love.window.getFullscreen() then        
+        bg(0x29/255,0x23/255,0x2e/255)
+        wx,wy=love.window.getMode()
+        wx=wx/2;wy=wy/2
+        wx=wx-(309*scale)/2; wy=wy-(309*scale)/2
+        wx=flr(wx); wy=flr(wy)
+        lg.setScissor(wx,wy,309*scale,309*scale)
+    end
+    lg.draw(canvas,wx,wy,0,scale,scale)
     lg.setShader(graytrans)
     if preview1 and love.draw==gallerydraw then 
-    lg.draw(preview1,(100-40+100-20-15+2+60-100-50-14-4-4)/3*scale,(200+100-40-20-15+2-60+100+100+100+100+50-8+14-12-4)/3*scale,0,0.3333,0.3333)
+    lg.draw(preview1,wx+(100-40+100-20-15+2+60-100-50-14-4-4)/3*scale,wy+(200+100-40-20-15+2-60+100+100+100+100+50-8+14-12-4)/3*scale,0,0.3333,0.3333)
     end
     vc_x=vc_x or (100-40+100-20-15+2+60-8-16-14)/3*scale
     vc_y=vc_y or (200+100-40-20-15+2-60-20-6-8-8-8-15+8+16+14)/3*scale
@@ -229,14 +248,15 @@ function gallerydraw()
     vc_scale=vc_scale+(0.6666-vc_scale)*0.1
     end
 
-    lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
+    lg.draw(vcanvas,wx+vc_x,wy+vc_y,0,vc_scale,vc_scale)
     if preview2 and love.draw==gallerydraw then 
-    lg.draw(preview2,(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
+    lg.draw(preview2,wx+(100-40+100-20-15+2+60+100+100+100+100+50-14-4-4-2)/3*scale,wy+(200+100-40-20-15+2-60-100-50-8+14-12-4-2)/3*scale,0,0.3333,0.3333)
     end
     lg.setShader()
     --if love.draw==gallerydraw then
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.draw(canvas3,wx+(-309/2-250-60)/3*scale,wy+(430+50-20)/3*scale,-pi/4,scale,scale)
     --end
+    lg.setScissor()
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
@@ -325,7 +345,7 @@ function galleryfadeout()
     if bar_dist==0 and title=='MOMENTUM' then 
     onlyoncem2=nil
     audio.mewsic4:stop()
-    audio.mewsic4:setVolume(1)
+    audio.mewsic4:setVolume(mvol)
     love.update=menu; love.draw=menudraw
     sc_t=t+1
     end
@@ -333,8 +353,18 @@ function galleryfadeout()
 
     fg(1,1,1,1)
     lg.setCanvas()
-    lg.draw(canvas,0,0,0,scale,scale)
-    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
+    local wx,wy=0,0
+    if love.window.getFullscreen() then        
+        bg(0x29/255,0x23/255,0x2e/255)
+        wx,wy=love.window.getMode()
+        wx=wx/2;wy=wy/2
+        wx=wx-(309*scale)/2; wy=wy-(309*scale)/2
+        wx=flr(wx); wy=flr(wy)
+        lg.setScissor(wx,wy,309*scale,309*scale)
+    end
+    lg.draw(canvas,wx,wy,0,scale,scale)
+    lg.draw(canvas3,wx+(-309/2-250-60)/3*scale,wy+(430+50-20)/3*scale,-pi/4,scale,scale)
+    lg.setScissor()
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
@@ -353,7 +383,17 @@ function galleryzoom()
         simulate(main_wld,vcanvas)
 
         lg.setCanvas()
-        lg.draw(vcanvas,vc_x,vc_y,0,vc_scale,vc_scale)
+        local wx,wy=0,0
+        if love.window.getFullscreen() then        
+            bg(0x29/255,0x23/255,0x2e/255)
+            wx,wy=love.window.getMode()
+            wx=wx/2;wy=wy/2
+            wx=wx-(309*scale)/2; wy=wy-(309*scale)/2
+            wx=flr(wx); wy=flr(wy)
+            lg.setScissor(wx,wy,309*scale,309*scale)
+        end
+        lg.draw(vcanvas,wx+vc_x,wy+vc_y,0,vc_scale,vc_scale)
+        lg.setScissor()
     else
         gallerydraw()
     end
