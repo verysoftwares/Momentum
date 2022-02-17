@@ -19,6 +19,7 @@
 
 love.update = menu
 love.draw = menudraw
+love.load()
 
 loadprogress()
 

@@ -22,14 +22,24 @@ function loadprogress()
 
     if chunk then chunk() 
         print(fmt('loaded persistent data from %s',file))
+
+        for i,g in ipairs(gallery) do g.saved=true end
+
+        if cycle2[cycle2.i]=='Most recent first' then table.sort(gallery,function(a,b) return a.time>b.time end) end
+        if cycle2[cycle2.i]=='Highest score first' then table.sort(gallery,function(a,b) return a.score>b.score end) end
     else
         print(fmt('no save file %s',file))
     end
 
-    for i,g in ipairs(gallery) do g.saved=true end
+    file = 'options.soft'
+    chunk = love.filesystem.load(file)
 
-    if cycle2[cycle2.i]=='Most recent first' then table.sort(gallery,function(a,b) return a.time>b.time end) end
-    if cycle2[cycle2.i]=='Highest score first' then table.sort(gallery,function(a,b) return a.score>b.score end) end
+    if chunk then chunk() 
+        print(fmt('loaded persistent data from %s',file))
+        for i=1,4 do _G[fmt('cycle_opts%d_set',i)]() end
+    else
+        print(fmt('no save file %s',file))
+    end
 end
 
 function saveprogress(w)
@@ -58,8 +68,7 @@ function saveprogress(w)
     if not info then
         out='gallery={}\n'
         love.filesystem.write(file, out)
-    end
-        
+    end    
     out=''
     for i,rp in ipairs(gallery) do
         if not rp.saved then
@@ -78,4 +87,13 @@ function saveprogress(w)
     end
 
     love.filesystem.append(file, out)
+
+    file = 'options.soft'
+
+    out=''
+    for i=1,4 do
+        out=out..fmt('cycle_opts%d.i=%d\n',i,_G['cycle_opts'..tostring(i)].i)
+    end
+
+    love.filesystem.write(file, out)
 end

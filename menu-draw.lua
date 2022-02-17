@@ -72,6 +72,9 @@ function menudraw()
     lg.setCanvas(canvas3)
     lg.setFont(lcdfont)
     lg.print(title,309/2+60-80-10+4-1,24+24-1+60+60-40+20+10+2)
+    
+    lg.setFont(smolfont)
+    lg.print('Version 3c',309/2+60-80-10+4-1+60+4-1,24+24-1+60+60-40+20+10+2+200+24+18+4-6)
     lg.setCanvas(canvas)
     
     if titlelock>#'MOMENTUM' then
@@ -248,7 +251,7 @@ function menufadeout()
     lg.setCanvas()
     local wx,wy=0,0
     if love.window.getFullscreen() then        
-        bg(0x29/255,0x23/255,0x2e/255)
+        --bg(0x29/255,0x23/255,0x2e/255)
         wx,wy=love.window.getMode()
         wx=wx/2;wy=wy/2
         wx=wx-(309*scale)/2; wy=wy-(309*scale)/2

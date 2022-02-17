@@ -1,8 +1,8 @@
 cycle={i=1,'Standard','Chaotic','Gallery','Options','Quit'}
-cycle_opts4={i=1,'Scale=3x','Scale=4x','Scale=1x','Scale=2x'}
+cycle_opts4={i=3,'Scale=1x','Scale=2x','Scale=3x','Scale=4x'}
 cycle_opts3={i=1,'Fullscreen=false','Fullscreen=true'}
-cycle_opts2={i=1,'Music volume=100%','Music volume=75%','Music volume=50%','Music volume=25%','Music volume=0%'}
-cycle_opts1={i=1,'SFX volume=100%','SFX volume=75%','SFX volume=50%','SFX volume=25%','SFX volume=0%'}
+cycle_opts2={i=5,'Music volume=0%','Music volume=25%','Music volume=50%','Music volume=75%','Music volume=100%'}
+cycle_opts1={i=5,'SFX volume=0%','SFX volume=25%','SFX volume=50%','SFX volume=75%','SFX volume=100%'}
 cycle_unlocks={}
 --for i=1,#cycle do
 --    cycle_unlocks[cycle[i]]=false
@@ -120,6 +120,7 @@ function menuopts(dt,w)
     deltat=dt
     
     if tapped('escape') or tapped('x') then
+        saveprogress()
         love.update=menu
         love.draw=menudraw
     end
@@ -152,40 +153,8 @@ function menuopts(dt,w)
         end
         end
     end
-    cycle_act(cycle_opts4,function() 
-        scale=tonumber(sub(cycle_opts4[cycle_opts4.i],7,7))
-        local fs=love.window.getFullscreen()
-        love.window.setMode(309*scale,309*scale,{fullscreen=fs})
-    end)
-    cycle_act(cycle_opts3,function() 
-        local ci=cycle_opts3[cycle_opts3.i]
-        local fs=sub(ci,string.find(ci,'=')+1,#ci)
-        if fs=='true' then
-            love.window.setFullscreen(true)
-        else print(love.window.setFullscreen(false)) end
-    end)
-    cycle_act(cycle_opts1,function() 
-        local ci=cycle_opts1[cycle_opts1.i]
-        svol=tonumber(sub(ci,string.find(ci,'=')+1,string.find(ci,'%%')-1))
-        svol=svol/100.0
-        local sfx={'bump','crush','powerup','fall','get','shutter'}
-        for i,v in ipairs(sfx) do
-            if v=='get' or v=='shutter' then
-                audio[v]:setVolume(svol*0.7)
-            else
-                audio[v]:setVolume(svol)
-            end
-        end
-        playsnd(audio[sfx[random(#sfx)]])
-    end)
-    cycle_act(cycle_opts2,function() 
-        local ci=cycle_opts2[cycle_opts2.i]
-        mvol=tonumber(sub(ci,string.find(ci,'=')+1,string.find(ci,'%%')-1))
-        mvol=mvol/100.0
-        for i=1,4 do
-            audio['mewsic'..tostring(i)]:setVolume(mvol)
-        end
-    end)
+
+    for i=1,4 do cycle_act(_G[fmt('cycle_opts%d',i)],_G[fmt('cycle_opts%d_set',i)]) end
 
     t=t+1
 end
@@ -208,6 +177,48 @@ function cycle_act(_cycle,swapf)
             if swapf then swapf() end
         end
     end
+end
+
+function cycle_opts4_set()
+    scale=tonumber(sub(cycle_opts4[cycle_opts4.i],7,7))
+    local fs=love.window.getFullscreen()
+    love.window.setMode(309*scale,309*scale,{fullscreen=fs})
+    if worldprev1 then set_ball_image(worldprev1) end
+    set_ball_image(main_wld)
+    if worldprev2 then set_ball_image(worldprev2) end
+end
+
+function cycle_opts3_set() 
+    local ci=cycle_opts3[cycle_opts3.i]
+    local fs=sub(ci,string.find(ci,'=')+1,#ci)
+    if fs=='true' then
+        love.window.setFullscreen(true)
+    else print(love.window.setFullscreen(false)) end
+end
+
+function cycle_opts2_set() 
+    local ci=cycle_opts2[cycle_opts2.i]
+    mvol=tonumber(sub(ci,string.find(ci,'=')+1,string.find(ci,'%%')-1))
+    mvol=mvol/100.0
+    for i=1,4 do
+        audio['mewsic'..tostring(i)]:setVolume(mvol)
+    end
+end
+
+function cycle_opts1_set() 
+    local ci=cycle_opts1[cycle_opts1.i]
+    svol=tonumber(sub(ci,string.find(ci,'=')+1,string.find(ci,'%%')-1))
+    svol=svol/100.0
+    local sfx={'bump','crush','powerup','fall','get','shutter'}
+    for i,v in ipairs(sfx) do
+        if v=='get' or v=='shutter' then
+            audio[v]:setVolume(svol*0.7)
+        else
+            audio[v]:setVolume(svol)
+        end
+    end
+    --playsnd(audio[sfx[random(#sfx)]])
+    if love.update==menuopts then playsnd(audio.powerup) end
 end
 
 unlocks={}

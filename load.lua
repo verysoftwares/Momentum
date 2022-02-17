@@ -1,4 +1,7 @@
+loaded=false
 function love.load()
+    if loaded then return end
+    loaded=true
     lcdfont = lg.newFont('wares/advanced_pixel_lcd-7.ttf', 20)
     smolfont = lg.newFont('wares/nokiafc22.ttf', 8)
     explainfont = lg.newFont('wares/RobotoCondensed-Regular.ttf', 18)
