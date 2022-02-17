@@ -97,7 +97,9 @@ function menudraw()
     for c=1,#(visualize(cycle[cycle.i])) do
         local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
         fg(r/255.0,g/255.0,b/255.0,1)
-        lg.print(sub(visualize(cycle[cycle.i]),c,c),100+tx-40,30+309-60+8-3+sin(c*0.8+t*0.2)*3)
+        local wob=sin(c*0.8+t*0.2)*3
+        if love.update==menuopts then wob=0 end
+        lg.print(sub(visualize(cycle[cycle.i]),c,c),100+tx-40,30+309-60+8-3+wob)
         tx=tx+smolfont:getWidth(sub(visualize(cycle[cycle.i]),c,c))
     end
 
@@ -117,8 +119,8 @@ function menudraw()
     if not cycle.dx and cycle[cycle.i]=='Standard' then
     rainbowprint('The classic Momentum experience!')
     end
-    if not cycle.dx and cycle[cycle.i]=='Options' then
-    rainbowprint('Not yet implemented.')
+    if not cycle.dx and cycle[cycle.i]=='Options' and love.update~=menuopts then
+    rainbowprint('Modify game options')
     end
     if not cycle.dx and cycle[cycle.i]=='Chaotic' then
     local msg='10000 points in Standard mode to unlock!'
@@ -342,4 +344,62 @@ function menufadein()
 
     local et=love.timer.getTime()
     while deltat+et-st<1/60 do et=love.timer.getTime() end
+end
+
+function menuopts_draw()
+    menudraw()
+    lg.setCanvas(canvas)
+    bg(0,0,0,0)
+
+    lg.push()
+    lg.rotate(-pi/4)
+    lg.translate(-120-40+8-1-1,30-1)
+    fg(0x68/255,0x70/255,0x4b/255)
+
+    smolrect2=smolrect2 or {309/2,309-60-30+(smolfont:getHeight('MOMENTUM')+8)/2,0,0}
+    rect('fill',unpack(smolrect2))
+    smolrect2[1]=smolrect2[1]+(0-60-10-smolrect2[1])*0.14
+    smolrect2[2]=smolrect2[2]+(309-60-30-smolrect2[2])*0.14
+    smolrect2[3]=smolrect2[3]+(309+120+20-smolrect2[3])*0.14
+    smolrect2[4]=smolrect2[4]+(smolfont:getHeight('MOMENTUM')+8-smolrect2[4])*0.14
+
+    smolrect3=smolrect3 or {309/2,309-60-30-30+(smolfont:getHeight('MOMENTUM')+8)/2,0,0}
+    rect('fill',unpack(smolrect3))
+    smolrect3[1]=smolrect3[1]+(0-60-10-smolrect3[1])*0.14
+    smolrect3[2]=smolrect3[2]+(309-60-30-30-smolrect3[2])*0.14
+    smolrect3[3]=smolrect3[3]+(309+120+20-smolrect3[3])*0.14
+    smolrect3[4]=smolrect3[4]+(smolfont:getHeight('MOMENTUM')+8-smolrect3[4])*0.14
+
+    lg.pop()    
+
+    if smolrect2[4]>=smolfont:getHeight('MOMENTUM') then
+    lg.setCanvas(canvas3)
+    lg.setFont(smolfont)
+    local tx=309/2-smolfont:getWidth(visualize(cycle_opts1[cycle_opts1.i]))/2
+    if cycle_opts1.x then tx=cycle_opts1.x end
+    for c=1,#(visualize(cycle_opts1[cycle_opts1.i])) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        fg(r/255.0,g/255.0,b/255.0,1)
+        local wob=sin(c*0.8+t*0.2)*3
+        if opts_state~=cycle_opts1 then wob=0 end
+        lg.print(sub(visualize(cycle_opts1[cycle_opts1.i]),c,c),100+tx-40,30+309-60+8-3-30+wob)
+        tx=tx+smolfont:getWidth(sub(visualize(cycle_opts1[cycle_opts1.i]),c,c))
+    end
+
+    tx=309/2-smolfont:getWidth(visualize(cycle_opts2[cycle_opts2.i]))/2
+    if cycle_opts2.x then tx=cycle_opts2.x end
+    for c=1,#(visualize(cycle_opts2[cycle_opts2.i])) do
+        local r,g,b,a=HSL(((t+c*4)*2)%256,224,224,255)
+        fg(r/255.0,g/255.0,b/255.0,1)
+        local wob=sin(c*0.8+t*0.2)*3
+        if opts_state~=cycle_opts2 then wob=0 end
+        lg.print(sub(visualize(cycle_opts2[cycle_opts2.i]),c,c),100+tx-40,30+309-60+8-3-30-30+wob)
+        tx=tx+smolfont:getWidth(sub(visualize(cycle_opts2[cycle_opts2.i]),c,c))
+    end
+    end
+
+    fg(1,1,1,1)
+    lg.setCanvas()
+    lg.draw(canvas,0,0,0,scale,scale)
+    lg.draw(canvas3,(-309/2-250-60)/3*scale,(430+50-20)/3*scale,-pi/4,scale,scale)
 end
