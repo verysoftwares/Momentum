@@ -160,12 +160,12 @@ function gamedraw(nocap,virtual_canvas,w)
     lg.setCanvas(canvas3)
     lg.rotate(pi/2)
     lg.setFont(smolfont)
-    local msg=fmt('Frame %d/%d',w.t+1,#w.rp)
-    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250)
+    local msg=fmt('Frame %d/%d',w.t,#w.rp)
+    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+8)
     msg='Left and right to'
-    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+12)
-    msg='rewind/fast forward.'
     lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+12+8)
+    msg='rewind/fast forward.'
+    lg.print(msg,200-40-10+3-1+30+30+8-smolfont:getWidth(msg)/2,-300-40-10+3+250+12+8+8)
     lg.pop()
     lg.setCanvas(cn)
     fg(r,g,b,a)
