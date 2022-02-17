@@ -113,18 +113,18 @@ function gallerydraw()
     lg.setCanvas(preview2)
     bg(0,0,0,0)
 
-    if gallery[gallery.i-1] and love.draw==gallerydraw then
+    if gallery[gallery.i-1] and #worldprev1.rp>0 and love.draw==gallerydraw then
         simulate(worldprev1,preview1,true)
     end
 
-    if gallery[gallery.i+1] and love.draw==gallerydraw then
+    if gallery[gallery.i+1] and #worldprev2.rp>0 and love.draw==gallerydraw then
         simulate(worldprev2,preview2,true)
     end
 
     lg.setCanvas(vcanvas)
     bg(0,0,0,0)
 
-    if gallery[1] then
+    if gallery[1] and #main_wld.rp>0 then
     simulate(main_wld,vcanvas)
     end
 

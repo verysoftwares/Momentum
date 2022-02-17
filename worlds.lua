@@ -5,14 +5,8 @@ function new_world()
     w.spawn_t=2000
     w.spawn_dt=1000
 
-    w.ball={x=309/2-12, y=96, dx=0, dy=0, img=lg.newCanvas(26,26)}
-    lg.setCanvas(w.ball.img)
-    fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
-    circ('fill',13,13,13)
-    fg(0xf0/255.0,0xf0/255.0,0xf0/255.0)
-    circ('fill',13,13,12.8)
-    lg.setCanvas()
-    w.ball.imgdata=w.ball.img:newImageData()
+    w.ball={x=309/2-12, y=96, dx=0, dy=0}
+    set_ball_image(w)
     
     w.ball.lethalt=0
 
@@ -67,4 +61,15 @@ function reset(w,noresettime)
     if not noresettime then
     w.t=0
     end
+end
+
+function set_ball_image(w)
+    w.ball.img=lg.newCanvas(26,26)
+    lg.setCanvas(w.ball.img)
+    fg(0xa0/255.0,0xa0/255.0,0xa0/255.0)
+    circ('fill',13,13,13)
+    fg(0xf0/255.0,0xf0/255.0,0xf0/255.0)
+    circ('fill',13,13,12.8)
+    lg.setCanvas()
+    w.ball.imgdata=w.ball.img:newImageData()
 end

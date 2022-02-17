@@ -57,7 +57,7 @@ function collide(_ball,args,w)
             else
             love.update=gameover
             end 
-            if not find(gallery,w.rp) then 
+            if not rep and not find(gallery,w.rp) then 
                 ins(gallery,w.rp) 
                 w.rp.score=w.score+1
                 w.rp.mode=w.mode
