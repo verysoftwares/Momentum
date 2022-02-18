@@ -127,7 +127,7 @@ function menudraw()
     end
     if not cycle.dx and cycle[cycle.i]=='Chaotic' then
     local msg='10000 points in Standard mode to unlock!'
-    if cycle_unlocks['Chaotic'] then msg='Play with accelerated spawners!' end
+    if cycle_unlocks['Chaotic'] then msg='Play with dangerous red shifters!' end
     rainbowprint(msg)
     end
     if not cycle.dx and cycle[cycle.i]=='Gallery' then

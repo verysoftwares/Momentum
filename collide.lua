@@ -13,7 +13,7 @@ function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
                 local r2,g2,b2,a2=imgdata2:getPixel(flr(sx),flr(sy))
 
                 if a2==1 then
-                    if oncoll(args) then return end
+                    if oncoll(args,ent2) then return end
                 end
             end
         end

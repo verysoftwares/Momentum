@@ -8,11 +8,18 @@ function shiftupdate(s,w)
         s.update=nil
     end
 
-    if s.spec then oncoll=function()
+    if s.spec then oncoll=function(args,ent2)
         s.x=s.x-s.dx
         s.y=s.y-s.dy
         s.dx=-s.dx
         s.dy=-s.dy
+        if ent2 and ent2.spec then
+        ent2.x=ent2.x-ent2.dx
+        ent2.y=ent2.y-ent2.dy
+        ent2.dx=-ent2.dx
+        ent2.dy=-ent2.dy
+        end
+        return true
     end end
     
     if s.t<20 then
@@ -39,7 +46,7 @@ function shift(s,w)
     else s.dx=-1 end
     if w.ball.y+13>s.y+grid then s.dy=1 
     else s.dy=-1 end
-    if not s.spec then
+    if not (s.spec and s.t) then
     s.t=0
     end
 
@@ -91,12 +98,7 @@ function spawn(w)
         ::skip::
         ins(w.shifters,{x=sp.x,y=sp.y})
         if w.mode=='Chaotic' then 
-            w.shifters[#w.shifters].spec=true
-            w.shifters[#w.shifters].update=shiftupdate
-            w.shifters[#w.shifters].t=0
-            w.shifters[#w.shifters].dy=-1
-            if sp.x<309/2 then w.shifters[#w.shifters].dx=1
-            else w.shifters[#w.shifters].dx=-1 end
+            prep_spec(w.shifters[#w.shifters],w)
         end
         if spawnblocked then
             particlespam(w.shifters[#w.shifters],w)
@@ -127,4 +129,13 @@ function check_same(_sc)
         end
     end
     return scsame
+end
+
+-- initializing red shifters
+function prep_spec(s,w)
+    s.spec=true
+    shift(s,w)
+    s.dy=-1
+    if s.x<309/2 then s.dx=1
+    else s.dx=-1 end
 end
