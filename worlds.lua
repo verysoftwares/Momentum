@@ -15,13 +15,13 @@ function new_world()
     if debug then w.plrbonus=10 end
 
     w.shifters={}
+    w.spawners={}
     for i=1,5 do
         local sx,sy=grid*i+1,309/2-grid+grid*i+1
         ins(w.shifters,{x=sx,y=sy})
         ins(w.shifters,{x=309-sx-43,y=sy})
     end
-    w.spawners={}
-
+    
     w.shouts={}
     w.particles={}
 
@@ -41,10 +41,13 @@ function reset(w,noresettime)
     w.bonuses={}
 
     w.shifters={}
+    w.spawners={}
     for i=1,5 do
         local sx,sy=grid*i+1,309/2-grid+grid*i+1
         ins(w.shifters,{x=sx,y=sy})
+        --prep_spec(w.shifters[#w.shifters],w)
         ins(w.shifters,{x=309-sx-43,y=sy})
+        --prep_spec(w.shifters[#w.shifters],w)
     end
     if w.mode=='Chaotic' then
         ins(w.shifters,{x=grid*0+1,y=309/2-grid+grid*0+1})
@@ -55,8 +58,7 @@ function reset(w,noresettime)
     end
     w.spawn_t=2000
     w.spawn_dt=1000
-    w.spawners={}
-
+    
     w.shouts={}
     w.particles={}
 
