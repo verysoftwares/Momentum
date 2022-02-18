@@ -98,7 +98,7 @@ function spawn(w)
         ::skip::
         ins(w.shifters,{x=sp.x,y=sp.y})
         if w.mode=='Chaotic' and not sp.spec then 
-            prep_spec(w.shifters[#w.shifters],w)
+            prep_spec(w.shifters[#w.shifters],w,spawnblocked)
         end
         if spawnblocked then
             particlespam(w.shifters[#w.shifters],w)
@@ -132,9 +132,11 @@ function check_same(_sc)
 end
 
 -- initializing red shifters
-function prep_spec(s,w)
+function prep_spec(s,w,spawnblocked)
     s.spec=true
+    if not spawnblocked then
     shift(s,w)
+    end
     s.dy=-1
     if s.x<309/2 then s.dx=1
     else s.dx=-1 end
