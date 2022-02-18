@@ -2,7 +2,11 @@
 function particlespam(ent,w)
     local chunksize=6
     if find(w.shifters,ent) then
-        chunksplit(ent,images.shift,chunksize,w)
+        if w.shifters.spec then
+            chunksplit(ent,images.shiftred,chunksize,w)
+        else
+            chunksplit(ent,images.shift,chunksize,w)
+        end
     elseif ent==w.ball then
         chunksplit(ent,w.ball.img,chunksize,w)
     elseif find(w.bonuses,ent) then

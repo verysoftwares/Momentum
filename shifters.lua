@@ -1,17 +1,26 @@
 -- the given update function for moving shifters
 -- (when not moving, their update is nil)
+
 function shiftupdate(s,w)
+    local oncoll=function()
+        s.x=s.x-s.dx
+        s.y=s.y-s.dy
+        s.update=nil
+    end
+
+    if s.spec then oncoll=function()
+        s.x=s.x-s.dx
+        s.y=s.y-s.dy
+        s.dx=-s.dx
+        s.dy=-s.dy
+    end end
+    
     if s.t<20 then
         if s.t%3==0 then s.x=s.x+s.dx; s.y=s.y+s.dy end
     else
         s.x=s.x+s.dx; s.y=s.y+s.dy
     end
 
-    function oncoll()
-        s.x=s.x-s.dx
-        s.y=s.y-s.dy
-        s.update=nil
-    end
     pixelperfect(s,shifterdata,srndtop,surroundtopdata,oncoll)
     pixelperfect(s,shifterdata,srndbottom,surroundbottomdata,oncoll)
 
@@ -30,7 +39,9 @@ function shift(s,w)
     else s.dx=-1 end
     if w.ball.y+13>s.y+grid then s.dy=1 
     else s.dy=-1 end
+    if not s.spec then
     s.t=0
+    end
 
     -- first time moving -> add spawner
     if s.myspawn==nil then
@@ -79,6 +90,14 @@ function spawn(w)
 
         ::skip::
         ins(w.shifters,{x=sp.x,y=sp.y})
+        if w.mode=='Chaotic' then 
+            w.shifters[#w.shifters].spec=true
+            w.shifters[#w.shifters].update=shiftupdate
+            w.shifters[#w.shifters].t=0
+            w.shifters[#w.shifters].dy=-1
+            if sp.x<309/2 then w.shifters[#w.shifters].dx=1
+            else w.shifters[#w.shifters].dx=-1 end
+        end
         if spawnblocked then
             particlespam(w.shifters[#w.shifters],w)
             playsnd(audio.crush)

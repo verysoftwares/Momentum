@@ -127,7 +127,7 @@ function solidcoll(args)
         playsnd(audio.bump)
         args.touch=true
     end
-    if args._ball==args.w.ball and not args.s.update then shift(args.s,args.w) end
+    if args._ball==args.w.ball and (args.s.spec or not args.s.update) then shift(args.s,args.w) end
     
     NESWalign(args)
 end

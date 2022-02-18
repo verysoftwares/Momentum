@@ -59,6 +59,7 @@ function love.load()
     lg.draw(images.shift,0,0)
     lg.setCanvas()
     shifterdata=scanvas:newImageData()
+    images.shiftred=lg.newImage('wares/shiftred.png')
     
     images.arrow=lg.newImage('wares/shift2.png')
     images.alert=lg.newImage('wares/shift3.png')

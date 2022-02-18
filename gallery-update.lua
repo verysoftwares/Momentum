@@ -70,10 +70,10 @@ function rp_gallery(dt,w)
     cycle2.x=cycle2.x or 309/2-smolfont:getWidth(visualize(cycle2[cycle2.i]))/2
     if gall_state=='sort' then
         if tapped('left') then 
-            cycle2.dx=8
+            cycle2.dx=12
             cycle2.flip=nil
         elseif tapped('right') then 
-            cycle2.dx=-8
+            cycle2.dx=-12
             cycle2.flip=nil
         end
         if tapped('up') then

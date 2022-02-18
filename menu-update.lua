@@ -35,10 +35,10 @@ function menu(dt,w)
         end
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
         if tapped('left') then 
-            cycle.dx=8
+            cycle.dx=12
             cycle.flip=nil
         elseif tapped('right') then 
-            cycle.dx=-8
+            cycle.dx=-12
             cycle.flip=nil
         end
         if tapped('z') or tapped('return') then 
@@ -129,10 +129,10 @@ function menuopts(dt,w)
         co.x=co.x or 309/2-smolfont:getWidth(visualize(co[co.i]))/2
     end
     if tapped('left') then 
-        opts_state.dx=8
+        opts_state.dx=12
         opts_state.flip=nil
     elseif tapped('right') then 
-        opts_state.dx=-8
+        opts_state.dx=-12
         opts_state.flip=nil
     end
     if tapped('up') then

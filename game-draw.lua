@@ -47,7 +47,11 @@ function gamedraw(nocap,virtual_canvas,w)
 
     -- actual shifters
     for i,s in ipairs(w.shifters) do
+        if s.spec then
+        lg.draw(images.shiftred,flr(s.x),flr(s.y))
+        else
         lg.draw(images.shift,flr(s.x),flr(s.y))
+        end
         if s.update then
             local r=0
             if s.dx==1 and s.dy==1 then r=pi/2; end
