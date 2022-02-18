@@ -25,6 +25,7 @@ function rp_gallery(dt,w)
             worldprev2.rp=gallery[2]
             worldprev2.rp.i=1
             worldprev2.mode=worldprev2.rp.mode
+            reset(worldprev2)
         end
     end
 
@@ -32,13 +33,14 @@ function rp_gallery(dt,w)
         gallery.i=gallery.i-1
         if gallery.i<1 then gallery.i=1 
         else
-        worldprev2=main_wld
-        main_wld=worldprev1
+        worldprev2=deepcopy(main_wld)
+        main_wld=deepcopy(worldprev1)
         worldprev1=new_world()
-        worldprev1.rp=gallery[gallery.i-1]
+        worldprev1.rp=deepcopy(gallery[gallery.i-1])
         if worldprev1.rp then 
             worldprev1.rp.i=1 
             worldprev1.mode=worldprev1.rp.mode
+            reset(worldprev1)
         end
         worldcache[3]=worldcache[2]
         worldcache[2]=worldcache[1]
@@ -50,13 +52,14 @@ function rp_gallery(dt,w)
         gallery.i=gallery.i+1
         if gallery.i>#gallery then gallery.i=#gallery
         else
-        worldprev1=main_wld
-        main_wld=worldprev2
+        worldprev1=deepcopy(main_wld)
+        main_wld=deepcopy(worldprev2)
         worldprev2=new_world()
-        worldprev2.rp=gallery[gallery.i+1]
+        worldprev2.rp=deepcopy(gallery[gallery.i+1])
         if worldprev2.rp then 
             worldprev2.rp.i=1 
             worldprev2.mode=worldprev2.rp.mode
+            reset(worldprev2)
         end
         worldcache[1]=worldcache[2]
         worldcache[2]=worldcache[3]

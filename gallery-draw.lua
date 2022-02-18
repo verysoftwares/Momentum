@@ -102,10 +102,10 @@ end
 
 function gallerydraw()
     if t-sc_t==0 and gallery[1] then
-        reset(main_wld)
         main_wld.rp=gallery[1]
         main_wld.rp.i=1
         main_wld.mode=main_wld.rp.mode
+        reset(main_wld)
     end
 
     lg.setCanvas(preview1)
