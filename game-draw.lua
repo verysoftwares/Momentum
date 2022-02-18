@@ -54,10 +54,11 @@ function gamedraw(nocap,virtual_canvas,w)
         end
         if s.update then
             local r=0
-            if s.dx==1 and s.dy==1 then r=pi/2; end
-            if s.dx==-1 and s.dy==1 then r=pi end
-            if s.dx==-1 and s.dy==-1 then r=pi/2*3; end
-            lg.draw(images.arrow,flr(s.x+grid),flr(s.y+grid),r,1,1,grid,grid)
+            local ox,oy=0,0
+            if s.dx==1 and s.dy==1 then r=pi/2; ox=-1; oy=0 end
+            if s.dx==-1 and s.dy==1 then r=pi; ox=-1; oy=-1 end
+            if s.dx==-1 and s.dy==-1 then r=pi/2*3; ox=0; oy=-1 end
+            lg.draw(images.arrow,flr(s.x+grid+ox),flr(s.y+grid+oy),r,1,1,grid,grid)
         end
     end
 
