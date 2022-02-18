@@ -1,8 +1,9 @@
 -- splits target sprite to chunks.
 function particlespam(ent,w)
     local chunksize=6
-    if find(w.shifters,ent) then
-        if w.shifters.spec then
+    local sh=find(w.shifters,ent)
+    if sh then
+        if w.shifters[sh].spec then
             chunksplit(ent,images.shiftred,chunksize,w)
         else
             chunksplit(ent,images.shift,chunksize,w)
