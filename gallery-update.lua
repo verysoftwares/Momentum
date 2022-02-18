@@ -22,7 +22,7 @@ function rp_gallery(dt,w)
         preview2=lg.newCanvas(309*scale,309*scale)
         worldprev2=new_world()
         if #gallery>1 then
-            worldprev2.rp=gallery[2]
+            worldprev2.rp=deepcopy(gallery[2])
             worldprev2.rp.i=1
             worldprev2.mode=worldprev2.rp.mode
             reset(worldprev2)
@@ -42,8 +42,8 @@ function rp_gallery(dt,w)
             worldprev1.mode=worldprev1.rp.mode
             reset(worldprev1)
         end
-        worldcache[3]=worldcache[2]
-        worldcache[2]=worldcache[1]
+        worldcache[3]=deepcopy(worldcache[2])
+        worldcache[2]=deepcopy(worldcache[1])
         worldcache[1]={}
         end
         --reset(w,true)
@@ -61,8 +61,8 @@ function rp_gallery(dt,w)
             worldprev2.mode=worldprev2.rp.mode
             reset(worldprev2)
         end
-        worldcache[1]=worldcache[2]
-        worldcache[2]=worldcache[3]
+        worldcache[1]=deepcopy(worldcache[2])
+        worldcache[2]=deepcopy(worldcache[3])
         worldcache[3]={}
         end
     end
@@ -90,14 +90,15 @@ function rp_gallery(dt,w)
         worldprev1=new_world()
         worldprev2=new_world()
         if #gallery>1 then
-            worldprev2.rp=gallery[2]
+            worldprev2.rp=deepcopy(gallery[2])
             worldprev2.rp.i=1
             worldprev2.mode=worldprev2.rp.mode
+            reset(worldprev2)
         end
-        reset(main_wld,true)
-        main_wld.rp=gallery[1]
+        main_wld.rp=deepcopy(gallery[1])
         main_wld.rp.i=1
         main_wld.mode=main_wld.rp.mode
+        reset(main_wld)
         gallery.i=1        
     end)
     

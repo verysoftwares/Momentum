@@ -102,7 +102,7 @@ end
 
 function gallerydraw()
     if t-sc_t==0 and gallery[1] then
-        main_wld.rp=gallery[1]
+        main_wld.rp=deepcopy(gallery[1])
         main_wld.rp.i=1
         main_wld.mode=main_wld.rp.mode
         reset(main_wld)
@@ -113,18 +113,18 @@ function gallerydraw()
     lg.setCanvas(preview2)
     bg(0,0,0,0)
 
-    if gallery[gallery.i-1] and #worldprev1.rp>0 and love.draw==gallerydraw then
+    if worldprev1.rp and #worldprev1.rp>0 and love.draw==gallerydraw then
         simulate(worldprev1,preview1,true)
     end
 
-    if gallery[gallery.i+1] and #worldprev2.rp>0 and love.draw==gallerydraw then
+    if worldprev2.rp and #worldprev2.rp>0 and love.draw==gallerydraw then
         simulate(worldprev2,preview2,true)
     end
 
     lg.setCanvas(vcanvas)
     bg(0,0,0,0)
 
-    if gallery[1] and #main_wld.rp>0 then
+    if gallery[1] and main_wld.rp and #main_wld.rp>0 then
     simulate(main_wld,vcanvas)
     end
 
@@ -149,17 +149,17 @@ function gallerydraw()
 
     fg(0xb0/255,0x20/255,0x40/255,1)
     lg.setFont(smolfont)
-    if gallery[gallery.i-1] then
-    lg.print(gallery[gallery.i-1].score,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].score)/2,309/2+100-60-20+4-1-2-3+1)
-    lg.print(gallery[gallery.i-1].mode,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
+    if worldprev1.rp and #worldprev1.rp>0 then
+    lg.print(worldprev1.rp.score,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].score)/2,309/2+100-60-20+4-1-2-3+1)
+    lg.print(worldprev1.rp.mode,309/2+20-100+6-6-smolfont:getWidth(gallery[gallery.i-1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
     end
-    if gallery[gallery.i] then
-    lg.print(gallery[gallery.i].score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2+3,309/2-10-10+5-8)
-    lg.print(gallery[gallery.i].mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2+3,309/2-10-10+5+200-60+8-8+12+6-4+2)
+    if main_wld.rp and #main_wld.rp>0 then
+    lg.print(main_wld.rp.score,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].score)/2+3,309/2-10-10+5-8)
+    lg.print(main_wld.rp.mode,309/2+20+100-50-10+6+12-8-12-smolfont:getWidth(gallery[gallery.i].mode)/2+3,309/2-10-10+5+200-60+8-8+12+6-4+2)
     end
-    if gallery[gallery.i+1] then
-    lg.print(gallery[gallery.i+1].score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2+3,309/2+100-60-20+4-1-2-3)
-    lg.print(gallery[gallery.i+1].mode,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
+    if worldprev2.rp and #worldprev2.rp>0 then
+    lg.print(worldprev2.rp.score,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].score)/2+3,309/2+100-60-20+4-1-2-3)
+    lg.print(worldprev2.rp.mode,309/2+20+100+100-30+10+6+3-6-smolfont:getWidth(gallery[gallery.i+1].mode)/2,309/2+100-60-20+4-1+100-40+15+4-2+8-2)
     end
 
     if not gallery[1] then
