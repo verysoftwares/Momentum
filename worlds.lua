@@ -40,6 +40,9 @@ function reset(w,noresettime)
     if debug then w.plrbonus=10 end
     w.bonuses={}
 
+    w.spawn_t=2000
+    w.spawn_dt=1000
+    
     w.shifters={}
     w.spawners={}
     for i=1,5 do
@@ -56,8 +59,6 @@ function reset(w,noresettime)
         ins(w.shifters,{x=309-grid*0+1-43-1-1,y=309/2-grid+grid*0+1+1-1})
         prep_spec(w.shifters[#w.shifters],w)
     end
-    w.spawn_t=2000
-    w.spawn_dt=1000
     
     w.shouts={}
     w.particles={}
