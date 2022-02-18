@@ -57,7 +57,7 @@ function shift(s,w)
         s.myspawn=w.spawners[#w.spawners]
         w.spawn_t=w.spawn_t+w.spawn_dt
     elseif w.mode=='Chaotic' then    
-        ins(w.spawners,{t=math.max(w.spawn_t,w.score+w.spawn_dt),x=s.x,y=s.y})
+        ins(w.spawners,{t=math.max(w.spawn_t,w.score+w.spawn_dt),x=s.x,y=s.y,spec=s.spec})
         s.myspawn=w.spawners[#w.spawners]
         w.spawn_t=w.spawn_t+w.spawn_dt
         if w.spawn_dt>100 then w.spawn_dt=w.spawn_dt-50 end
@@ -97,7 +97,7 @@ function spawn(w)
 
         ::skip::
         ins(w.shifters,{x=sp.x,y=sp.y})
-        if w.mode=='Chaotic' then 
+        if w.mode=='Chaotic' and not sp.spec then 
             prep_spec(w.shifters[#w.shifters],w)
         end
         if spawnblocked then
