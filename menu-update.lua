@@ -34,10 +34,10 @@ function menu(dt,w)
             cycle.flip=nil
         end
         cycle.x=cycle.x or 309/2-smolfont:getWidth(visualize(cycle[cycle.i]))/2
-        if tapped('left') then 
+        if love.keyboard.isDown('left') then 
             cycle.dx=12
             cycle.flip=nil
-        elseif tapped('right') then 
+        elseif love.keyboard.isDown('right') then 
             cycle.dx=-12
             cycle.flip=nil
         end
@@ -128,10 +128,10 @@ function menuopts(dt,w)
         local co=_G['cycle_opts'..tostring(i)]
         co.x=co.x or 309/2-smolfont:getWidth(visualize(co[co.i]))/2
     end
-    if tapped('left') then 
+    if love.keyboard.isDown('left') then 
         opts_state.dx=12
         opts_state.flip=nil
-    elseif tapped('right') then 
+    elseif love.keyboard.isDown('right') then 
         opts_state.dx=-12
         opts_state.flip=nil
     end
@@ -193,7 +193,7 @@ function cycle_opts3_set()
     local fs=sub(ci,string.find(ci,'=')+1,#ci)
     if fs=='true' then
         love.window.setFullscreen(true)
-    else print(love.window.setFullscreen(false)) end
+    else love.window.setFullscreen(false) end
 end
 
 function cycle_opts2_set() 
