@@ -8,12 +8,15 @@ function shiftupdate(s,w)
         s.update=nil
     end
 
-    if s.spec then oncoll=function(args,ent2)
+    local endoncoll
+    if s.spec then 
+        oncoll=nil
+        endoncoll=function(args,ent2)
         s.x=s.x-s.dx
         s.y=s.y-s.dy
         s.dx=-s.dx
         s.dy=-s.dy
-        if ent2 and ent2.spec then
+        if ent2 and ent2.spec and args.hit<5 then
         ent2.x=ent2.x-ent2.dx
         ent2.y=ent2.y-ent2.dy
         ent2.dx=-ent2.dx
@@ -28,12 +31,12 @@ function shiftupdate(s,w)
         s.x=s.x+s.dx; s.y=s.y+s.dy
     end
 
-    pixelperfect(s,shifterdata,srndtop,surroundtopdata,oncoll)
-    pixelperfect(s,shifterdata,srndbottom,surroundbottomdata,oncoll)
+    pixelperfect(s,shifterdata,srndtop,surroundtopdata,oncoll,nil,endoncoll)
+    pixelperfect(s,shifterdata,srndbottom,surroundbottomdata,oncoll,nil,endoncoll)
 
     for i2,s2 in ipairs(w.shifters) do
     if s2~=s then
-        pixelperfect(s,shifterdata,s2,shifterdata,oncoll)
+        pixelperfect(s,shifterdata,s2,shifterdata,oncoll,nil,endoncoll)
     end
     end
 

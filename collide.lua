@@ -1,6 +1,8 @@
 -- pixel-perfect collisions.
 -- takes 'oncoll' callback function as argument. 
-function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
+function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args,endoncoll)
+    args=args or {}
+    args.hit=0
     for y=imgdata1:getHeight()-1,0,-1 do
     for x=imgdata1:getWidth()-1,0,-1 do
         local r,g,b,a=imgdata1:getPixel(x,y)
@@ -13,11 +15,15 @@ function pixelperfect(ent1,imgdata1,ent2,imgdata2,oncoll,args)
                 local r2,g2,b2,a2=imgdata2:getPixel(flr(sx),flr(sy))
 
                 if a2==1 then
-                    if oncoll(args,ent2) then return end
+                    args.hit=args.hit+1
+                    if oncoll then if oncoll(args,ent2) then return end end
                 end
             end
         end
     end
+    end
+    if args.hit>0 then
+        if endoncoll then endoncoll(args,ent2) end
     end
 end
 
