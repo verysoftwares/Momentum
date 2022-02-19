@@ -10,7 +10,7 @@ function rp_gallery(dt,w)
 
     init(4)
 
-    if tapped('escape') or tapped('x') then
+    if (tapped('escape') or tapped('x')) and t-sc_t>=0 then
         love.update=menufade
         love.draw=galleryfadeout
     end
