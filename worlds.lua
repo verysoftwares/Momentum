@@ -54,10 +54,12 @@ function reset(w,noresettime)
     end
     if w.mode=='Chaotic' then
         ins(w.shifters,{x=grid*0+1,y=309/2-grid+grid*0+1})
-        prep_spec(w.shifters[#w.shifters],w)
+        prep_spec(w.shifters[#w.shifters],w,false,true)
+        w.shifters[#w.shifters].myspawn={}
 
         ins(w.shifters,{x=309-grid*0+1-43-1-1,y=309/2-grid+grid*0+1+1-1})
-        prep_spec(w.shifters[#w.shifters],w)
+        prep_spec(w.shifters[#w.shifters],w,false,true)
+        w.shifters[#w.shifters].myspawn={}
     end
     
     w.shouts={}
