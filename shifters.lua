@@ -2,6 +2,10 @@
 -- (when not moving, their update is nil)
 
 function shiftupdate(s,w)
+    if s.pokedthisframe then
+        s.pokedthisframe=nil
+        return
+    end
     local oncoll=function()
         s.x=s.x-s.dx
         s.y=s.y-s.dy
@@ -16,11 +20,15 @@ function shiftupdate(s,w)
         s.y=s.y-s.dy
         s.dx=-s.dx
         s.dy=-s.dy
-        if ent2 and ent2.spec and args.hit<5 then
-        ent2.x=ent2.x-ent2.dx
-        ent2.y=ent2.y-ent2.dy
-        ent2.dx=-ent2.dx
-        ent2.dy=-ent2.dy
+        if ent2 then
+            if ent2.spec and args.hit<5 then
+            ent2.x=ent2.x-ent2.dx
+            ent2.y=ent2.y-ent2.dy
+            ent2.dx=-ent2.dx
+            ent2.dy=-ent2.dy
+            elseif not ent2.spec and ent2.update==nil then
+                shift(ent2,w,s)
+            end
         end
         return true
     end end
@@ -44,11 +52,19 @@ function shiftupdate(s,w)
 end
 
 -- shifter starts to move
-function shift(s,w)
-    if w.ball.x+13>s.x+grid then s.dx=1 
-    else s.dx=-1 end
-    if w.ball.y+13>s.y+grid then s.dy=1 
-    else s.dy=-1 end
+function shift(s,w,ent)
+    ent=ent or w.ball
+    if ent==w.ball then
+        if w.ball.x+13>s.x+grid then s.dx=1 
+        else s.dx=-1 end
+        if w.ball.y+13>s.y+grid then s.dy=1 
+        else s.dy=-1 end
+    else
+        if ent.x>s.x then s.dx=1
+        else s.dx=-1 end
+        if ent.y>s.y then s.dy=1
+        else s.dy=-1 end
+    end
     if not (s.spec and s.t) then
     s.t=0
     end
@@ -68,6 +84,7 @@ function shift(s,w)
         end
     end
 
+    s.pokedthisframe=true
     s.update=shiftupdate
 end
 
