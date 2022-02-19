@@ -52,7 +52,7 @@ function shiftupdate(s,w)
 end
 
 -- shifter starts to move
-function shift(s,w,ent)
+function shift(s,w,ent,nospawn)
     ent=ent or w.ball
     if ent==w.ball then
         if w.ball.x+13>s.x+grid then s.dx=1 
@@ -60,17 +60,22 @@ function shift(s,w,ent)
         if w.ball.y+13>s.y+grid then s.dy=1 
         else s.dy=-1 end
     else
+        if s.dx and s.dx==ent.dx and s.dy and s.dy==ent.dy then
+            s.dx=-s.dx; s.dy=-s.dy
+            s.x=s.x+s.dx; s.y=s.y+s.dy
+        else
         if ent.x>s.x then s.dx=1
         else s.dx=-1 end
         if ent.y>s.y then s.dy=1
         else s.dy=-1 end
+        end
     end
     if not (s.spec and s.t) then
     s.t=0
     end
 
     -- first time moving -> add spawner
-    if s.myspawn==nil then
+    if s.myspawn==nil and not nospawn then
     if w.mode=='Standard' then
         ins(w.spawners,{t=w.spawn_t,x=s.x,y=s.y})
         s.myspawn=w.spawners[#w.spawners]
@@ -152,10 +157,10 @@ function check_same(_sc)
 end
 
 -- initializing red shifters
-function prep_spec(s,w,spawnblocked)
+function prep_spec(s,w,spawnblocked,nospawn)
     s.spec=true
     if not spawnblocked then
-    shift(s,w)
+    shift(s,w,nil,nospawn)
     end
     s.dy=-1
     if s.x<309/2 then s.dx=1
