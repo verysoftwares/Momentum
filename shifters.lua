@@ -89,7 +89,9 @@ function shift(s,w,ent,nospawn)
         end
     end
 
+    if not s.spec then
     s.pokedthisframe=true
+    end
     s.update=shiftupdate
 end
 
